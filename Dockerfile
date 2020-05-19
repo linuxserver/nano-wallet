@@ -14,10 +14,14 @@ RUN \
   mv /bundle.js /buildout/
 
 # runtime stage
-from lsiobase/alpine:3.11
+FROM lsiobase/cloud9:alpine
 
-COPY --from=browserify /buildout /wallet
+COPY --from=browserify /buildout /code
 COPY root/ /
 RUN \
  apk add --no-cache \
-	nginx
+	nginx && \
+ chown -R abc:abc \
+	/c9sdk/build \
+	/code \
+	/c9bins
