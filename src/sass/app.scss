@@ -33,6 +33,7 @@ html, body {
 #app {
     width: 100vw;
     height: 100vh;
+    padding: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,17 +42,17 @@ html, body {
 #inputs {
     display: flex;
     flex-direction: column;
+    width: 100%;
     label {
         margin-bottom: 10px;
     }
     input[type=text] {
-        font-size: 18px;
-        padding: 10px;
+        font-size: 22px;
+        padding: 15px;
         background: #00000036;
         color: $text;
         border-radius: 5px;
         border: 2px solid $highlight;
-        width: 340px;
     }
     button {
         background: $highlight;
@@ -59,7 +60,7 @@ html, body {
         border-radius: 20px;
         border: none;
         color: #26314e;
-        font-size: 14px;
+        font-size: 18px;
         cursor: pointer;
     }
 }
