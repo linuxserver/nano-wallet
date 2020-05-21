@@ -5,7 +5,7 @@ body {
   background: linear-gradient(to bottom, #4d5879, #26314e);
   color: #bec3d2;
   font-family: "Nunito", sans-serif;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 16px;
   height: 100vh;
   margin: 0;
@@ -138,10 +138,14 @@ body {
 }
 
 #app #wallet .headingtitle {
-  font-size: 35px;
-  text-align: center;
-  font-weight: 200;
-  margin: 40px 0 5px;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 40px 30px 5px;
+  color: white;
+}
+
+#app #wallet .headingtitle.top {
+  margin: 20px 30px 15px;
 }
 
 #app #wallet .balance {
@@ -216,7 +220,7 @@ body {
 #history,
 #pendingblocks {
   width: 100%;
-  padding: 10px;
+  padding: 0 10px;
 }
 
 .transaction {
@@ -272,7 +276,7 @@ body {
 
 .transaction .amount img {
   width: 15px;
-  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .transaction .amount .type {
