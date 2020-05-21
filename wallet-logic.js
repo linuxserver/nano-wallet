@@ -16,15 +16,15 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 var rpcurl = 'http://' + getUrlParameter('node') + ':7076';
 
-const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
 
 function abbreviateNumber (number) {
-    let tier = Math.log10(number) / 3 | 0;
-    if(tier == 0) return number;
-    let suffix = SI_SYMBOL[tier];
-    let scale = Math.pow(10, tier * 3);
-    let scaled = number / scale;
-    return scaled.toFixed(2) + '<span class="suffix">' + suffix + '</span>';
+  const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
+  let tier = Math.log10(number) / 3 | 0;
+  if(tier == 0) return number;
+  let suffix = SI_SYMBOL[tier];
+  let scale = Math.pow(10, tier * 3);
+  let scaled = number / scale;
+  return scaled.toFixed(2) + '<span class="suffix">' + suffix + '</span>';
 }
 
 function abbreviateAddress (address) {
