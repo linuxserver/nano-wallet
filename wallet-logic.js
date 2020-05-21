@@ -16,6 +16,31 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 var rpcurl = 'http://' + getUrlParameter('node') + ':7076';
 
+
+function abbreviateNumber (number) {
+  const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
+  let tier = Math.log10(number) / 3 | 0;
+  if(tier == 0) return Number.parseFloat(number).toFixed(2);
+  let suffix = SI_SYMBOL[tier];
+  let scale = Math.pow(10, tier * 3);
+  let scaled = number / scale;
+  return scaled.toFixed(2) + '<span class="suffix">' + suffix + '</span>';
+}
+
+function abbreviateAddress (address) {
+  return address.substring(0, 11) + '...' + address.slice(address.length - 6)
+}
+function highlightAddress (address) {
+  const length = address.length;
+  const end = address.length - 6;
+  return '<span class="highlight">' + address.substring(0, 11) + '</span>' + address.substring(11, end) + '<span class="highlight">' + address.slice(address.length - 6) + '</span>'
+}
+
+function transactionStatus (value) {
+  if (value === 'send') return 'Sent'
+  if (value === 'receive') return 'Received'
+}
+
 async function getseed() {
   var seed = await nanocurrency.generateSeed();
   var privatekey = nanocurrency.deriveSecretKey(seed, 0);
@@ -29,18 +54,17 @@ async function getseed() {
   return payload;
 }
 $('body').on('click', '.genwallet', async function(){
-  $('#history').empty();
-  $('#output').empty();
-  $('#pendingblocks').empty();
-  $('#dynform').empty();
-  $('#qrcode').empty();
+  $('#genoutput').empty();
+  $('#genqrcode').empty();
   var walletdata = await getseed();
-  $('#output').append(
-    'Private Key: ' + walletdata.privatekey +
-    '<br>Public Key: ' + walletdata.publickey +
-    '<br>Address: ' + walletdata.address
+  $('#genwallet').addClass('active')
+  $('#genoutput').append(
+    '<div class="details"><label for="privatekey">Private Key</label><div class="copy">Copy</div><input class="copytext" type="text" name="privatekey" value="' + walletdata.privatekey + '" /></div>' +
+    '<div class="details"><label for="publickey">Public Key</label><div class="copy">Copy</div><input class="copytext" type="text" name="publickey" value="' + walletdata.publickey + '" /></div>' +
+    '<div class="details"><label for="address">Address</label><div class="copy">Copy</div><input class="copytext" type="text" name="address" value="' + walletdata.address + '" /></div>'
   );
-  new QRCode(document.getElementById("qrcode"), walletdata.address);
+
+  new QRCode(document.getElementById("genqrcode"), walletdata.address);
 });
 
 async function rpcall(body) {
@@ -51,12 +75,14 @@ async function rpcall(body) {
 }
 
 $('body').on('click', '.scan', function(){
+  $('#scan').addClass('active')
   $('#qrpreview').append('<video id="preview"></video>');
   let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
   scanner.addListener('scan', function (content) {
     $('#destination').val(content);
     scanner.stop();
     $('#preview').remove();
+    $('#scan').removeClass('active')
   });
   Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length > 0) {
@@ -99,11 +125,34 @@ $('body').on('click', '.sendfunds', async function(){
   var sendres = await rpcall(send);
   console.log(sendres);
   $('.openwallet').click();
+  $('#send').removeClass('active');
 });
+
+$('#output').on('click', '.copy', function() {
+  const parent = $(this).parent()
+  const input = parent.find('input')
+  //alert(input.val())
+  input.select()
+  document.execCommand("copy")
+  alert('Copied to clipboard')
+})
+
+$('#walletmenu').on('click', 'a', function(e) {
+  e.preventDefault()
+  const tab = $(this).data('tab')
+  $(tab).addClass('active')
+});
+
+$('#app').on('click', '.close', function(e) {
+  e.preventDefault()
+  const parent = $(this).parent()
+  parent.removeClass('active')
+})
 
 $('body').on('click', '.openwallet', async function(){
   $('#history').empty();
   $('#output').empty();
+  $('#settingsdetails').empty();
   $('#pendingblocks').empty();
   $('#dynform').empty();
   $('#qrcode').empty();
@@ -111,12 +160,14 @@ $('body').on('click', '.openwallet', async function(){
   var privatekey = $("#key").val();
   var publickey = nanocurrency.derivePublicKey(privatekey);
   var address = nanocurrency.deriveAddress(publickey,{useNanoPrefix:true});
+  $('#qrcode').prepend('<div class="address">' + highlightAddress(address) + '</div>')
   new QRCode(document.getElementById("qrcode"), address);
   var info = {};
   info['action'] = 'account_info';
   info['representative'] = 'true';
   info['account'] = address;
   var info = await rpcall(info);
+  $('#wallet').addClass('active');
   if ('frontier' in info){
     var frontier = info.frontier;
     var balance = nanocurrency.convert(info.balance,rawconv);
@@ -124,38 +175,34 @@ $('body').on('click', '.openwallet', async function(){
     $('#dynform').append('\
       <div id="sendform">\
         <label for="amount">Amount:</label>\
-        <input type="text" id="amount" name="amount"><br>\
+        <input type="text" id="amount" name="amount">\
         <label for="destination">Destination:</label>\
-        <input type="text" id="destination" name="destination"><br>\
+        <input type="text" id="destination" name="destination">\
       </div>\
-      <button class="scan" type="button">ScanQR</button><br>\
-      <button class="sendfunds" type="button">Send</button>');
+      <button class="sendfunds" type="button">Send</button><button class="scan" type="button">Scan QR</button>');
   }
   $('#output').append(
-    'Address: ' + address +
-    '<br>balance: ' + balance +
-    '<br>Representative: ' + representative 
+    '<div class="balance"><div class="value"><img src="img/coin.svg" />' + abbreviateNumber(balance) + '</div><div class="raw"><img src="img/coin.svg" />' + balance + '</div></div>'
   );
+  $('#settingsdetails').append(
+    '<div class="details"><label for="representative">Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>'
+  )
   var history = {};
   history['action'] = 'account_history';
   history['account'] = address;
   var history = await rpcall(history);
   if (Array.isArray(history.history) && history.history.length){
-    $('#history').append('\
-      <table id="histable"  border="1">\
-        <tr>\
-	  <td>type</td>\
-	  <td>account</td>\
-	  <td>amount</td>\
-	</tr>\
-      </table>');
     $.each(history.history, function( index, value ) {
-      $('#histable tr:last').after('\
-        <tr>\
-          <td>' + value.type + '</td>\
-          <td>' + value.account + '</td>\
-          <td>' + nanocurrency.convert(value.amount,rawconv) + '</td>\
-	</tr>');
+      let date = new Date(value.local_timestamp * 1000); 
+
+      $('#history').append('\
+      <div class="transaction ' + value.type + '">\
+        <div class="type"><img class="' + value.type + '" src="img/' + (value.type === 'send' ? 'minus-' : 'plus-' ) + 'circle.svg" alt="' + value.type + '" /></div>\
+        <div class="innerdetails">\
+          <div class="amount"><div title="' + nanocurrency.convert(value.amount,rawconv) + '" class="value"><img src="img/coin.svg" />' + abbreviateNumber(nanocurrency.convert(value.amount,rawconv)) + '</div><div class="type">' + transactionStatus(value.type) + '</div></div>\
+          <div class="address">' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() + ' - ' + abbreviateAddress(value.account) + '</div>\
+        </div>\
+	    </div>');
     });
   }
   var pending = {};
@@ -165,26 +212,20 @@ $('body').on('click', '.openwallet', async function(){
   pending['account'] = address;
   var pending = await rpcall(pending);
   if (typeof pending.blocks === 'object'){
-    $('#pendingblocks').append('\
-      <table id="pendtable"  border="1">\
-        <tr>\
-	  <td>block</td>\
-          <td>source</td>\
-          <td>amount</td>\
-        </tr>\
-      </table>');
     $.each(pending.blocks, function( key, value ) {
-      $('#pendtable tr:last').after('\
-        <tr>\
-	  <td><button class="receive" value="' + key + '|' + value.amount + '|' + value.source + '">Recieve</button></td>\
-          <td>' + value.source + '</td>\
-          <td>' + nanocurrency.convert(value.amount,rawconv) + '</td>\
-        </tr>');
+      $('#pendingblocks').append('\
+      <div class="transaction pending">\
+      <div class="type"><img class="pending" src="img/exclamation-circle.svg" alt="pending" /></div>\
+      <div class="innerdetails">\
+        <div class="amount"><div title="' + nanocurrency.convert(value.amount,rawconv) + '" class="value"><img src="img/coin.svg" />' + nanocurrency.convert(value.amount,rawconv) + '</div><div class="type"><button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button></div></div>\
+        <div class="address">' + abbreviateAddress(value.source) + '</div>\
+      </div>\
+      </div>');
     });
   }
 });
 
-$('body').on('click', '.receive', async function(){
+$('body').on('click', '.pocket', async function(){
   var data = $(this).attr("value").split('|');
   var block = data[0];
   var amount = data[1];
