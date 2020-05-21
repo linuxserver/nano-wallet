@@ -15,14 +15,14 @@ var getUrlParameter = function getUrlParameter(sParam) {
 var rpcurl = 'http://' + getUrlParameter('node') + ':7076';
 
 
-function abbreviateNumber (number) {
+function abbreviateNumber (number, precision = 2) {
   const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
   let tier = Math.log10(number) / 3 | 0;
-  if(tier == 0) return Number.parseFloat(number).toFixed(2);
+  if(tier == 0) return Number.parseFloat(number).toFixed(precision);
   let suffix = SI_SYMBOL[tier];
   let scale = Math.pow(10, tier * 3);
   let scaled = number / scale;
-  return scaled.toFixed(2) + '<span class="suffix">' + suffix + '</span>';
+  return scaled.toFixed(precision) + '<span class="suffix">' + suffix + '</span>';
 }
 
 function abbreviateAddress (address) {
@@ -167,6 +167,8 @@ async function genwork(hash){
       worker.onmessage = (work) => {
         console.log('Work Generated: ' + work.data);
         $('#workstorage').data('workstorage',work);
+        $('#powstatus .busy').removeClass('active');
+        $('#powstatus .ready').addClass('active');
         for (let workerIndex in workerList) {
           workerList[workerIndex].terminate();
         }
@@ -216,7 +218,7 @@ $('body').on('click', '.openwallet', async function(){
     genwork(publickey);
   }
   $('#output').append(
-    '<div class="balance"><div class="value"><img src="img/coin.svg" />' + abbreviateNumber(balance) + '</div><div class="raw"><img src="img/coin.svg" />' + balance + '</div></div>'
+    '<div class="balance"><div class="value">' + abbreviateNumber(balance) + '</div><div class="raw">' + balance + '</div></div>'
   );
   $('#settingsdetails').append(
     '<div class="details"><label for="representative">Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>'
@@ -230,9 +232,9 @@ $('body').on('click', '.openwallet', async function(){
       let date = new Date(value.local_timestamp * 1000); 
       $('#history').append('\
       <div class="transaction ' + value.type + '">\
-        <div class="type"><img class="' + value.type + '" src="img/' + (value.type === 'send' ? 'minus-' : 'plus-' ) + 'circle.svg" alt="' + value.type + '" /></div>\
+        <div class="type icon"><i class="' + value.type + ' fal ' + (value.type === 'send' ? 'fa-minus-circle' : 'fa-plus-circle' ) + '"></i></div>\
         <div class="innerdetails">\
-          <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value"><img src="img/coin.svg" />' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv)) + '</div><div class="type">' + transactionStatus(value.type) + '</div></div>\
+          <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value">' + (value.type === 'send' ? '-' : '+' ) + ' ' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv), 5) + ' <i class="fal fa-coin"></i></div><div class="type">' + transactionStatus(value.type) + '</div></div>\
           <div class="address">' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() + ' - ' + abbreviateAddress(value.account) + '</div>\
         </div>\
 	    </div>');
@@ -248,9 +250,9 @@ $('body').on('click', '.openwallet', async function(){
     $.each(pending.blocks, function( key, value ) {
       $('#pendingblocks').append('\
       <div class="transaction pending">\
-      <div class="type"><img class="pending" src="img/exclamation-circle.svg" alt="pending" /></div>\
+      <div class="type icon"><i class="fal fa-exclamation-circle"></i></div>\
       <div class="innerdetails">\
-        <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value"><img src="img/coin.svg" />' + NanoCurrency.convert(value.amount,rawconv) + '</div><div class="type"><button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button></div></div>\
+        <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value">+ ' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv), 5) + ' <i class="fal fa-coin"></i></div><div class="type"><button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button></div></div>\
         <div class="address">' + abbreviateAddress(value.source) + '</div>\
       </div>\
       </div>');

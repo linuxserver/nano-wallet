@@ -22,6 +22,30 @@ body {
   color: #2cc2ca;
 }
 
+#powstatus {
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+#powstatus .status {
+  display: none;
+  padding: 5px;
+}
+
+#powstatus .status.busy {
+  background: #363e58;
+}
+
+#powstatus .status.ready {
+  background: #14af70;
+  color: white;
+}
+
+#powstatus .status.active {
+  display: block;
+}
+
 #app {
   width: 100vw;
   height: 100vh;
@@ -234,31 +258,16 @@ body {
   flex: 1;
 }
 
-.transaction .send {
-  -webkit-filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(244deg) brightness(199%) contrast(92%);
-          filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(244deg) brightness(199%) contrast(92%);
-}
-
-.transaction .receive {
-  -webkit-filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(149deg) brightness(199%) contrast(92%);
-          filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(149deg) brightness(199%) contrast(92%);
-}
-
-.transaction .pending {
-  -webkit-filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(20deg) brightness(252%) contrast(92%);
-          filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(20deg) brightness(252%) contrast(92%);
-}
-
 .transaction .address {
   font-weight: 200;
   font-size: 12px;
   opacity: 0.7;
 }
 
-.transaction .type img {
-  width: 35px;
+.transaction .icon {
+  font-size: 35px;
   margin-right: 15px;
-  opacity: 0.7;
+  opacity: 0.85;
   display: block;
 }
 
@@ -268,14 +277,17 @@ body {
   line-height: 1;
 }
 
+.transaction .value svg {
+  margin-left: 5px;
+}
+
 .transaction .amount {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.transaction .amount img {
-  width: 15px;
+.transaction .amount .icon {
   margin-left: 5px;
 }
 
@@ -297,6 +309,10 @@ body {
 
 .transaction.send .type {
   color: #af73d2;
+}
+
+.transaction.pending .type {
+  color: #e2ac39;
 }
 
 #output {

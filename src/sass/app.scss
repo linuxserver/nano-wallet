@@ -17,7 +17,7 @@ $lighter-text: #959da0;
 
 $highlight: #2cc2ca;
 $highlight2: #af73d2;
-$highlight3: #4bc3c7;
+$highlight3: #e2ac39;
 
 html, body {
     background: linear-gradient(to bottom, $body-bg1, $body-bg2);
@@ -36,6 +36,25 @@ html, body {
     top: 20px;
     right: 20px;
     color: $highlight;
+}
+#powstatus {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    .status {
+        display: none;
+        padding: 5px;
+        &.busy {
+            background: #363e58;
+        }
+        &.ready {
+            background: #14af70;
+            color: white;
+        }
+        &.active {
+            display: block;
+        }
+    }
 }
 #app {
     width: 100vw;
@@ -217,39 +236,30 @@ html, body {
     .innerdetails {
         flex: 1;
     }
-    .send {
-        filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(244deg) brightness(199%) contrast(92%);
-    }
-    .receive {
-        filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(149deg) brightness(199%) contrast(92%);
-    }
-    .pending {
-        filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(20deg) brightness(252%) contrast(92%);
-    }
     .address {
         font-weight: 200;
         font-size: 12px;
         opacity: 0.7;
     }
-    .type {
-        img {
-            width: 35px;
-            margin-right: 15px;
-            opacity: 0.7;
-            display: block;
-        }
+    .icon {
+        font-size: 35px;
+        margin-right: 15px;
+        opacity: 0.85;
+        display: block;
     }
     .value {
         display: flex;
         align-items: center;
         line-height: 1;
+        svg {
+            margin-left: 5px;
+        }
     }
     .amount {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        img {
-            width: 15px;
+        .icon {
             margin-left: 5px;
         }
         .type {
@@ -258,7 +268,7 @@ html, body {
         }
     }
     button.pocket {
-        background: #e2ac39;
+        background: $highlight3;
         border: none;
         padding: 3px 20px;
         border-radius: 7px;
@@ -271,6 +281,11 @@ html, body {
     &.send {
         .type {
             color: $highlight2;
+        }
+    }
+    &.pending {
+        .type {
+            color: $highlight3;
         }
     }
 }
