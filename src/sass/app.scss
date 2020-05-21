@@ -39,20 +39,33 @@ html, body {
 }
 #powstatus {
     width: 100%;
-    text-align: center;
     position: relative;
+    height:32px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 5;
     .status {
-        display: none;
         padding: 5px;
+        position: absolute;
+        transition: 0.7s all;
+        text-align: center;
+        left: 0;
+        right: 0;
+        height: 32px;
         &.busy {
             background: #363e58;
+            top: -32px;
+            &.active {
+                top: 0;
+            }
         }
         &.ready {
             background: #14af70;
             color: white;
-        }
-        &.active {
-            display: block;
+            top: 32px;
+            &.active {
+                top: 0;
+            }
         }
     }
 }
@@ -86,6 +99,7 @@ html, body {
             padding-bottom: 65px;
             position: relative;
             width: 100%;
+            padding-top: 32px;
         }
     }
     #login {

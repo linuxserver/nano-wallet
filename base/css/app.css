@@ -24,26 +24,40 @@ body {
 
 #powstatus {
   width: 100%;
-  text-align: center;
   position: relative;
+  height: 32px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 5;
 }
 
 #powstatus .status {
-  display: none;
   padding: 5px;
+  position: absolute;
+  transition: 0.7s all;
+  text-align: center;
+  left: 0;
+  right: 0;
+  height: 32px;
 }
 
 #powstatus .status.busy {
   background: #363e58;
+  top: -32px;
+}
+
+#powstatus .status.busy.active {
+  top: 0;
 }
 
 #powstatus .status.ready {
   background: #14af70;
   color: white;
+  top: 32px;
 }
 
-#powstatus .status.active {
-  display: block;
+#powstatus .status.ready.active {
+  top: 0;
 }
 
 #app {
@@ -81,6 +95,7 @@ body {
   padding-bottom: 65px;
   position: relative;
   width: 100%;
+  padding-top: 32px;
 }
 
 #app #login {
