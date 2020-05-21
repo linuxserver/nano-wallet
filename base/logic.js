@@ -94,6 +94,12 @@ $('body').on('click', '.scan', function(){
 });
 
 $('body').on('click', '.sendfunds', async function(){
+  var pow = $('#workstorage').data('workstorage').data;
+  if (!pow){
+    console.log('work not ready');
+    return null;
+  }
+  console.log(pow);
   var senderprivate = $("#key").val();
   var amount = NanoCurrency.convert($("#amount").val(),nanoconv);
   var senderpublickey = NanoCurrency.derivePublicKey(senderprivate);
@@ -105,8 +111,6 @@ $('body').on('click', '.sendfunds', async function(){
   info['account'] = sender;
   var res = await rpcall(info);
   console.log(res);
-  console.log('Calculating pow for ' + res.frontier + ' this may take some time')
-  var pow = await NanoCurrency.computeWork(res.frontier);
   var balance = new BigNumber(res.balance).minus(new BigNumber(amount)).toFixed();
   var block = NanoCurrency.createBlock(senderprivate, {
     work: pow,
@@ -147,6 +151,33 @@ $('#app').on('click', '.close', function(e) {
   parent.removeClass('active')
 })
 
+async function genwork(hash){
+  console.log('Calculating pow for ' + hash + ' this may take some time');
+  const hardwareConcurrency = window.navigator.hardwareConcurrency || 2;
+  const workerCount = Math.max(hardwareConcurrency - 1, 1);
+  const work = () => new Promise(resolve => {
+    const workerList = [];
+    for (let i = 0; i < workerCount; i++) {
+      const worker = new Worker('pow.js');
+      worker.postMessage({
+        blockHash: hash,
+        workerIndex: i,
+        workerCount: workerCount
+      });
+      worker.onmessage = (work) => {
+        console.log('Work Generated: ' + work.data);
+        $('#workstorage').data('workstorage',work);
+        for (let workerIndex in workerList) {
+          workerList[workerIndex].terminate();
+        }
+        resolve();
+      };
+      workerList.push(worker);
+    }
+  });
+  await work();
+}
+
 $('body').on('click', '.openwallet', async function(){
   $('#history').empty();
   $('#output').empty();
@@ -154,6 +185,7 @@ $('body').on('click', '.openwallet', async function(){
   $('#pendingblocks').empty();
   $('#dynform').empty();
   $('#qrcode').empty();
+  $('#workstorage').data('workstorage','');
   var rep = 'nano_18gmu6engqhgtjnppqam181o5nfhj4sdtgyhy36dan3jr9spt84rzwmktafc';
   var privatekey = $("#key").val();
   var publickey = NanoCurrency.derivePublicKey(privatekey);
@@ -168,6 +200,7 @@ $('body').on('click', '.openwallet', async function(){
   $('#wallet').addClass('active');
   if ('frontier' in info){
     var frontier = info.frontier;
+    genwork(frontier);
     var balance = NanoCurrency.convert(info.balance,rawconv);
     var representative = info.representative;
     $('#dynform').append('\
@@ -178,6 +211,9 @@ $('body').on('click', '.openwallet', async function(){
         <input type="text" id="destination" name="destination">\
       </div>\
       <button class="sendfunds" type="button">Send</button><button class="scan" type="button">Scan QR</button>');
+  }
+  else{
+    genwork(publickey);
   }
   $('#output').append(
     '<div class="balance"><div class="value"><img src="img/coin.svg" />' + abbreviateNumber(balance) + '</div><div class="raw"><img src="img/coin.svg" />' + balance + '</div></div>'
@@ -223,6 +259,11 @@ $('body').on('click', '.openwallet', async function(){
 });
 
 $('body').on('click', '.pocket', async function(){
+  var pow = $('#workstorage').data('workstorage').data;
+  if (!pow){
+    console.log('work not ready');
+    return null;
+  }
   var data = $(this).attr("value").split('|');
   var block = data[0];
   var amount = data[1];
@@ -247,8 +288,6 @@ $('body').on('click', '.pocket', async function(){
     var frontier = publickey;
     var previous = '0000000000000000000000000000000000000000000000000000000000000000';
   }
-  console.log('Calculating pow for ' + frontier + ' this may take some time')
-  var pow = await NanoCurrency.computeWork(frontier);
   var balance = new BigNumber(startingbalance).plus(new BigNumber(amount)).toFixed();
   var block = NanoCurrency.createBlock(privatekey, {
     work: pow,
