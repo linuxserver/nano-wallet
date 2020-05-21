@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="css/app.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap" rel="stylesheet">
     <title>Test Wallet</title>
   </head>
   <body>
@@ -26,6 +27,7 @@
       <div id="wallet" class="page">
         <div class="inner">
           <div id="output"></div>
+          <div class="headingtitle">History</div>
           <div id="pendingblocks"></div>
           <div id="history"></div>
         </div>
@@ -34,6 +36,7 @@
           <div class="content">
             <a data-tab="#receive" href="">Receive</a>
             <a data-tab="#send" href="">Send</a>
+            <a data-tab="#settings" href="">Settings</a>
           </div>
         </div>
       </div>
@@ -45,6 +48,10 @@
       <div id="send" class="page">
         <a href="#" class="close">Close</a>
         <div id="dynform"></div>
+      </div>
+      <div id="settings" class="page">
+        <a href="#" class="close">Close</a>
+        <div id="settingsdetails"></div>
       </div>
       <div id="receive" class="page">
         <a href="#" class="close">Close</a>

@@ -20,7 +20,7 @@ var rpcurl = 'http://' + getUrlParameter('node') + ':7076';
 function abbreviateNumber (number) {
   const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
   let tier = Math.log10(number) / 3 | 0;
-  if(tier == 0) return number;
+  if(tier == 0) return Number.parseFloat(number).toFixed(2);
   let suffix = SI_SYMBOL[tier];
   let scale = Math.pow(10, tier * 3);
   let scaled = number / scale;
@@ -125,6 +125,7 @@ $('body').on('click', '.sendfunds', async function(){
   var sendres = await rpcall(send);
   console.log(sendres);
   $('.openwallet').click();
+  $('#send').removeClass('active');
 });
 
 $('#output').on('click', '.copy', function() {
@@ -151,6 +152,7 @@ $('#app').on('click', '.close', function(e) {
 $('body').on('click', '.openwallet', async function(){
   $('#history').empty();
   $('#output').empty();
+  $('#settingsdetails').empty();
   $('#pendingblocks').empty();
   $('#dynform').empty();
   $('#qrcode').empty();
@@ -173,29 +175,33 @@ $('body').on('click', '.openwallet', async function(){
     $('#dynform').append('\
       <div id="sendform">\
         <label for="amount">Amount:</label>\
-        <input type="text" id="amount" name="amount"><br>\
+        <input type="text" id="amount" name="amount">\
         <label for="destination">Destination:</label>\
-        <input type="text" id="destination" name="destination"><br>\
+        <input type="text" id="destination" name="destination">\
       </div>\
-      <button class="scan" type="button">ScanQR</button><br>\
-      <button class="sendfunds" type="button">Send</button>');
+      <button class="sendfunds" type="button">Send</button><button class="scan" type="button">Scan QR</button>');
   }
   $('#output').append(
-    '<div class="balance"><div class="title">Balance</div><div class="value">' + abbreviateNumber(balance) + '</div><div class="raw">' + balance + '</div></div>' +
-    '<div class="details"><label for="address">Address</label><div class="copy">Copy</div><input class="copytext" type="text" name="address" value="' + address + '" /></div>' +
-    '<div class="details"><label for="representative">Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>'
+    '<div class="balance"><div class="value"><img src="img/coin.svg" />' + abbreviateNumber(balance) + '</div><div class="raw"><img src="img/coin.svg" />' + balance + '</div></div>'
   );
+  $('#settingsdetails').append(
+    '<div class="details"><label for="representative">Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>'
+  )
   var history = {};
   history['action'] = 'account_history';
   history['account'] = address;
   var history = await rpcall(history);
   if (Array.isArray(history.history) && history.history.length){
     $.each(history.history, function( index, value ) {
+      let date = new Date(value.local_timestamp * 1000); 
+
       $('#history').append('\
-      <div class="transaction">\
-        <div class="type"><img src="img/' + (value.type === 'send' ? 'minus-' : 'plus-' ) + 'circle.svg" alt="' + value.type + '" /></div>\
-        <div class="amount"><div class="type">' + transactionStatus(value.type) + '</div><div title="' + nanocurrency.convert(value.amount,rawconv) + '" class="value">' + abbreviateNumber(nanocurrency.convert(value.amount,rawconv)) + '</div></div>\
-        <div class="address">' + abbreviateAddress(value.account) + '</div>\
+      <div class="transaction ' + value.type + '">\
+        <div class="type"><img class="' + value.type + '" src="img/' + (value.type === 'send' ? 'minus-' : 'plus-' ) + 'circle.svg" alt="' + value.type + '" /></div>\
+        <div class="innerdetails">\
+          <div class="amount"><div title="' + nanocurrency.convert(value.amount,rawconv) + '" class="value"><img src="img/coin.svg" />' + abbreviateNumber(nanocurrency.convert(value.amount,rawconv)) + '</div><div class="type">' + transactionStatus(value.type) + '</div></div>\
+          <div class="address">' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() + ' - ' + abbreviateAddress(value.account) + '</div>\
+        </div>\
 	    </div>');
     });
   }
@@ -206,26 +212,20 @@ $('body').on('click', '.openwallet', async function(){
   pending['account'] = address;
   var pending = await rpcall(pending);
   if (typeof pending.blocks === 'object'){
-    $('#pendingblocks').append('\
-      <table id="pendtable"  border="1">\
-        <tr>\
-	  <td>block</td>\
-          <td>source</td>\
-          <td>amount</td>\
-        </tr>\
-      </table>');
     $.each(pending.blocks, function( key, value ) {
-      $('#pendtable tr:last').after('\
-        <tr>\
-	  <td><button class="receive" value="' + key + '|' + value.amount + '|' + value.source + '">Recieve</button></td>\
-          <td>' + value.source + '</td>\
-          <td>' + nanocurrency.convert(value.amount,rawconv) + '</td>\
-        </tr>');
+      $('#pendingblocks').append('\
+      <div class="transaction pending">\
+      <div class="type"><img class="pending" src="img/exclamation-circle.svg" alt="pending" /></div>\
+      <div class="innerdetails">\
+        <div class="amount"><div title="' + nanocurrency.convert(value.amount,rawconv) + '" class="value"><img src="img/coin.svg" />' + nanocurrency.convert(value.amount,rawconv) + '</div><div class="type"><button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button></div></div>\
+        <div class="address">' + abbreviateAddress(value.source) + '</div>\
+      </div>\
+      </div>');
     });
   }
 });
 
-$('body').on('click', '.receive', async function(){
+$('body').on('click', '.pocket', async function(){
   var data = $(this).attr("value").split('|');
   var block = data[0];
   var amount = data[1];

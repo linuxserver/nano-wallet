@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap');
 
 // Body
 $body-bg1: #4d5879;
@@ -16,12 +16,14 @@ $text: #bec3d2;
 $lighter-text: #959da0;
 
 $highlight: #2cc2ca;
+$highlight2: #af73d2;
+$highlight3: #4bc3c7;
 
 html, body {
-    background: linear-gradient(to bottom left, $body-bg1, $body-bg2);
+    background: linear-gradient(to bottom, $body-bg1, $body-bg2);
     color: $text;
     font-family: 'Nunito', sans-serif;
-    font-weight: 200;
+    font-weight: 400;
     font-size: $font-size-base;
     height: 100vh;
     margin: 0;
@@ -45,7 +47,7 @@ html, body {
     overflow: hidden;
     position: relative;
     .page {
-        background: linear-gradient(to bottom left, $body-bg1, $body-bg2);
+        background: linear-gradient(to bottom, $body-bg1, $body-bg2);
         width: 100vw;
         height: 100vh;
         padding: 40px;    
@@ -63,7 +65,8 @@ html, body {
         .inner {
             overflow-y: auto;
             padding-bottom: 65px;
-            position: relative;    
+            position: relative;
+            width: 100%;
         }
     }
     #login {
@@ -71,7 +74,7 @@ html, body {
         justify-content: space-between;
     }
     
-    #send, #receive {
+    #send, #receive, #settings {
         z-index: 2;
     }
     #receive {
@@ -128,6 +131,12 @@ html, body {
                 }
             }
         }
+        .headingtitle {
+            font-size: 35px;
+            text-align: center;
+            font-weight: 200;
+            margin: 40px 0 5px;
+        }
         .balance {
             background: rgba(0,0,0,0.2);
             margin: 10px 10px 40px;
@@ -141,6 +150,15 @@ html, body {
                 color: white;
                 font-weight: bold;
                 margin: 30px 0;
+                line-height: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img {
+                    display: inline-block;
+                    width: 40px;
+                    margin-right: 10px;
+                }
                 .suffix {
                     font-size: 30px;
                     color: #bec3d2c9;
@@ -149,14 +167,39 @@ html, body {
             }
             .raw {
                 font-size: 12px;
+                line-height: 1;
+                display: flex;
+                justify-content: center;
+                img {
+                    width: 12px;
+                    margin-right:4px;
+                }
             }
         }
     }
 }
+.sendfunds {
+    width: 100%;
+    background: $highlight;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 15px 0 30px;
+}
+.scan {
+    width: 100%;
+    border: 3px solid $highlight;
+    background: transparent;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 18px;
+    color: $highlight;
+}
 .highlight {
     color: $highlight;
 }
-#history {
+#history, #pendingblocks {
     width: 100%;
     padding: 10px;
 }
@@ -164,9 +207,24 @@ html, body {
     display: flex;
     align-items: center;
     padding: 20px;
-    border-radius: 15px;
-    background: rgba(255,255,255, 0.1);
-    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255, 0.1);
+    .innerdetails {
+        flex: 1;
+    }
+    .send {
+        filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(244deg) brightness(199%) contrast(92%);
+    }
+    .receive {
+        filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(149deg) brightness(199%) contrast(92%);
+    }
+    .pending {
+        filter: invert(76%) sepia(43%) saturate(2366%) hue-rotate(20deg) brightness(252%) contrast(92%);
+    }
+    .address {
+        font-weight: 200;
+        font-size: 12px;
+        opacity: 0.7;
+    }
     .type {
         img {
             width: 35px;
@@ -175,15 +233,38 @@ html, body {
             display: block;
         }
     }
+    .value {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+    }
     .amount {
         display: flex;
-        flex-direction: column;
-        flex: 1;
+        align-items: center;
+        justify-content: space-between;
+        img {
+            width: 15px;
+            margin-right: 5px;
+        }
         .type {
             color: white;
-            font-weight: bold;
-            text-transform: uppercase;
             font-size: 14px;
+        }
+    }
+    button.pocket {
+        background: #e2ac39;
+        border: none;
+        padding: 3px 20px;
+        border-radius: 7px;
+    }
+    &.receive {
+        .type {
+            color: $highlight;
+        }
+    }
+    &.send {
+        .type {
+            color: $highlight2;
         }
     }
 }
