@@ -92,6 +92,10 @@ body {
   z-index: 3;
 }
 
+#app #settingsdetails {
+  width: 100%;
+}
+
 #app #wallet {
   z-index: 1;
   justify-content: flex-start;
@@ -312,6 +316,7 @@ input[type=text] {
   border-radius: 5px;
   border: 2px solid #2cc2ca;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 .details {
@@ -332,7 +337,7 @@ input[type=text] {
 
 .details .copy {
   position: absolute;
-  right: 40px;
+  right: 0px;
   top: 0px;
   color: #2cc2ca;
   text-decoration: underline;

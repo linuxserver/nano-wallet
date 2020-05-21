@@ -97,6 +97,9 @@ html, body {
     #scan {
         z-index: 3;
     }
+    #settingsdetails {
+        width: 100%;
+    }
     #wallet {
         z-index: 1;
         justify-content: flex-start;
@@ -286,6 +289,7 @@ input[type=text] {
     border-radius: 5px;
     border: 2px solid $highlight;
     margin-bottom: 30px;
+    width: 100%;
     &.copytext {
     }
 }
@@ -303,7 +307,7 @@ input[type=text] {
     }
     .copy {
         position: absolute;
-        right: 40px;
+        right: 0px;
         top: 0px;
         color: $highlight;
         text-decoration: underline;
