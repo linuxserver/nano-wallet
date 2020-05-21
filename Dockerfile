@@ -1,5 +1,5 @@
 # build stage
-from lsiobase/alpine:3.11 as browserify
+from lsiobase/alpine:3.11 as build
 
 RUN \
  apk add \
@@ -7,17 +7,15 @@ RUN \
 COPY ./ /build
 RUN \
  cd /build && \
- npm install -g browserify && \
  npm install && \
  npm run development && \
- browserify wallet-logic.js -o base/bundle.js && \
  mkdir /buildout && \
  mv base/* /buildout/ 
 
 # runtime stage
 FROM lsiobase/cloud9:alpine
 
-COPY --from=browserify /buildout /code
+COPY --from=build /buildout /code
 COPY root/ /
 RUN \
  apk add --no-cache \
