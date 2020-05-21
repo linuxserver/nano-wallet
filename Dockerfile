@@ -4,14 +4,15 @@ from lsiobase/alpine:3.11 as browserify
 RUN \
  apk add \
 	nodejs-npm
+COPY ./ /build
 RUN \
+ cd /build && \
  npm install -g browserify && \
- npm install nanocurrency
-COPY /wallet-logic.js /wallet-logic.js
-COPY /base /buildout
-RUN \
-  browserify /wallet-logic.js -o /bundle.js && \
-  mv /bundle.js /buildout/
+ npm install && \
+ npm run development && \
+ browserify wallet-logic.js -o base/bundle.js && \
+ mkdir /buildout && \
+ mv base/* /buildout/ 
 
 # runtime stage
 FROM lsiobase/cloud9:alpine
