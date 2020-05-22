@@ -102,6 +102,7 @@ $('body').on('click', '.scan', function(){
 $('body').on('click', '.sendfunds', async function(){
   var pow = $('#workstorage').data('workstorage').data;
   if (!pow){
+    alert('Calculation not yet complete, please try again when the status has changed to ready');
     console.log('work not ready');
     return null;
   }
@@ -155,10 +156,17 @@ $('#app').on('click', '.close', function(e) {
   e.preventDefault()
   const parent = $(this).parent()
   parent.removeClass('active')
-})
-
-$('#app').on('click', '#closewallet', function(e) {
+}).on('click', '#closewallet', function(e) {
   $('#wallet').removeClass('active')
+}).on('click', '.status.ready', function(e) {
+  alert($('#workstorage').data('workstorage').data)
+});
+
+$('#app').on('keyup', '#key', function(e){
+  if(e.keyCode == 13)
+  {
+    $('.openwallet').click();
+  }
 });
 
 async function genwork(hash){
@@ -176,7 +184,7 @@ async function genwork(hash){
           workerCount: workerCount
         });
         worker.onmessage = (work) => {
-          console.log('Work Generated: ' + work.data);
+          console.log('Work: ' + work);
           $('#workstorage').data('workstorage',work);
           $('#powstatus .busy').removeClass('active');
           $('#powstatus .ready').addClass('active');
@@ -284,6 +292,7 @@ $('body').on('click', '.openwallet', async function(){
 $('body').on('click', '.pocket', async function(){
   var pow = $('#workstorage').data('workstorage').data;
   if (!pow){
+    alert('Calculation not yet complete, please try again when the status has changed to ready');
     console.log('work not ready');
     return null;
   }
@@ -335,6 +344,7 @@ $('body').on('click', '.pocket', async function(){
 $('body').on('click', '.repchange', async function(){
   var pow = $('#workstorage').data('workstorage').data;
   if (!pow){
+    alert('Calculation not yet complete, please try again when the status has changed to ready');
     console.log('work not ready');
     return null;
   }
