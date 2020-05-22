@@ -36,6 +36,7 @@ html, body {
     top: 20px;
     right: 20px;
     color: $highlight;
+    font-size: 24px;
 }
 #powstatus {
     width: 100%;
@@ -121,14 +122,13 @@ html, body {
             }
         }
         .address {
-            word-break: break-all;
             font-size: 18px;
             margin: 0 30px 30px;
             font-weight: bold;
             line-height: 1.8;
         }
     }
-    #scan {
+    #scan, #blockdetails {
         z-index: 3;
     }
     #settingsdetails {
@@ -223,6 +223,30 @@ html, body {
         }
     }
 }
+.address {
+    word-break: break-all;
+    font-size: 16px;
+}
+#breakdown {
+    .hide {
+        position: absolute;
+        left: -999em;
+    }
+    .address {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        font-weight: 400;
+    }
+    .date {
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+    details.uaddress {
+        height: 100px;
+    }
+}
+
 .mla {
     margin-left: auto;
 }

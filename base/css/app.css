@@ -20,6 +20,7 @@ body {
   top: 20px;
   right: 20px;
   color: #2cc2ca;
+  font-size: 24px;
 }
 
 #powstatus {
@@ -121,14 +122,14 @@ body {
 }
 
 #app #receive .address {
-  word-break: break-all;
   font-size: 18px;
   margin: 0 30px 30px;
   font-weight: bold;
   line-height: 1.8;
 }
 
-#app #scan {
+#app #scan,
+#app #blockdetails {
   z-index: 3;
 }
 
@@ -237,6 +238,32 @@ body {
 #app #wallet .balance .raw img {
   width: 12px;
   margin-right: 4px;
+}
+
+.address {
+  word-break: break-all;
+  font-size: 16px;
+}
+
+#breakdown .hide {
+  position: absolute;
+  left: -999em;
+}
+
+#breakdown .address {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  font-weight: 400;
+}
+
+#breakdown .date {
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+#breakdown details.uaddress {
+  height: 100px;
 }
 
 .mla {

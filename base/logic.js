@@ -397,5 +397,14 @@ $('body').on('click', '.type', async function(){
   blockinfo['json_block'] = 'true';
   blockinfo['hash'] = $(this).attr("value");
   var blockinfo = await rpcall(blockinfo);
+  $('#breakdown').empty()
+  let date = new Date(blockinfo.local_timestamp * 1000);
+  $('#breakdown').append(
+    '<div class="details"><label for="amount">Date</label><div class="date">' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() + ' - ' + date.toLocaleTimeString(undefined, {hour: '2-digit',minute: '2-digit',second: '2-digit'}) + '</div></div>\
+    <div class="details"><label for="amount">Amount</label><a href="#" class="copy"><i class="fad fa-clone"></i></a></a><input class="amount" type="text" name="amount" value="' + blockinfo.amount + '" /></div>\
+    <div class="details uaddress"><label for="address">Address</label><a href="#" class="copy"><i class="fad fa-clone"></i></a><input class="hide" type="text" name="address" value="' + blockinfo.block_account + '" /><div class="address">' + highlightAddress(blockinfo.block_account) + '</div></div>'
+  )
+  $('#blockdetails').addClass('active')
+
   console.log(blockinfo);
 });
