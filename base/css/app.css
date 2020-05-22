@@ -245,6 +245,29 @@ body {
   font-size: 16px;
 }
 
+#breakdown {
+  justify-content: flex-start;
+  height: calc(100% - 30px);
+  overflow: auto;
+}
+
+#breakdown .json {
+  width: 320px;
+  overflow: auto;
+}
+
+#breakdown .block {
+  margin-bottom: 20px;
+}
+
+#breakdown .stateblock {
+  word-break: break-all;
+}
+
+#breakdown .value {
+  word-break: break-all;
+}
+
 #breakdown .hide {
   position: absolute;
   left: -999em;

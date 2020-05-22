@@ -397,13 +397,22 @@ $('body').on('click', '.type', async function(){
   blockinfo['json_block'] = 'true';
   blockinfo['hash'] = $(this).attr("value");
   var blockinfo = await rpcall(blockinfo);
-  $('#breakdown').empty()
+  $('#breakdown .value').empty()
   let date = new Date(blockinfo.local_timestamp * 1000);
-  $('#breakdown').append(
-    '<div class="details"><label for="amount">Date</label><div class="date">' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() + ' - ' + date.toLocaleTimeString(undefined, {hour: '2-digit',minute: '2-digit',second: '2-digit'}) + '</div></div>\
-    <div class="details"><label for="amount">Amount</label><a href="#" class="copy"><i class="fad fa-clone"></i></a></a><input class="amount" type="text" name="amount" value="' + blockinfo.amount + '" /></div>\
-    <div class="details uaddress"><label for="address">Address</label><a href="#" class="copy"><i class="fad fa-clone"></i></a><input class="hide" type="text" name="address" value="' + blockinfo.block_account + '" /><div class="address">' + highlightAddress(blockinfo.block_account) + '</div></div>'
-  )
+  $('#breakdown .stateblock').text(blockinfo.hash)
+  $('#breakdown .subtype').text(blockinfo.subtype)
+  $('#breakdown .account').text(blockinfo.block_account)
+  $('#breakdown .amount').text(blockinfo.amount)
+  $('#breakdown .balance').text(blockinfo.balance)
+  $('#breakdown .representative').text(blockinfo.contents.representative)
+  $('#breakdown .recipient').text(blockinfo.contents.link_as_account)
+  $('#breakdown .date').text(blockinfo.local_timestamp)
+  $('#breakdown .previous').text(blockinfo.contents.previous)
+  $('#breakdown .link').text(blockinfo.contents.link)
+  $('#breakdown .proof').text(blockinfo.contents.work)
+  $('#breakdown .signature').text(blockinfo.contents.signature)
+  $('#breakdown .json').text(JSON.stringify(blockinfo, null, '\t'))
+
   $('#blockdetails').addClass('active')
 
   console.log(blockinfo);

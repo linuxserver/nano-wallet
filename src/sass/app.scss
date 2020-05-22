@@ -228,6 +228,22 @@ html, body {
     font-size: 16px;
 }
 #breakdown {
+    justify-content: flex-start;
+    height: calc(100% - 30px);
+    overflow: auto;
+    .json {
+        width: 320px;
+        overflow: auto;
+    }
+    .block {
+        margin-bottom: 20px;
+    }
+    .stateblock {
+        word-break: break-all;
+    }
+    .value {
+        word-break: break-all;
+    }
     .hide {
         position: absolute;
         left: -999em;
