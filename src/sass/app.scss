@@ -89,7 +89,7 @@ html, body {
         justify-content: center;
         transition: all 0.3s;
         position: absolute;
-        top: 0;
+        top: 32px;
         left: 100vw;
         &.active {
             left: 0;
@@ -105,6 +105,7 @@ html, body {
     #login {
         z-index: 0;
         justify-content: space-between;
+        top: 0;
     }
     
     #send, #receive, #settings {
@@ -133,10 +134,14 @@ html, body {
     #settingsdetails {
         width: 100%;
     }
+    #genwallet {
+        top: 0;
+    }
     #wallet {
         z-index: 1;
         justify-content: flex-start;
         padding: 0;
+        top: 0;
         .menu {
             position: absolute;
             bottom:0;

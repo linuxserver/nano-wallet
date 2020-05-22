@@ -63,9 +63,9 @@ $('body').on('click', '.genwallet', async function(){
   var walletdata = await getseed();
   $('#genwallet').addClass('active')
   $('#genoutput').append(
-    '<div class="details"><label for="privatekey">Private Key</label><div class="copy">Copy</div><input class="copytext" type="text" name="privatekey" value="' + walletdata.privatekey + '" /></div>' +
-    '<div class="details"><label for="publickey">Public Key</label><div class="copy">Copy</div><input class="copytext" type="text" name="publickey" value="' + walletdata.publickey + '" /></div>' +
-    '<div class="details"><label for="address">Address</label><div class="copy">Copy</div><input class="copytext" type="text" name="address" value="' + walletdata.address + '" /></div>'
+    '<div class="details"><label for="privatekey">Private Key</label><a href="#" class="copy"><i class="fad fa-clone"></i></a><input class="copytext" type="text" name="privatekey" value="' + walletdata.privatekey + '" /></div>' +
+    '<div class="details"><label for="publickey">Public Key</label><a href="#" class="copy"><i class="fad fa-clone"></i></a><input class="copytext" type="text" name="publickey" value="' + walletdata.publickey + '" /></div>' +
+    '<div class="details"><label for="address">Address</label><a href="#" class="copy"><i class="fad fa-clone"></i></a><input class="copytext" type="text" name="address" value="' + walletdata.address + '" /></div>'
   );
 
   new QRCode(document.getElementById("genqrcode"), walletdata.address);
@@ -137,7 +137,8 @@ $('body').on('click', '.sendfunds', async function(){
   $('#send').removeClass('active');
 });
 
-$('#output').on('click', '.copy', function() {
+$('#app').on('click', '.copy', function(e) {
+  e.preventDefault()
   const parent = $(this).parent()
   const input = parent.find('input')
   //alert(input.val())
@@ -248,8 +249,8 @@ $('body').on('click', '.openwallet', async function(){
     '<div class="balance"><div class="value">' + abbreviateNumber(balance) + '</div><div class="raw">' + balance + '</div></div>'
   );
   $('#settingsdetails').append(
-    '<div class="details"><label for="representative">Current Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>\
-    <div class="details"><label for="newrep">Change Representative</label><div class="copy">Copy</div><input class="newrep" type="text" name="newrep" /></div>\
+    '<div class="details"><label for="representative">Current Representative</label><a href="#" class="copy"><i class="fad fa-clone"></i></a></a><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>\
+    <div class="details"><label for="newrep">Change Representative</label><a href="#" class="copy"><i class="fad fa-clone"></i></a><input class="newrep" type="text" name="newrep" /></div>\
     <button class="repchange btn">Change Representative</button>'
   )
   var history = {};

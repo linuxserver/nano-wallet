@@ -82,7 +82,7 @@ body {
   justify-content: center;
   transition: all 0.3s;
   position: absolute;
-  top: 0;
+  top: 32px;
   left: 100vw;
 }
 
@@ -101,6 +101,7 @@ body {
 #app #login {
   z-index: 0;
   justify-content: space-between;
+  top: 0;
 }
 
 #app #send,
@@ -135,10 +136,15 @@ body {
   width: 100%;
 }
 
+#app #genwallet {
+  top: 0;
+}
+
 #app #wallet {
   z-index: 1;
   justify-content: flex-start;
   padding: 0;
+  top: 0;
 }
 
 #app #wallet .menu {
