@@ -234,7 +234,9 @@ $('body').on('click', '.openwallet', async function(){
     '<div class="balance"><div class="value">' + abbreviateNumber(balance) + '</div><div class="raw">' + balance + '</div></div>'
   );
   $('#settingsdetails').append(
-    '<div class="details"><label for="representative">Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>'
+    '<div class="details"><label for="representative">Current Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>\
+    <div class="details"><label for="newrep">Change Representative</label><div class="copy">Copy</div><input class="newrep" type="text" name="newrep" /></div>\
+    <button class="repchange">Change Representative</button>'
   )
   var history = {};
   history['action'] = 'account_history';
@@ -245,7 +247,7 @@ $('body').on('click', '.openwallet', async function(){
       let date = new Date(value.local_timestamp * 1000); 
       $('#history').append('\
       <div class="transaction ' + value.type + '">\
-        <div class="type icon"><i class="' + value.type + ' fal ' + (value.type === 'send' ? 'fa-minus-circle' : 'fa-plus-circle' ) + '"></i></div>\
+        <div class="type icon" value="' + value.hash + '"><i class="' + value.type + ' fal ' + (value.type === 'send' ? 'fa-minus-circle' : 'fa-plus-circle' ) + '"></i></div>\
         <div class="innerdetails">\
           <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value">' + (value.type === 'send' ? '-' : '+' ) + ' ' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv), 5) + ' <i class="fal fa-coin"></i></div><div class="type">' + transactionStatus(value.type) + '</div></div>\
           <div class="address">' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() + ' - ' + abbreviateAddress(value.account) + '</div>\
@@ -263,7 +265,7 @@ $('body').on('click', '.openwallet', async function(){
     $.each(pending.blocks, function( key, value ) {
       $('#pendingblocks').append('\
       <div class="transaction pending">\
-      <div class="type icon"><i class="fal fa-exclamation-circle"></i></div>\
+      <div class="type icon" value="' + value.hash + '"><i class="fal fa-exclamation-circle"></i></div>\
       <div class="innerdetails">\
         <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value">+ ' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv), 5) + ' <i class="fal fa-coin"></i></div><div class="type"><button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button></div></div>\
         <div class="address">' + abbreviateAddress(value.source) + '</div>\
@@ -296,18 +298,20 @@ $('body').on('click', '.pocket', async function(){
     var blocktype = 'receive';
     var frontier = info.frontier;
     var previous = info.frontier;
+    var rep = info.representative;
   }
   else{
     var startingbalance = '0';
     var blocktype = 'open';
     var frontier = publickey;
     var previous = '0000000000000000000000000000000000000000000000000000000000000000';
+    var rep = address;
   }
   var balance = new BigNumber(startingbalance).plus(new BigNumber(amount)).toFixed();
   var block = NanoCurrency.createBlock(privatekey, {
     work: pow,
     previous: previous,
-    representative: 'nano_18gmu6engqhgtjnppqam181o5nfhj4sdtgyhy36dan3jr9spt84rzwmktafc',
+    representative: rep,
     balance: balance,
     link: block
   });
@@ -320,4 +324,51 @@ $('body').on('click', '.pocket', async function(){
   var receiveres = await rpcall(receive);
   console.log(receiveres);
   $('.openwallet').click();
+});
+
+$('body').on('click', '.repchange', async function(){
+  var pow = $('#workstorage').data('workstorage').data;
+  if (!pow){
+    console.log('work not ready');
+    return null;
+  }
+  var privatekey = $("#key").val();
+  var publickey = NanoCurrency.derivePublicKey(privatekey);
+  var address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
+  var rep = $('.newrep').val();
+  console.log(rep);
+  var info = {};
+  info['action'] = 'account_info';
+  info['representative'] = 'true';
+  info['account'] = address;
+  var info = await rpcall(info);
+  var blocktype = 'change';
+  var frontier = info.frontier;
+  var previous = info.frontier;
+  var balance = info.balance;
+  var block = NanoCurrency.createBlock(privatekey, {
+    work: pow,
+    previous: previous,
+    representative: rep,
+    balance: balance,
+    link: '0000000000000000000000000000000000000000000000000000000000000000'
+  });
+  var repchange = {};
+  repchange['action'] = 'process';
+  repchange['json_block'] = 'true';
+  repchange['subtype'] = blocktype;
+  repchange['block'] = block.block;
+  console.log(repchange);
+  var repchangeres = await rpcall(repchange);
+  console.log(repchangeres);
+  $('.openwallet').click();
+});
+
+$('body').on('click', '.type', async function(){
+  var blockinfo = {};
+  blockinfo['action'] = 'block_info';
+  blockinfo['json_block'] = 'true';
+  blockinfo['hash'] = $(this).attr("value");
+  var blockinfo = await rpcall(blockinfo);
+  console.log(blockinfo);
 });
