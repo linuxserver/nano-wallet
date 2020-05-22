@@ -172,6 +172,7 @@ html, body {
             font-weight: 700;
             margin: 40px 30px 5px;
             color: white;
+            display: flex;
             &.top {
                 margin: 20px 30px 15px;               
             }
@@ -217,23 +218,15 @@ html, body {
         }
     }
 }
+.mla {
+    margin-left: auto;
+}
 .sendfunds {
     width: 100%;
-    background: $highlight;
-    border: none;
-    padding: 10px;
-    border-radius: 20px;
-    font-size: 18px;
     margin: 15px 0 30px;
 }
 .scan {
     width: 100%;
-    border: 3px solid $highlight;
-    background: transparent;
-    padding: 10px;
-    border-radius: 20px;
-    font-size: 18px;
-    color: $highlight;
 }
 .highlight {
     color: $highlight;
@@ -353,11 +346,22 @@ input[type=text] {
     button {
         background: $highlight;
         padding: 15px;
-        border-radius: 20px;
-        border: none;
-        color: #26314e;
-        font-size: 18px;
-        cursor: pointer;
+    }
+}
+.btn {
+    background: $highlight;
+    border-radius: 20px;
+    border: none;
+    color: $body-bg2;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 18px;
+    display: inline-block;
+
+    &.outline {
+        border: 3px solid $highlight;
+        background: transparent;
+        color: $highlight;
     }
 }
 input:-webkit-autofill,

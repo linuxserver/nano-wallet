@@ -181,6 +181,7 @@ body {
   font-weight: 700;
   margin: 40px 30px 5px;
   color: white;
+  display: flex;
 }
 
 #app #wallet .headingtitle.top {
@@ -232,24 +233,17 @@ body {
   margin-right: 4px;
 }
 
+.mla {
+  margin-left: auto;
+}
+
 .sendfunds {
   width: 100%;
-  background: #2cc2ca;
-  border: none;
-  padding: 10px;
-  border-radius: 20px;
-  font-size: 18px;
   margin: 15px 0 30px;
 }
 
 .scan {
   width: 100%;
-  border: 3px solid #2cc2ca;
-  background: transparent;
-  padding: 10px;
-  border-radius: 20px;
-  font-size: 18px;
-  color: #2cc2ca;
 }
 
 .highlight {
@@ -387,11 +381,23 @@ input[type=text] {
 #inputs button {
   background: #2cc2ca;
   padding: 15px;
+}
+
+.btn {
+  background: #2cc2ca;
   border-radius: 20px;
   border: none;
   color: #26314e;
-  font-size: 18px;
   cursor: pointer;
+  padding: 10px 20px;
+  font-size: 18px;
+  display: inline-block;
+}
+
+.btn.outline {
+  border: 3px solid #2cc2ca;
+  background: transparent;
+  color: #2cc2ca;
 }
 
 input:-webkit-autofill,

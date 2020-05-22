@@ -157,6 +157,10 @@ $('#app').on('click', '.close', function(e) {
   parent.removeClass('active')
 })
 
+$('#app').on('click', '#closewallet', function(e) {
+  $('#wallet').removeClass('active')
+});
+
 async function genwork(hash){
   if (window.Worker) {
     console.log('Calculating pow for ' + hash + ' this may take some time');
@@ -200,6 +204,8 @@ $('body').on('click', '.openwallet', async function(){
   $('#pendingblocks').empty();
   $('#dynform').empty();
   $('#qrcode').empty();
+  $('#powstatus .busy').addClass('active');
+  $('#powstatus .ready').removeClass('active');
   $('#workstorage').data('workstorage','');
   var rep = 'nano_18gmu6engqhgtjnppqam181o5nfhj4sdtgyhy36dan3jr9spt84rzwmktafc';
   var privatekey = $("#key").val();
@@ -225,7 +231,7 @@ $('body').on('click', '.openwallet', async function(){
         <label for="destination">Destination:</label>\
         <input type="text" id="destination" name="destination">\
       </div>\
-      <button class="sendfunds" type="button">Send</button><button class="scan" type="button">Scan QR</button>');
+      <button class="sendfunds btn" type="button">Send</button><button class="scan btn outline" type="button">Scan QR</button>');
   }
   else{
     genwork(publickey);
@@ -236,7 +242,7 @@ $('body').on('click', '.openwallet', async function(){
   $('#settingsdetails').append(
     '<div class="details"><label for="representative">Current Representative</label><div class="copy">Copy</div><input class="copytext" type="text" name="representative" value="' + representative + '" /></div>\
     <div class="details"><label for="newrep">Change Representative</label><div class="copy">Copy</div><input class="newrep" type="text" name="newrep" /></div>\
-    <button class="repchange">Change Representative</button>'
+    <button class="repchange btn">Change Representative</button>'
   )
   var history = {};
   history['action'] = 'account_history';
