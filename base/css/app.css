@@ -74,7 +74,7 @@ body {
 #app .page {
   background: linear-gradient(to bottom, #4d5879, #26314e);
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   padding: 40px;
   display: flex;
   flex-direction: column;

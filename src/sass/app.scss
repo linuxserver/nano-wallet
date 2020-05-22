@@ -81,7 +81,7 @@ html, body {
     .page {
         background: linear-gradient(to bottom, $body-bg1, $body-bg2);
         width: 100vw;
-        height: 100vh;
+        height: 100%;
         padding: 40px;    
         display: flex;
         flex-direction: column;
