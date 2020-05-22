@@ -7,7 +7,7 @@ body {
   font-family: "Nunito", sans-serif;
   font-weight: 700;
   font-size: 16px;
-  height: 100%;
+  height: calc(100vh - calc(100vh - 100%));
   margin: 0;
 }
 
@@ -62,7 +62,7 @@ body {
 
 #app {
   width: 100vw;
-  height: 100%;
+  height: calc(100vh - calc(100vh - 100%));
   display: flex;
   flex-direction: column;
   align-items: center;
