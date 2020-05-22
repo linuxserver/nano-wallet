@@ -12,8 +12,14 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
   }
 };
-var rpcurl = 'http://' + getUrlParameter('node') + ':7076';
-
+var protocol = window.location.protocol;
+if (protocol == 'https:'){
+  var port = '7077';
+}
+else {
+  var port = '7076';
+}
+var rpcurl = protocol + '//' + getUrlParameter('node') + ':' + port;
 
 function abbreviateNumber (number, precision = 2) {
   const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
@@ -152,32 +158,39 @@ $('#app').on('click', '.close', function(e) {
 })
 
 async function genwork(hash){
-  console.log('Calculating pow for ' + hash + ' this may take some time');
-  const hardwareConcurrency = window.navigator.hardwareConcurrency || 2;
-  const workerCount = Math.max(hardwareConcurrency - 1, 1);
-  const work = () => new Promise(resolve => {
-    const workerList = [];
-    for (let i = 0; i < workerCount; i++) {
-      const worker = new Worker('pow.js');
-      worker.postMessage({
-        blockHash: hash,
-        workerIndex: i,
-        workerCount: workerCount
-      });
-      worker.onmessage = (work) => {
-        console.log('Work Generated: ' + work.data);
-        $('#workstorage').data('workstorage',work);
-        $('#powstatus .busy').removeClass('active');
-        $('#powstatus .ready').addClass('active');
-        for (let workerIndex in workerList) {
-          workerList[workerIndex].terminate();
-        }
-        resolve();
-      };
-      workerList.push(worker);
-    }
-  });
-  await work();
+  if (window.Worker) {
+    console.log('Calculating pow for ' + hash + ' this may take some time');
+    const hardwareConcurrency = window.navigator.hardwareConcurrency || 2;
+    const workerCount = Math.max(hardwareConcurrency - 1, 1);
+    const work = () => new Promise(resolve => {
+      const workerList = [];
+      for (let i = 0; i < workerCount; i++) {
+        const worker = new Worker('pow.js');
+        worker.postMessage({
+          blockHash: hash,
+          workerIndex: i,
+          workerCount: workerCount
+        });
+        worker.onmessage = (work) => {
+          console.log('Work Generated: ' + work.data);
+          $('#workstorage').data('workstorage',work);
+          $('#powstatus .busy').removeClass('active');
+          $('#powstatus .ready').addClass('active');
+          for (let workerIndex in workerList) {
+            workerList[workerIndex].terminate();
+          }
+          resolve();
+        };
+        workerList.push(worker);
+      }
+    });
+    await work();
+  }
+  else{
+    console.log('Calculating pow for ' + hash + ' this may take some time');
+    var pow = await NanoCurrency.computeWork(hash);
+    $('#workstorage').data('workstorage',work);
+  }
 }
 
 $('body').on('click', '.openwallet', async function(){
