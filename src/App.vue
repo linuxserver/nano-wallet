@@ -1,0 +1,473 @@
+<template>
+  <div id="app">
+    <router-view/>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  components: {
+    // HelloWorld
+  },
+  data() {
+    return {
+      key: null
+    }
+  },
+  computed: {
+  }
+}
+</script>
+
+
+<style lang="scss">
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap');
+
+// Body
+$body-bg1: #4d5879;
+$body-bg2: #26314e;
+
+// Typography
+$font-family-sans-serif: "Nunito", sans-serif;
+$font-size-base: 16px;
+$line-height-base: 1.6;
+
+// Colors
+$active: #0075c2;
+$text: #bec3d2;
+$lighter-text: #959da0;
+
+$highlight: #2cc2ca;
+$highlight2: #af73d2;
+$highlight3: #e2ac39;
+
+html, body {
+    background: linear-gradient(to bottom, $body-bg1, $body-bg2);
+    color: $text;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: $font-size-base;
+    height: 100%;
+    margin: 0;
+}
+* {
+    box-sizing: border-box;
+}
+#breakdown {
+  word-break: break-all;
+}
+.error {
+  background: #ca4b4b;
+  margin: 0 0 30px;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  font-weight: 200;
+}
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: $highlight;
+    font-size: 24px;
+}
+#powstatus {
+    width: 100%;
+    position: relative;
+    height:32px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 5;
+    .status {
+        padding: 5px;
+        position: absolute;
+        transition: 0.7s all;
+        text-align: center;
+        left: 0;
+        right: 0;
+        height: 32px;
+        &.busy {
+            background: #363e58;
+            top: -32px;
+            &.active {
+                top: 0;
+            }
+        }
+        &.ready {
+            background: #14af70;
+            color: white;
+            top: 32px;
+            &.active {
+                top: 0;
+            }
+        }
+    }
+}
+#app {
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    .page {
+        background: linear-gradient(to bottom, $body-bg1, $body-bg2);
+        width: 100vw;
+        height: 100%;
+        padding: 40px;    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        position: absolute;
+        top: 32px;
+        left: 100vw;
+        &.active {
+            left: 0;
+        } 
+        .inner {
+            overflow-y: auto;
+            padding-bottom: 65px;
+            position: relative;
+            width: 100%;
+            padding-top: 32px;
+        }
+    }
+    #login {
+        z-index: 0;
+        justify-content: space-between;
+        top: 0;
+    }
+    
+    #send, #receive, #settings {
+        z-index: 2;
+    }
+    #receive {
+        #qrcode {
+            text-align: center;
+            img {
+                display: inline-block!important;
+                max-width: 100%;
+                height: auto;
+            }
+        }
+        .address {
+            font-size: 18px;
+            margin: 0 30px 30px;
+            font-weight: bold;
+            line-height: 1.8;
+        }
+    }
+    #scan, #blockdetails {
+        z-index: 3;
+    }
+    #settingsdetails {
+        width: 100%;
+    }
+    #genwallet {
+        top: 0;
+    }
+    #wallet {
+        z-index: 1;
+        justify-content: flex-start;
+        padding: 0;
+        top: 0;
+        .menu {
+            position: absolute;
+            bottom:0;
+            height: 75px;
+            left: 0;
+            width: 100%;
+            .bg {
+                position: absolute;
+                bottom:0;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: #1f263cad;
+                backdrop-filter: blur(10px)
+            }
+            .content {
+                position: absolute;
+                bottom:0;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                a {
+                    color: white;
+                    text-decoration: none;
+                }
+            }
+        }
+        .headingtitle {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 40px 30px 5px;
+            color: white;
+            display: flex;
+            &.top {
+                margin: 20px 30px 15px;               
+            }
+        }
+        .balance {
+            background: rgba(0,0,0,0.2);
+            margin: 10px 10px 40px;
+            padding: 20px 40px;
+            border-radius: 10px;
+            word-break: break-all;
+            text-align: center;
+            color: #bec3d273;
+            .value {
+                font-size: 44px;
+                color: white;
+                font-weight: bold;
+                margin: 30px 0;
+                line-height: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img {
+                    display: inline-block;
+                    width: 40px;
+                    margin-right: 10px;
+                }
+                .suffix {
+                    font-size: 30px;
+                    color: #bec3d2c9;
+                    margin-left: 6px;
+                }
+            }
+            .raw {
+                font-size: 12px;
+                line-height: 1;
+                display: flex;
+                justify-content: center;
+                img {
+                    width: 12px;
+                    margin-right:4px;
+                }
+            }
+        }
+    }
+}
+.address {
+    word-break: break-all;
+    font-size: 16px;
+}
+#breakdown {
+    justify-content: flex-start;
+    height: calc(100% - 30px);
+    overflow: auto;
+    font-weight: 200;
+    .title {
+        font-weight: 700;
+    }
+    .label {
+        opacity: 0.7;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    .json {
+        width: 320px;
+        overflow: auto;
+    }
+    .block {
+        margin-bottom: 20px;
+    }
+    .stateblock {
+        word-break: break-all;
+    }
+    .value {
+        word-break: break-all;
+        font-weight: 200;
+    }
+    .hide {
+        position: absolute;
+        left: -999em;
+    }
+    .address {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        font-weight: 400;
+    }
+    .date {
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+    details.uaddress {
+        height: 100px;
+    }
+}
+
+.mla {
+    margin-left: auto;
+}
+.sendfunds {
+    width: 100%;
+    margin: 15px 0 30px;
+}
+.scan {
+    width: 100%;
+}
+.highlight {
+    color: $highlight;
+}
+#history, #pendingblocks {
+    width: 100%;
+    padding: 0 10px;
+}
+.transaction {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255, 0.1);
+    .innerdetails {
+        flex: 1;
+    }
+    .address {
+        font-weight: 200;
+        font-size: 12px;
+        opacity: 0.7;
+    }
+    .icon {
+        font-size: 35px;
+        margin-right: 15px;
+        opacity: 0.85;
+        display: block;
+    }
+    .value {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        svg {
+            margin-left: 5px;
+        }
+    }
+    .amount {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .icon {
+            margin-left: 5px;
+        }
+        .type {
+            color: white;
+            font-size: 14px;
+        }
+    }
+    button.pocket {
+        background: $highlight3;
+        border: none;
+        padding: 3px 20px;
+        border-radius: 7px;
+    }
+    &.receive {
+        .type {
+            color: $highlight;
+        }
+    }
+    &.send {
+        .type {
+            color: $highlight2;
+        }
+    }
+    &.pending {
+        .type {
+            color: $highlight3;
+        }
+    }
+}
+#output {
+    width: 100%;
+    .details {
+        padding: 0 40px;
+    }
+}
+label {
+    margin-bottom: 10px;
+    display: inline-block;
+}
+input[type=text] {
+    font-size: 22px;
+    padding: 15px;
+    background: #00000036;
+    color: $text;
+    border-radius: 5px;
+    border: 2px solid $highlight;
+    margin-bottom: 30px;
+    width: 100%;
+    &.copytext {
+    }
+}
+.details {
+    position: relative;
+    label {
+        display: block;
+    }
+    input {
+        background: #00000014;
+        padding: 6px;
+        font-size: 16px;
+        width: 100%;
+        border: none;
+    }
+    .copy {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        color: $highlight;
+        text-decoration: underline;
+    }
+}
+
+#inputs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    button {
+        background: $highlight;
+        padding: 15px;
+    }
+}
+.btn {
+    background: $highlight;
+    border-radius: 20px;
+    border: none;
+    color: $body-bg2;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 18px;
+    display: inline-block;
+
+    &.outline {
+        border: 3px solid $highlight;
+        background: transparent;
+        color: $highlight;
+    }
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: $text !important;
+}
+#buttons {
+    button {
+        background: none;
+        color: #ccc;
+        border: none;
+        font-size: 14px;
+    }
+}
+
+</style>

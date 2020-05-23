@@ -1,6 +1,0 @@
-server {
-	listen 80;
-	location / {
-		root /code;
-	}
-}
