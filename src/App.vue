@@ -396,7 +396,7 @@ label {
     margin-bottom: 10px;
     display: inline-block;
 }
-input[type=text] {
+input[type=text], input[type=password] {
     font-size: 22px;
     padding: 15px;
     background: #00000036;
@@ -408,6 +408,32 @@ input[type=text] {
     &.copytext {
     }
 }
+.login {
+    position: relative;
+    .eye {
+        position: absolute;
+        display: flex;
+        right: 0;
+        top: 0;
+        height: 60px;
+        width: 60px;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        span {
+            display: none;
+            &.active {
+                display: block;
+            }
+        }
+
+    }
+    input[type=text], input[type=password] {
+        padding-right: 60px;
+    }
+
+}
+
 .details {
     position: relative;
     label {

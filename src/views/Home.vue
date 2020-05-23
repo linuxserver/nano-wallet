@@ -6,7 +6,14 @@
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
           <label for="key">Private Key:</label>
-          <input v-model="key" type="text" id="key" name="key"><br>
+          <div class="login">
+            <input v-model="key" :type="logintype" id="key" name="key">
+            <span class="eye" @click="togglevisibility">
+              <span :class="{ active: logintype === 'password'}"><i class="far fa-eye"></i></span>
+              <span :class="{ active: logintype === 'text'}"><i class="far fa-eye-slash"></i></span>
+            </span>
+          </div>
+          
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
         </div>
         <div id="buttons">
@@ -123,7 +130,8 @@ export default {
       blockdetails: null,
       history: [],
       pending: [], 
-      address: null
+      address: null,
+      logintype: 'password'
     }
   },
   watch: {
@@ -141,9 +149,16 @@ export default {
     }
   },
   computed: {
+    loginicon () {
+      return (this.logintype === 'password') ? 'fa-eye' : 'fa-eye-slash'
+    }
   },
   methods: {
-    getAddress(key) {
+    togglevisibility () {
+      console.log(this.logintype)
+      this.logintype = (this.logintype === 'password') ? 'text' : 'password'
+    },
+    getAddress (key) {
       console.log(key)
       const publickey = NanoCurrency.derivePublicKey(key)
       return NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true})
