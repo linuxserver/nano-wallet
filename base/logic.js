@@ -33,6 +33,15 @@ function abbreviateNumber (number, precision = 2) {
   return scaled.toFixed(precision) + '<span class="suffix">' + suffix + '</span>';
 }
 
+function copyToClipboard(text) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val(text).select();
+  document.execCommand("copy");
+  $temp.remove();
+  alert('Copied to clipboard')
+}
+
 function abbreviateAddress (address) {
   return address.substring(0, 11) + '...' + address.slice(address.length - 6)
 }
@@ -157,6 +166,11 @@ $('#app').on('click', '.copy', function(e) {
   input.select()
   document.execCommand("copy")
   alert('Copied to clipboard')
+})
+
+$('#app').on('click', '.datacopy', function(e) {
+  const data = $(this).data('text')
+  copyToClipboard(data)
 })
 
 $('#walletmenu').on('click', 'a', function(e) {
@@ -420,7 +434,7 @@ $('body').on('click', '.type', async function(){
   var blockinfo = await rpcall(blockinfo);
   $('#breakdown .value').empty()
   let date = new Date(blockinfo.local_timestamp * 1000);
-  $('#breakdown .stateblock').text(blockinfo.hash)
+  $('#breakdown .stateblock').text(blockinfo['hash'])
   $('#breakdown .subtype').text(blockinfo.subtype)
   $('#breakdown .account').text(blockinfo.block_account)
   $('#breakdown .amount').text(blockinfo.amount)

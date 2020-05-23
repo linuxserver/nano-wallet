@@ -231,6 +231,15 @@ html, body {
     justify-content: flex-start;
     height: calc(100% - 30px);
     overflow: auto;
+    font-weight: 200;
+    .title {
+        font-weight: 700;
+    }
+    .label {
+        opacity: 0.7;
+        font-size: 14px;
+        margin-top: 5px;
+    }
     .json {
         width: 320px;
         overflow: auto;
@@ -243,6 +252,7 @@ html, body {
     }
     .value {
         word-break: break-all;
+        font-weight: 200;
     }
     .hide {
         position: absolute;
