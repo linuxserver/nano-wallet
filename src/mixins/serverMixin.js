@@ -1,5 +1,6 @@
 
 import Worker from 'worker-loader!./pow.js'
+import * as NanoCurrency from 'nanocurrency'
 
 const worker = new Worker()
 
@@ -36,6 +37,19 @@ export const serverMixin = {
   },
 
   methods: {
+    async getSeed() {
+      const seed = await NanoCurrency.generateSeed();
+      const privatekey = NanoCurrency.deriveSecretKey(seed, 0);
+      const publickey = NanoCurrency.derivePublicKey(privatekey);
+      const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
+      const payload = {
+        "privatekey":privatekey,
+        "publickey":publickey,
+        "address":address
+      };
+      return payload;
+    },
+    
     async rpCall (body) {
       var Init = { method:'POST',body: JSON.stringify(body)}
       var res = await fetch(this.rpcurl,Init)

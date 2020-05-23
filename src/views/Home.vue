@@ -1,7 +1,7 @@
 <template>
   <div class="wallet">
     <div type="hidden" id="workstorage"></div>
-      <div v-if="open===false" id="login" class="page active">
+      <div id="login" class="page active" :class="{ active: open===false }">
         <div class="title">&nbsp;</div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
@@ -17,16 +17,16 @@
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
         </div>
         <div id="buttons">
-          <button class="genwallet" type="button">Generate Wallet</button>
+          <button class="genwallet" @click="generateWallet" type="button">Generate Wallet</button>
         </div>
       </div>
-      <div v-else id="wallet" class="page" :class="{active: open === true}">
+      <div id="wallet" class="page" :class="{active: open === true}">
         <div id="powstatus">
             <div class="status busy" :class="{active: ready === false}">Calculating Work <i class="fas fa-spinner fa-spin"></i></div>
             <div class="status ready" :class="{active: ready === true}">Ready <i class="fas fa-check"></i></div>
         </div>
         <div class="inner">
-          <div class="headingtitle top">Wallet <i id="closewallet" @click="open = false" class="fad fa-sign-out-alt mla"></i></div>
+          <div class="headingtitle top">Wallet <span id="closewallet" class="mla" @click="open = false"><i class="fad fa-sign-out-alt"></i></span></div>
           <div id="output">
             <div class="balance">
               <div class="value" v-html="abbreviateNumber(balance)"></div>
@@ -60,32 +60,32 @@
         </div>
       </div>
       <div id="genwallet" class="page" :class="{active: genwallet !== false}">
-        <a href="#" class="close" @click="genwallet = false"><i class="fal fa-times"></i></a>
-          <div id="genoutput"></div>
-          <div id="genqrcode"></div>
+        <a class="close" @click="genwallet = false"><i class="fal fa-times"></i></a>
+        <generate
+          :walletdata="walletdata"></generate>
       </div>
       <div id="send" class="page" :class="{active: send !== false}">
-        <a href="#" class="close" @click="send = false"><i class="fal fa-times"></i></a>
+        <a class="close" @click="send = false"><i class="fal fa-times"></i></a>
         <send></send>
       </div>
       <div id="settings" class="page" :class="{active: settings !== false}">
-        <a href="#" class="close" @click="settings = false"><i class="fal fa-times"></i></a>
+        <a class="close" @click="settings = false"><i class="fal fa-times"></i></a>
         <settings
           :representative="representative"
         ></settings>
       </div>
       <div id="receive" class="page" :class="{active: receive !== false}">
-        <a href="#" class="close" @click="receive = false"><i class="fal fa-times"></i></a>
+        <a class="close" @click="receive = false"><i class="fal fa-times"></i></a>
         <receive
           :address="address"
         ></receive>
       </div>
       <div id="blockdetails" class="page" :class="{active: blockdetails !== null}">
-        <a href="#" class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
+        <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
         <block-state :details="blockdetails"></block-state>
       </div>
       <div id="scan" class="page" :class="{active: scan !== false}">
-        <a href="#" class="close" @click="scan = false"><i class="fal fa-times"></i></a>
+        <a class="close" @click="scan = false"><i class="fal fa-times"></i></a>
         <div id="qrpreview"></div>
       </div>
 
@@ -98,6 +98,7 @@ import Transaction from '@/components/Transaction.vue'
 import Send from '@/views/Send.vue'
 import Receive from '@/views/Receive.vue'
 import Settings from '@/views/Settings.vue'
+import Generate from '@/views/Generate.vue'
 import BlockState from '@/components/BlockState.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
@@ -109,6 +110,7 @@ export default {
     Send,
     Receive,
     Settings,
+    Generate,
     BlockState
   },
   mixins: [ serverMixin ],
@@ -131,7 +133,8 @@ export default {
       history: [],
       pending: [], 
       address: null,
-      logintype: 'password'
+      logintype: 'password',
+      walletdata: null
     }
   },
   watch: {
@@ -154,6 +157,10 @@ export default {
     }
   },
   methods: {
+    async generateWallet () {
+      this.genwallet = true
+      this.walletdata = await this.getSeed();
+    },
     togglevisibility () {
       console.log(this.logintype)
       this.logintype = (this.logintype === 'password') ? 'text' : 'password'

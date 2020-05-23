@@ -73,6 +73,12 @@ html, body {
     color: $highlight;
     font-size: 24px;
 }
+canvas {
+    display: inline-block!important;
+    max-width: 100%;
+    height: auto!important;
+}
+
 #powstatus {
     width: 100%;
     position: relative;
