@@ -1,26 +1,18 @@
-# build stage
-from lsiobase/alpine:3.11 as build
-
-RUN \
- apk add \
-	nodejs-npm
-COPY ./ /build
-RUN \
- cd /build && \
- npm install && \
- npm run development && \
- mkdir /buildout && \
- mv base/* /buildout/ 
-
-# runtime stage
 FROM lsiobase/cloud9:alpine
 
-COPY --from=build /buildout /code
+COPY ./ /code
 COPY root/ /
 RUN \
  apk add --no-cache \
-	nginx && \
+	git \
+	nodejs-npm && \
+ cd /code && \
+ npm install && \
+ npm config set cache /config --global && \
+ mkdir -p /applogs && \
  chown -R abc:abc \
+	/applogs \
 	/c9sdk/build \
 	/code \
+	/config \
 	/c9bins

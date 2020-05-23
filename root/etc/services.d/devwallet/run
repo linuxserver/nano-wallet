@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+cd /code || exit
+exec \
+	s6-setuidgid abc npm run serve > /applogs/app.log
