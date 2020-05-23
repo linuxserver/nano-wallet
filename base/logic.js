@@ -229,10 +229,12 @@ $('body').on('click', '.openwallet', async function(){
   $('#workstorage').data('workstorage','');
   $('#walletmenu').show();
   $('#powstatus').show();
+  $('#closewallet').show();
   if (urladdress){
     var address = urladdress;
     $('#walletmenu').hide();
     $('#powstatus').hide();
+    $('#closewallet').hide();
   }
   else{
     var privatekey = $("#key").val();
