@@ -13,6 +13,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
   }
 };
 var protocol = window.location.protocol;
+var urladdress = getUrlParameter('address');
+var urlblock = getUrlParameter('block');
 if (protocol == 'https:'){
   var port = '7077';
 }
@@ -195,7 +197,7 @@ async function genwork(hash){
           workerCount: workerCount
         });
         worker.onmessage = (work) => {
-          console.log('Work: ' + work);
+          console.log('Work Generated');
           $('#workstorage').data('workstorage',work);
           $('#powstatus .busy').removeClass('active');
           $('#powstatus .ready').addClass('active');
@@ -215,7 +217,6 @@ async function genwork(hash){
     $('#workstorage').data('workstorage',work);
   }
 }
-
 $('body').on('click', '.openwallet', async function(){
   $('#history').empty();
   $('#output').empty();
@@ -226,10 +227,18 @@ $('body').on('click', '.openwallet', async function(){
   $('#powstatus .busy').addClass('active');
   $('#powstatus .ready').removeClass('active');
   $('#workstorage').data('workstorage','');
-  var rep = 'nano_18gmu6engqhgtjnppqam181o5nfhj4sdtgyhy36dan3jr9spt84rzwmktafc';
-  var privatekey = $("#key").val();
-  var publickey = NanoCurrency.derivePublicKey(privatekey);
-  var address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
+  $('#walletmenu').show();
+  $('#powstatus').show();
+  if (urladdress){
+    var address = urladdress;
+    $('#walletmenu').hide();
+    $('#powstatus').hide();
+  }
+  else{
+    var privatekey = $("#key").val();
+    var publickey = NanoCurrency.derivePublicKey(privatekey);
+    var address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
+  }
   $('#qrcode').prepend('<div class="address">' + highlightAddress(address) + '</div>')
   new QRCode(document.getElementById("qrcode"), address);
   var info = {};
@@ -240,7 +249,9 @@ $('body').on('click', '.openwallet', async function(){
   $('#wallet').addClass('active');
   if ('frontier' in info){
     var frontier = info.frontier;
-    genwork(frontier);
+    if (!urladdress){
+      genwork(frontier);  
+    }
     var balance = NanoCurrency.convert(info.balance,rawconv);
     var representative = info.representative;
     $('#dynform').append('\
@@ -253,7 +264,9 @@ $('body').on('click', '.openwallet', async function(){
       <button class="sendfunds btn" type="button">Send</button><button class="scan btn outline" type="button">Scan QR</button>');
   }
   else{
-    genwork(publickey);
+    if (!urladdress){
+      genwork(publickey);
+    }
   }
   $('#output').append(
     '<div class="balance"><div class="value">' + abbreviateNumber(balance) + '</div><div class="raw">' + balance + '</div></div>'
@@ -288,13 +301,19 @@ $('body').on('click', '.openwallet', async function(){
   var pending = await rpcall(pending);
   if (typeof pending.blocks === 'object'){
     $.each(pending.blocks, function( key, value ) {
+      if (!urladdress){
+        var pocketbutton = '<button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button>';
+      }
+      else{
+        var pocketbutton = 'Pending';
+      }
       $('#pendingblocks').append('\
       <div class="transaction pending">\
-      <div class="type icon" value="' + value.hash + '"><i class="fal fa-exclamation-circle"></i></div>\
-      <div class="innerdetails">\
-        <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value">+ ' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv), 5) + ' <i class="fal fa-coin"></i></div><div class="type"><button class="pocket" value="' + key + '|' + value.amount + '|' + value.source + '">Receive</button></div></div>\
-        <div class="address">' + abbreviateAddress(value.source) + '</div>\
-      </div>\
+        <div class="type icon" value="' + value.hash + '"><i class="fal fa-exclamation-circle"></i></div>\
+        <div class="innerdetails">\
+          <div class="amount"><div title="' + NanoCurrency.convert(value.amount,rawconv) + '" class="value">+ ' + abbreviateNumber(NanoCurrency.convert(value.amount,rawconv), 5) + ' <i class="fal fa-coin"></i></div><div class="type">' + pocketbutton + '</div></div>\
+          <div class="address">' + abbreviateAddress(value.source) + '</div>\
+        </div>\
       </div>');
     });
   }
@@ -416,4 +435,14 @@ $('body').on('click', '.type', async function(){
   $('#blockdetails').addClass('active')
 
   console.log(blockinfo);
+});
+
+$(document).ready ( function(){
+  if (urladdress){
+    $('.openwallet').click();
+  }
+  if (urlblock){
+    $( "body" ).append('<div class="type" style="display:none;" value="' + urlblock + '">');
+    $('.type').click();
+  }
 });
