@@ -137,8 +137,9 @@ export default {
         this.$store.dispatch('app/pending', this.address)
       }
     },
-    pow: function (newpow/*, oldpow */) {
+    pow: async function (newpow/*, oldpow */) {
       if(this.open === true && newpow === null) {
+        await this.getDetails(this.privatekey)
         this.$store.commit('app/ready', false)
         this.genWork(this.privatekey, this.details)
         this.$store.dispatch('app/history', this.address)
@@ -239,18 +240,20 @@ export default {
       const publickey = NanoCurrency.derivePublicKey(key)
       return NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true})
     },
+    async getDetails (key) {
+      this.address = this.getAddress(key)
+      const info = {
+        action: 'account_info',
+        representative: 'true',
+        account: this.address
+      }
+      this.details = await this.$store.dispatch('app/rpCall', info)
+    },
     async openWallet () {
       this.error = null
       if(this.key) {
         try {
-          this.address = this.getAddress(this.key)
-          const info = {
-            action: 'account_info',
-            representative: 'true',
-            account: this.address
-          }
-          this.details = await this.$store.dispatch('app/rpCall', info)
-
+          await this.getDetails(this.key)
           if('error' in this.details && this.details.error !== 'Account not found') {
             this.error = this.details.error
           } else {
