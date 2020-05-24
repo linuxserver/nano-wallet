@@ -98,8 +98,6 @@ import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
 
-const worker = new Worker()
-
 export default {
   name: 'Home',
   components: {
@@ -148,12 +146,6 @@ export default {
   },
   mounted () {
     this.$store.commit('app/node', this.$route.params.node)
-        // Set up a worker
-    worker.onmessage = ({ data }) => {
-      this.$store.commit('app/pow', data)
-      this.$store.commit('app/ready', true)
-    };
-
   },
   computed: {
     loginicon () {
@@ -176,15 +168,57 @@ export default {
     }
   },
   methods: {
-    genWork (key, details){
+    async genWork (key, details){
       let hash
       if ('frontier' in details){
+        console.log('Frontier in details');
         hash = details.frontier
       } else {
+        console.log('Frontier NOT in details');
         hash = NanoCurrency.derivePublicKey(key)
       }
-      console.log('gen work ' + hash)
-      worker.postMessage(hash);
+
+      if (window.Worker) {
+        console.log('Calculating pow for ' + hash + ' this may take some time');
+        const hardwareConcurrency = window.navigator.hardwareConcurrency || 2;
+        const workerCount = Math.max(hardwareConcurrency - 1, 1);
+        const work = () => new Promise(resolve => {
+          const workerList = [];
+          for (let i = 0; i < workerCount; i++) {
+            const worker = new Worker()
+            worker.postMessage({
+              blockHash: hash,
+              workerIndex: i,
+              workerCount: workerCount
+            });
+            worker.onmessage = (work) => {
+              console.log('Work: ' + work);
+              
+              this.$store.commit('app/pow', work)
+              this.$store.commit('app/ready', true)
+
+              for (let workerIndex in workerList) {
+                console.log('Terminate: ' + workerIndex)
+                workerList[workerIndex].terminate();
+              }
+              resolve();
+            };
+            workerList.push(worker);
+          }
+        });
+        await work();
+      }
+      else{
+        console.log('Calculating pow for ' + hash + ' (no worker) this may take some time');
+        var work = await NanoCurrency.computeWork(hash);
+        this.$store.commit('app/pow', work)
+        this.$store.commit('app/ready', true)
+
+      }
+
+
+
+      // worker.postMessage(hash);
     },
 
     togglevisibility () {

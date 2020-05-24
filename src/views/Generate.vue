@@ -44,12 +44,9 @@ export default {
     }
   },
   methods: {
-    async seed () {
-      return await this.getSeed()
-    }
   },
   mounted () {
-    this.getSeed().then(data => {
+    this.$store.dispatch('app/getSeed').then(data => {
       this.walletdata = data
       QRCode.toCanvas(document.getElementById('genqrcode'), data.address, { width: 512 })
     }) 

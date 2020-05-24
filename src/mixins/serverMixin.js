@@ -1,7 +1,4 @@
 
-import * as NanoCurrency from 'nanocurrency'
-
-
 export const serverMixin = {
   data() {
     return {
@@ -16,19 +13,6 @@ export const serverMixin = {
   },
 
   methods: {
-    async getSeed() {
-      const seed = await NanoCurrency.generateSeed();
-      const privatekey = NanoCurrency.deriveSecretKey(seed, 0);
-      const publickey = NanoCurrency.derivePublicKey(privatekey);
-      const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
-      const payload = {
-        "seed":seed,
-        "privatekey":privatekey,
-        "publickey":publickey,
-        "address":address
-      };
-      return payload;
-    },
        
     abbreviateNumber (number, precision = 2) {
       const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];

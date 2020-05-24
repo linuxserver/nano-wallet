@@ -1,3 +1,5 @@
+import * as NanoCurrency from 'nanocurrency'
+
 function protocol() {
   return window.location.protocol
 }
@@ -7,6 +9,20 @@ function port() {
       return '7077'
   }
   return '7076'
+}
+
+export async function getSeed () {
+  const seed = await NanoCurrency.generateSeed();
+  const privatekey = NanoCurrency.deriveSecretKey(seed, 0);
+  const publickey = NanoCurrency.derivePublicKey(privatekey);
+  const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
+  const payload = {
+    "seed":seed,
+    "privatekey":privatekey,
+    "publickey":publickey,
+    "address":address
+  };
+  return payload;
 }
 
 export async function rpCall (context, body) {
@@ -27,18 +43,16 @@ export async function history (context, address) {
 
   const details = await context.dispatch('rpCall', history);
   if (Array.isArray(details.history) && details.history.length){
-    console.log(details)
     context.commit('history', details.history)
   }
 }
 
 export async function pending (context, address) {
-  const pending = {
-    action: 'pending',
-    source: 'true',
-    sorting: 'true',
-    address: address
-  }
+  let pending = {}
+  pending['action'] = 'pending'
+  pending['source'] = 'true'
+  pending['sorting'] = 'true'
+  pending['account'] = address
 
   const details = await context.dispatch('rpCall', pending);
   console.log('pending1')
