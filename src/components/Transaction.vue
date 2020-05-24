@@ -10,7 +10,10 @@
         <div :title="rawValue" class="value" v-html="formattedValue"><i class="fal fa-coin"></i>
         </div>
         <div v-if="type !== 'pending'" class="type">{{ transactionStatus(transaction.type) }}</div>
-        <div v-if="type === 'pending'" class="type"><button @click="receive" class="pocket">Receive</button></div>
+        <div v-if="type === 'pending'" class="type">
+          <button v-if="privatekey !== null" @click="receive" class="pocket">Receive</button>
+          <div v-else class="">Pending</div>
+        </div>
       </div>
       <div class="address">
         <span v-if="type !== 'pending'">{{ formattedDate }} {{ abbreviateAddress(transaction.account) }}</span>
