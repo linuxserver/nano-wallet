@@ -7,7 +7,12 @@
         <input type="text" v-model="destination" id="destination" name="destination">
       </div>
       <button class="sendfunds btn" @click="send" type="button">Send</button>
-      <button class="scan btn outline" type="button">Scan QR</button>
+      <button class="scan btn outline" @click="scanQR" type="button">Scan QR</button>
+    <div id="scan" class="page" :class="{active: scan !== false}">
+        <a class="close" @click="scan = false"><i class="fal fa-times"></i></a>
+        <div id="qrpreview"><video id="preview"></video></div>
+    </div>
+
   </div>
 </template>
 
@@ -15,6 +20,7 @@
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
 import BigNumber from 'bignumber.js'
+import Instascan from 'instascan'
 
 export default {
   name: 'Send',
@@ -25,7 +31,8 @@ export default {
   data() {
     return {
       amount: '',
-      destination: ''
+      destination: '',
+      scan: false
     }
   },
   computed: {
@@ -47,14 +54,13 @@ export default {
       }
       const amount = NanoCurrency.convert(this.amount, this.nanoconv)
       const senderpublickey = NanoCurrency.derivePublicKey(this.privatekey)
-      const sender = NanoCurrency.deriveAddress(senderpublickey,{useNanoPrefix:true});  
-      let info = {};
-      info['action'] = 'account_info';
-      info['representative'] = 'true';
-      info['account'] = sender;
-      const res = await this.$store.dispatch('app/rpCall', info);
-      console.log(res);
-      const balance = new BigNumber(res.balance).minus(new BigNumber(amount)).toFixed();
+      const sender = NanoCurrency.deriveAddress(senderpublickey,{useNanoPrefix:true}); 
+      let info = {}
+      info['action'] = 'account_info'
+      info['representative'] = 'true'
+      info['account'] = sender
+      const res = await this.$store.dispatch('app/rpCall', info)
+      const balance = new BigNumber(res.balance).minus(new BigNumber(amount)).toFixed()
       const block = NanoCurrency.createBlock(this.privatekey, {
         work: this.pow,
         previous: res.frontier,
@@ -62,15 +68,34 @@ export default {
         balance: balance,
         link: this.destination
       });
-      let send = {};
-      send['action'] = 'process';
-      send['json_block'] = 'true';
-      send['subtype'] = 'send';
-      send['block'] = block.block;
-      const sendres = await this.$store.dispatch('app/rpCall', send);
-      console.log(sendres);
+      console.log(block)
+      let send = {}
+      send['action'] = 'process'
+      send['json_block'] = 'true'
+      send['subtype'] = 'send'
+      send['block'] = block.block
+      await this.$store.dispatch('app/rpCall', send)
       this.$store.commit('app/pow', null)
       this.$emit('close', 'true')
+    },
+    async scanQR () {
+      this.scan = true
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') })
+      scanner.addListener('scan', function (content) {
+        this.destination = content
+        scanner.stop()
+        this.scan = false
+      })
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0])
+        } else {
+          console.error('No cameras found.')
+        }
+      }).catch(function (e) {
+        console.error(e)
+      })
+
     }
   }
 

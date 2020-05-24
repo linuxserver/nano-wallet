@@ -172,6 +172,9 @@ canvas {
     #scan, #blockdetails {
         z-index: 3;
     }
+    #scan {
+        top: 0;
+    }
     #settingsdetails {
         width: 100%;
     }
