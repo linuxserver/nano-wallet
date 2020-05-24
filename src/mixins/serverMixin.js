@@ -1,8 +1,6 @@
 
-import Worker from 'worker-loader!./pow.js'
 import * as NanoCurrency from 'nanocurrency'
 
-const worker = new Worker()
 
 export const serverMixin = {
   data() {
@@ -13,27 +11,8 @@ export const serverMixin = {
   },
 
   computed: {
-    protocol() {
-      return window.location.protocol
-    },
-    port() {
-      if (this.protocol == 'https:'){
-          return '7077'
-      }
-      return '7076'
-    },
-    rpcurl() {
-      return this.protocol + '//' + this.$route.params.node + ':' + this.port
-    }
   },
   mounted() {
-    // Set up a worker
-    worker.onmessage = ({ data }) => {
-      console.log('Finished calculating')
-      this.pow = data
-      this.ready = true
-    };
-
   },
 
   methods: {
@@ -50,52 +29,7 @@ export const serverMixin = {
       };
       return payload;
     },
-    
-    async rpCall (body) {
-      var Init = { method:'POST',body: JSON.stringify(body)}
-      var res = await fetch(this.rpcurl,Init)
-      var data = await res.json()
-      console.log(data)
-      return data
-    },
-    genWork (hash){
-      console.log('gen work ' + hash)
-      worker.postMessage(hash);
-    },
-
-    async getHistory (address) {
-      const history = {
-        action: 'account_history',
-        account: address
-      }
-      console.log('history')
-
-      const details = await this.rpCall(history);
-      if (Array.isArray(details.history) && details.history.length){
-        console.log(details)
-        this.history = details.history
-      }
-    },
-
-    async getPending (address) {
-      const pending = {
-        action: 'pending',
-        source: 'true',
-        sorting: 'true',
-        address: address
-      }
-
-      const details = await this.rpCall(pending);
-      console.log('pending1')
-      console.log(details)
-
-      if (typeof details.blocks === 'object'){
-        console.log('pending2')
-        this.pending = details.history
-      }
-    
-    },
-   
+       
     abbreviateNumber (number, precision = 2) {
       const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
       let tier = Math.log10(number) / 3 | 0;

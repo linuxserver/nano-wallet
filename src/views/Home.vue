@@ -61,7 +61,7 @@
       </div>
       <div id="send" class="page" :class="{active: send !== false}">
         <a class="close" @click="send = false"><i class="fal fa-times"></i></a>
-        <send></send>
+        <send @close="send = false"></send>
       </div>
       <div id="settings" class="page" :class="{active: settings !== false}">
         <a class="close" @click="settings = false"><i class="fal fa-times"></i></a>
@@ -96,6 +96,9 @@ import Settings from '@/views/Settings.vue'
 import BlockState from '@/components/BlockState.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
+import Worker from 'worker-loader!./../mixins/pow.js'
+
+const worker = new Worker()
 
 export default {
   name: 'Home',
@@ -113,8 +116,6 @@ export default {
       open: false,
       details: null,
       error: null,
-      ready: false,
-      pow: null,
       balance: 0,
       receive: false,
       genwallet: false,
@@ -123,8 +124,6 @@ export default {
       scan: false,
       representative: '',
       blockdetails: null,
-      history: [],
-      pending: [], 
       address: null,
       logintype: 'password',
       walletdata: null
@@ -133,23 +132,61 @@ export default {
   watch: {
     open: function (newopen, oldpopen) {
       if(newopen === true && oldpopen === false && this.key !== null) {
-        this.genWork(this.key)
-        this.getHistory(this.address)
-        this.getPending(this.address)
+        this.genWork(this.privatekey, this.details)
+        this.$store.dispatch('app/history', this.address)
+        this.$store.dispatch('app/pending', this.address)
       }
     },
     pow: function (newpow/*, oldpow */) {
       if(open === true && newpow === null) {
-        this.genWork(this.key)
+        this.$store.commit('app/ready', false)
+        this.genWork(this.privatekey, this.details)
+        this.$store.dispatch('app/history', this.address)
+        this.$store.dispatch('app/pending', this.address)
       }
     }
+  },
+  mounted () {
+    this.$store.commit('app/node', this.$route.params.node)
+        // Set up a worker
+    worker.onmessage = ({ data }) => {
+      this.$store.commit('app/pow', data)
+      this.$store.commit('app/ready', true)
+    };
+
   },
   computed: {
     loginicon () {
       return (this.logintype === 'password') ? 'fa-eye' : 'fa-eye-slash'
+    },
+    pow () {
+      return this.$store.state.app.pow
+    },
+    ready () {
+      return this.$store.state.app.ready
+    },
+    history () {
+      return this.$store.state.app.history
+    },
+    pending () {
+      return this.$store.state.app.pending
+    },
+    privatekey () {
+      return this.$store.state.app.privatekey
     }
   },
   methods: {
+    genWork (key, details){
+      let hash
+      if ('frontier' in details){
+        hash = details.frontier
+      } else {
+        hash = NanoCurrency.derivePublicKey(key)
+      }
+      console.log('gen work ' + hash)
+      worker.postMessage(hash);
+    },
+
     togglevisibility () {
       console.log(this.logintype)
       this.logintype = (this.logintype === 'password') ? 'text' : 'password'
@@ -168,11 +205,13 @@ export default {
             representative: 'true',
             account: this.getAddress(this.key)
           }
-          this.details = await this.rpCall(info)
+          this.details = await this.$store.dispatch('app/rpCall', info)
 
           if('error' in this.details) {
             this.error = this.details.error
           } else {
+            this.$store.commit('app/privatekey', this.key)
+            
             this.open = true
             this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
             this.representative = this.details.representative;

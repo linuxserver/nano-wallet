@@ -81,7 +81,7 @@ export default {
           json_block: 'true',
           hash: newvalue
         }
-        this.blockstate = await this.rpCall(blockinfo);
+        this.blockstate = await this.$store.dispatch('app/rpCall', blockinfo);
       } else {
         this.blockstate = null
       }

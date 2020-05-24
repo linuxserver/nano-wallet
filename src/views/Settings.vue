@@ -15,11 +15,9 @@
 </template>
 
 <script>
-import { serverMixin } from '../mixins/serverMixin.js'
 
 export default {
   name: 'Settings',
-  mixins: [ serverMixin ],
   props: {
     representative: String
   },

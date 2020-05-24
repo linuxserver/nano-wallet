@@ -52,8 +52,7 @@ export default {
     this.getSeed().then(data => {
       this.walletdata = data
       QRCode.toCanvas(document.getElementById('genqrcode'), data.address, { width: 512 })
-    })
-      
+    }) 
   }
 }
 </script>
