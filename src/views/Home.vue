@@ -26,7 +26,7 @@
             <div class="status ready" :class="{active: ready === true}">Ready <i class="fas fa-check"></i></div>
         </div>
         <div class="inner">
-          <div class="headingtitle top">Wallet <span id="closewallet" class="mla" @click="logout"><i class="fad fa-sign-out-alt"></i></span></div>
+          <div class="headingtitle top"><span>Wallet<span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fad fa-sync-alt"></i></span></span> <span id="closewallet" class="mla" @click="logout"><i class="fad fa-sign-out-alt"></i></span></div>
           <div id="output">
             <div class="balance">
               <div class="value" v-html="abbreviateNumber(balance)"></div>
@@ -112,7 +112,8 @@ function initialState (){
     blockdetails: null,
     address: null,
     logintype: 'password',
-    walletdata: null
+    walletdata: null,
+    isActive: false
   }
 }
 
@@ -132,18 +133,12 @@ export default {
   watch: {
     open: function (newopen) {
       if(newopen === true && this.key !== null) {
-        this.genWork(this.privatekey, this.details)
-        this.$store.dispatch('app/history', this.address)
-        this.$store.dispatch('app/pending', this.address)
+        this.refreshDetails()
       }
     },
     pow: async function (newpow/*, oldpow */) {
       if(this.open === true && newpow === null) {
-        await this.getDetails(this.privatekey)
-        this.$store.commit('app/ready', false)
-        this.genWork(this.privatekey, this.details)
-        this.$store.dispatch('app/history', this.address)
-        this.$store.dispatch('app/pending', this.address)
+        this.refreshDetails()
       }
     }
   },
@@ -178,6 +173,17 @@ export default {
         this.$store.commit('app/ready', false)
         this.$store.commit('app/pow', null)
         this.$store.commit('app/privatekey', null)
+    },
+    refresh () {
+      this.isActive = !this.isActive
+      this.refreshDetails()
+    },
+    async refreshDetails () {
+        await this.getDetails(this.privatekey)
+        this.$store.commit('app/ready', false)
+        this.genWork(this.privatekey, this.details)
+        this.$store.dispatch('app/history', this.address)
+        this.$store.dispatch('app/pending', this.address)
     },
     async genWork (key, details){
       let hash

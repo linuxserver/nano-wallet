@@ -58,6 +58,20 @@ html, body {
 #breakdown {
   word-break: break-all;
 }
+.rotate{
+  svg {
+    transition: all 2s linear;
+  }
+  &.down{
+    svg {
+      transform: rotate(360deg);
+    }
+  }
+}
+.refresh {
+    font-size: 20px;
+    margin-left: 10px
+}
 .error {
   background: #ca4b4b;
   margin: 0 0 30px;
