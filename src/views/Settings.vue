@@ -69,7 +69,7 @@ export default {
       repchange['subtype'] = blocktype;
       repchange['block'] = block.block;
       await this.$store.dispatch('app/rpCall', repchange)
-
+      this.$emit('change', true)
     }
   }
 

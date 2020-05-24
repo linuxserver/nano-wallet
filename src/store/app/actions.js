@@ -61,6 +61,8 @@ export async function pending (context, address) {
   if (typeof details.blocks === 'object'){
     console.log('pending')
     context.commit('pending', details.blocks)
+  } else {
+    context.commit('pending', [])
   }
 
 }

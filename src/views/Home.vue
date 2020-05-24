@@ -71,6 +71,7 @@
         <a class="close" @click="settings = false"><i class="fal fa-times"></i></a>
         <settings
           :representative="representative"
+          @change="refreshDetails"
         ></settings>
       </div>
       <div id="receive" class="page" :class="{active: receive !== false}">
@@ -181,6 +182,7 @@ export default {
     },
     async refreshDetails () {
         await this.getDetails(this.privatekey)
+        this.$store.commit('app/pow', null)
         this.$store.commit('app/ready', false)
         this.genWork(this.privatekey, this.details)
         this.$store.dispatch('app/history', this.address)
