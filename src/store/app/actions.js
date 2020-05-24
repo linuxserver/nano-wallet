@@ -27,6 +27,8 @@ export async function getSeed () {
 
 export async function rpCall (context, body) {
   var rpcurl = protocol() + '//' + context.state.node + ':' + port()
+  console.log('call: ' + rpcurl)
+
   var Init = { method:'POST',body: JSON.stringify(body)}
   var res = await fetch(rpcurl,Init)
   var data = await res.json()
