@@ -1,6 +1,11 @@
 <template>
   <div class="generate">
     <div class="details">
+      <label for="seed">Seed</label>
+      <a href="#" @click="copyToClipboard(walletdata.seed)" class="copy"><i class="fad fa-clone"></i></a>
+      <input class="copytext" type="text" name="seed" :value="walletdata.seed" />
+    </div>
+    <div class="details">
       <label for="privatekey">Private Key</label>
       <a href="#" @click="copyToClipboard(walletdata.privatekey)" class="copy"><i class="fad fa-clone"></i></a>
       <input class="copytext" type="text" name="privatekey" :value="walletdata.privatekey" />
