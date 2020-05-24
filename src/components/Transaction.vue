@@ -1,8 +1,8 @@
 <template>
   <div class="transaction" :class="type">
     <div class="type icon" :value="transaction.hash" @click="$emit('blockdetails', transaction.hash)">
-      <i v-if="transaction.type === 'send'" class="fal fa-minus-circle"></i>
-      <i v-else-if="transaction.type === 'pending'" class="fal fa-exclamation-circle"></i>
+      <i v-if="type === 'send'" class="fal fa-minus-circle"></i>
+      <i v-else-if="type === 'pending'" class="fal fa-exclamation-circle"></i>
       <i v-else class="fal fa-plus-circle"></i>
     </div>
     <div class="innerdetails">
