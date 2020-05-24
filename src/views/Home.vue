@@ -36,18 +36,21 @@
           <div class="headingtitle">History</div>
           <div id="pendingblocks"></div>
           <transaction
-            v-for="transaction in pending"
-            :key="transaction.hash"
+            v-for="(transaction, index) in pending"
+            :key="index"
+            :index="index"
             :transaction="transaction"
-             v-on:blockdetails="blockdetails = $event"
-             :type="pending"
+            v-on:blockdetails="blockdetails = $event"
+            type="pending"
           ></transaction>
 
           <transaction
-            v-for="transaction in history"
-            :key="transaction.hash"
+            v-for="(transaction, index) in history"
+            :key="index"
+            :index="index"
             :transaction="transaction"
-             v-on:blockdetails="blockdetails = $event"
+            v-on:blockdetails="blockdetails = $event"
+            :type="transaction.type"
           ></transaction>
         </div>
         <div id="walletmenu" class="menu">
@@ -78,10 +81,6 @@
       <div id="blockdetails" class="page" :class="{active: blockdetails !== null}">
         <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
         <block-state :details="blockdetails"></block-state>
-      </div>
-      <div id="scan" class="page" :class="{active: scan !== false}">
-        <a class="close" @click="scan = false"><i class="fal fa-times"></i></a>
-        <div id="qrpreview"></div>
       </div>
 
   </div>
@@ -119,7 +118,6 @@ export default {
       genwallet: false,
       send: false,
       settings: false,
-      scan: false,
       representative: '',
       blockdetails: null,
       address: null,
@@ -136,7 +134,7 @@ export default {
       }
     },
     pow: function (newpow/*, oldpow */) {
-      if(open === true && newpow === null) {
+      if(this.open === true && newpow === null) {
         this.$store.commit('app/ready', false)
         this.genWork(this.privatekey, this.details)
         this.$store.dispatch('app/history', this.address)
@@ -192,9 +190,9 @@ export default {
               workerCount: workerCount
             });
             worker.onmessage = (work) => {
-              console.log('Work: ' + work);
+              console.log('Work: ' + work.data);
               
-              this.$store.commit('app/pow', work)
+              this.$store.commit('app/pow', work.data)
               this.$store.commit('app/ready', true)
 
               for (let workerIndex in workerList) {
@@ -234,14 +232,15 @@ export default {
       this.error = null
       if(this.key) {
         try {
+          this.address = this.getAddress(this.key)
           const info = {
             action: 'account_info',
             representative: 'true',
-            account: this.getAddress(this.key)
+            account: this.address
           }
           this.details = await this.$store.dispatch('app/rpCall', info)
 
-          if('error' in this.details) {
+          if('error' in this.details && this.details.error !== 'Account not found') {
             this.error = this.details.error
           } else {
             this.$store.commit('app/privatekey', this.key)
@@ -249,14 +248,12 @@ export default {
             this.open = true
             this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
             this.representative = this.details.representative;
-            this.address = info.account
           }
 
         } catch(e) {
           this.error = e
         }
 
-        console.log(this.details)
       }
     }
   }
