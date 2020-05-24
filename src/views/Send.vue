@@ -9,8 +9,8 @@
       <button class="sendfunds btn" @click="send" type="button">Send</button>
       <button class="scan btn outline" @click="scanQR" type="button">Scan QR</button>
     <div id="scan" class="page" :class="{active: scan !== false}">
-        <a class="close" @click="scan = false"><i class="fal fa-times"></i></a>
-        <div id="qrpreview"><video id="preview"></video></div>
+        <a class="close" @click="closeScan"><i class="fal fa-times"></i></a>
+        <video id="qrpreview"></video>
     </div>
 
   </div>
@@ -78,16 +78,20 @@ export default {
       this.$store.commit('app/pow', null)
       this.$emit('close', 'true')
     },
+    closeScan () {
+      this.scan = false
+      // scanner.stop()
+    },
     async scanQR () {
       this.scan = true
-      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') })
+      var scanner = new Instascan.Scanner({ video: document.getElementById('qrpreview') })
       scanner.addListener('scan', function (content) {
         this.destination = content
-        scanner.stop()
-        this.scan = false
+        this.closeScan()
       })
       Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {
+          console.log('starting first camera')
           scanner.start(cameras[0])
         } else {
           console.error('No cameras found.')
