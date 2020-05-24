@@ -177,6 +177,10 @@ canvas {
     }
     #genwallet {
         top: 0;
+        justify-content: flex-start;
+    }
+    .genwallet {
+        color:white;
     }
     #wallet {
         z-index: 1;

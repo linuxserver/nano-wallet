@@ -17,7 +17,7 @@
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
         </div>
         <div id="buttons">
-          <button class="genwallet" @click="generateWallet" type="button">Generate Wallet</button>
+          <router-link class="genwallet" :to="'/' + $route.params.node + '/generate'">Generate Wallet</router-link>
         </div>
       </div>
       <div id="wallet" class="page" :class="{active: open === true}">
@@ -59,11 +59,6 @@
           </div>
         </div>
       </div>
-      <div id="genwallet" class="page" :class="{active: genwallet !== false}">
-        <a class="close" @click="genwallet = false"><i class="fal fa-times"></i></a>
-        <generate
-          :walletdata="walletdata"></generate>
-      </div>
       <div id="send" class="page" :class="{active: send !== false}">
         <a class="close" @click="send = false"><i class="fal fa-times"></i></a>
         <send></send>
@@ -98,7 +93,6 @@ import Transaction from '@/components/Transaction.vue'
 import Send from '@/views/Send.vue'
 import Receive from '@/views/Receive.vue'
 import Settings from '@/views/Settings.vue'
-import Generate from '@/views/Generate.vue'
 import BlockState from '@/components/BlockState.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
@@ -110,7 +104,6 @@ export default {
     Send,
     Receive,
     Settings,
-    Generate,
     BlockState
   },
   mixins: [ serverMixin ],
@@ -157,10 +150,6 @@ export default {
     }
   },
   methods: {
-    async generateWallet () {
-      this.genwallet = true
-      this.walletdata = await this.getSeed();
-    },
     togglevisibility () {
       console.log(this.logintype)
       this.logintype = (this.logintype === 'password') ? 'text' : 'password'

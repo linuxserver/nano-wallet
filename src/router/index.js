@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Block from '../views/Block.vue'
+import Generate from '../views/Generate.vue'
 import Address from '../views/Address.vue'
 
 Vue.use(VueRouter)
@@ -11,6 +12,11 @@ Vue.use(VueRouter)
     path: '/:node',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/:node/generate',
+    name: 'Generate',
+    component: Generate
   },
   {
     path: '/:node/block/:hash',
