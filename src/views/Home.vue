@@ -224,7 +224,6 @@ export default {
       this.logintype = (this.logintype === 'password') ? 'text' : 'password'
     },
     getAddress (key) {
-      console.log(key)
       const publickey = NanoCurrency.derivePublicKey(key)
       return NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true})
     },
