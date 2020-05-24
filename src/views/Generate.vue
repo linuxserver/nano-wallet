@@ -20,6 +20,7 @@
       <a href="#" @click="copyToClipboard(walletdata.address)" class="copy"><i class="fad fa-clone"></i></a>
       <input class="copytext" type="text" name="address" :value="walletdata.address" />
     </div>
+    <button class="btn" @click="copyToClipboard('Seed: ' + walletdata.seed + '\nPrivate Key: ' + walletdata.privatekey + '\nPublic Key: ' + walletdata.publickey + '\nAddress: ' + walletdata.address)">Copy All</button>
     <canvas id="genqrcode"></canvas>
   </div>
 </template>
@@ -53,5 +54,10 @@ export default {
 #qrcode {
   max-width: 100%;
   height: auto!important;
+}
+</style>
+<style lang="scss" scoped>
+.btn {
+  width: 100%;
 }
 </style>
