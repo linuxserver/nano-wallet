@@ -1,6 +1,7 @@
 import * as NanoCurrency from 'nanocurrency'
 
 function protocol() {
+  consoile.log('protocol: ' + window.location.protocol)
   return window.location.protocol
 }
 
