@@ -32,7 +32,8 @@ export default {
     return {
       amount: '',
       destination: '',
-      scan: false
+      scan: false,
+      scanner: null
     }
   },
   computed: {
@@ -80,19 +81,20 @@ export default {
     },
     closeScan () {
       this.scan = false
-      // scanner.stop()
+      this.scanner.stop()
     },
     async scanQR () {
       this.scan = true
-      var scanner = new Instascan.Scanner({ video: document.getElementById('qrpreview') })
-      scanner.addListener('scan', function (content) {
+      this.scanner = new Instascan.Scanner({ video: document.getElementById('qrpreview') })
+      this.scanner.addListener('scan', function (content) {
         this.destination = content
         this.closeScan()
       })
+      let that = this
       Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {
           console.log('starting first camera')
-          scanner.start(cameras[0])
+          that.scanner.start(cameras[0])
         } else {
           console.error('No cameras found.')
         }
