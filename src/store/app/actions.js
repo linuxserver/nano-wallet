@@ -1,12 +1,11 @@
 import * as NanoCurrency from 'nanocurrency'
 
 function protocol() {
-  console.log('protocol: ' + window.location.protocol)
   return window.location.protocol
 }
 
 function port() {
-  if (protocol == 'https:'){
+  if (protocol() == 'https:'){
       return '7077'
   }
   return '7076'
@@ -28,8 +27,6 @@ export async function getSeed () {
 
 export async function rpCall (context, body) {
   var rpcurl = protocol() + '//' + context.state.node + ':' + port()
-  console.log('call: ' + rpcurl)
-
   var Init = { method:'POST',body: JSON.stringify(body)}
   var res = await fetch(rpcurl,Init)
   var data = await res.json()
