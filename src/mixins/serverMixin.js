@@ -43,7 +43,7 @@ export const serverMixin = {
       const publickey = NanoCurrency.derivePublicKey(privatekey);
       const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
       const payload = {
-	"seed":seed,
+        "seed":seed,
         "privatekey":privatekey,
         "publickey":publickey,
         "address":address
