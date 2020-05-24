@@ -100,7 +100,8 @@ export default {
       receive['subtype'] = blocktype;
       receive['block'] = block.block;
       await this.$store.dispatch('app/rpCall', receive)
-      this.$store.commit('app/pow', null)
+      this.$emit('receive', true)
+      //this.$store.commit('app/pow', null)
 
     }
   }

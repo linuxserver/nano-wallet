@@ -42,6 +42,7 @@
             :transaction="transaction"
             v-on:blockdetails="blockdetails = $event"
             type="pending"
+            @receive="refreshDetails"
           ></transaction>
 
           <transaction
@@ -184,6 +185,7 @@ export default {
         this.genWork(this.privatekey, this.details)
         this.$store.dispatch('app/history', this.address)
         this.$store.dispatch('app/pending', this.address)
+        this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
     },
     async genWork (key, details){
       let hash
