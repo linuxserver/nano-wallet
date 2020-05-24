@@ -26,7 +26,7 @@
             <div class="status ready" :class="{active: ready === true}">Ready <i class="fas fa-check"></i></div>
         </div>
         <div class="inner">
-          <div class="headingtitle top">Wallet <span id="closewallet" class="mla" @click="open = false"><i class="fad fa-sign-out-alt"></i></span></div>
+          <div class="headingtitle top">Wallet <span id="closewallet" class="mla" @click="logout"><i class="fad fa-sign-out-alt"></i></span></div>
           <div id="output">
             <div class="balance">
               <div class="value" v-html="abbreviateNumber(balance)"></div>
@@ -97,6 +97,25 @@ import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
 
+function initialState (){
+  return {
+    key: null,
+    open: false,
+    details: null,
+    error: null,
+    balance: 0,
+    receive: false,
+    genwallet: false,
+    send: false,
+    settings: false,
+    representative: '',
+    blockdetails: null,
+    address: null,
+    logintype: 'password',
+    walletdata: null
+  }
+}
+
 export default {
   name: 'Home',
   components: {
@@ -108,26 +127,11 @@ export default {
   },
   mixins: [ serverMixin ],
   data() {
-    return {
-      key: null,
-      open: false,
-      details: null,
-      error: null,
-      balance: 0,
-      receive: false,
-      genwallet: false,
-      send: false,
-      settings: false,
-      representative: '',
-      blockdetails: null,
-      address: null,
-      logintype: 'password',
-      walletdata: null
-    }
+    return initialState();
   },
   watch: {
-    open: function (newopen, oldpopen) {
-      if(newopen === true && oldpopen === false && this.key !== null) {
+    open: function (newopen) {
+      if(newopen === true && this.key !== null) {
         this.genWork(this.privatekey, this.details)
         this.$store.dispatch('app/history', this.address)
         this.$store.dispatch('app/pending', this.address)
@@ -166,6 +170,14 @@ export default {
     }
   },
   methods: {
+    logout () {
+        Object.assign(this.$data, initialState());
+        this.$store.commit('app/pending', [])
+        this.$store.commit('app/history', [])
+        this.$store.commit('app/ready', false)
+        this.$store.commit('app/pow', null)
+        this.$store.commit('app/privatekey', null)
+    },
     async genWork (key, details){
       let hash
       if ('frontier' in details){
