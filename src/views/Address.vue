@@ -29,11 +29,16 @@
             :type="transaction.type"
           ></transaction>
         </div>
+        <div id="blockdetails" class="page" :class="{active: blockdetails !== null}">
+          <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
+          <block-state :details="blockdetails"></block-state>
+        </div>
 
   </div>
 </template>
 
 <script>
+import BlockState from '@/components/BlockState.vue'
 import Transaction from '@/components/Transaction.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
@@ -41,13 +46,15 @@ import * as NanoCurrency from 'nanocurrency'
 export default {
   name: 'Address',
   components: {
-    Transaction
+    Transaction,
+    BlockState
   },
   mixins: [ serverMixin ],
   data() {
     return {
       details: null,
-      balance: 0
+      balance: 0,
+      blockdetails: null
     }
   },
   computed: {
