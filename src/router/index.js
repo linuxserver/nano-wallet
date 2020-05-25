@@ -2,12 +2,19 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Block from '../views/Block.vue'
+import Node from '../views/Node.vue'
 import Generate from '../views/Generate.vue'
 import Address from '../views/Address.vue'
 
 Vue.use(VueRouter)
 
   const routes = [
+  {
+    path: '/',
+    name: 'Node',
+    component: Node
+  },
+
   {
     path: '/:node',
     name: 'Home',
