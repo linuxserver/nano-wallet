@@ -8,7 +8,7 @@
           </div>
           <div class="block">
             <div class="title">Account <span @click="copyToClipboard(blockstate.contents.account)" class="value"><i class="fad fa-clone"></i></span></div>
-            <div class="account">{{ blockstate.contents.account }}</div>
+            <div @click="link('address',blockstate.contents.account)" class="account">{{ blockstate.contents.account }}</div>
             <div class="label">The account represented by this state block</div>
           </div>
           <div class="block">
@@ -23,12 +23,12 @@
           </div>
           <div class="block">
             <div class="title">Representative <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span></div>
-            <div><span class="rep_raw">{{ blockstate.contents.representative }}</span></div>
+            <div><span @click="link('address',blockstate.contents.representative)" class="rep_raw">{{ blockstate.contents.representative }}</span></div>
             <div class="label">The account's representative</div>
           </div>
           <div class="block">
             <div class="title">Recipient <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span></div>
-            <div><span class="rec_raw">{{ blockstate.contents.link_as_account }}</span></div>
+            <div><span @click="link('address',blockstate.contents.link_as_account)" class="rec_raw">{{ blockstate.contents.link_as_account }}</span></div>
             <div class="label">The account that is receiving the transaction</div>
           </div>
           <div class="block">
@@ -37,7 +37,7 @@
           </div>
           <div class="block">
             <div class="title">Previous Block</div>
-            <div>{{ blockstate.contents.previous }}</div>
+            <div @click="link('block',blockstate.contents.previous)">{{ blockstate.contents.previous }}</div>
             <div class="label">The previous block in this account's chain</div>
           </div>
           <div class="block">

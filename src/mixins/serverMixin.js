@@ -35,6 +35,17 @@ export const serverMixin = {
       alert('Copied to clipboard')
 
     },
+    
+    link(type,data) {
+      const baseurl = window.location.origin;
+      const server = this.$route.path.split('/')[1];
+      if (type == 'address'){
+	window.open(baseurl + '/#/' + server + '/address/' + data);
+      }
+      if (type == 'block'){
+        window.open(baseurl + '/#/' + server + '/block/' + data);
+      }
+    },
 
     /*async keyFromClipboard() {
       try {
