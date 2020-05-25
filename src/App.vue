@@ -55,7 +55,7 @@ html, body {
 pre {
     font-family: 'Nunito', sans-serif;
     font-weight: 200;
-    letter-spacing: 1px;
+    line-height: 1.2;
 }
 * {
     box-sizing: border-box;
