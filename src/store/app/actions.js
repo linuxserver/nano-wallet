@@ -1,4 +1,5 @@
 import * as NanoCurrency from 'nanocurrency'
+import router from '@/router'
 
 function protocol() {
   return window.location.protocol
@@ -26,7 +27,7 @@ export async function getSeed () {
 }
 
 export async function rpCall (context, body) {
-  var rpcurl = protocol() + '//' + context.state.node + ':' + port()
+  var rpcurl = protocol() + '//' + router.currentRoute.params.node + ':' + port()
   var Init = { method:'POST',body: JSON.stringify(body)}
   var res = await fetch(rpcurl,Init)
   var data = await res.json()

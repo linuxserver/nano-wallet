@@ -1,6 +1,6 @@
 <template>
   <div style="top: 0;" id="blockdetails" class="page active">
-    <block-state :details="blockdetails"></block-state>
+    <block-state :static="true"></block-state>
   </div>
 </template>
 

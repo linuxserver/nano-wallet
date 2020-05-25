@@ -52,6 +52,11 @@ html, body {
     height: 100%;
     margin: 0;
 }
+pre {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    letter-spacing: 1px;
+}
 * {
     box-sizing: border-box;
 }
@@ -294,13 +299,22 @@ canvas {
     height: calc(100% - 30px);
     overflow: auto;
     font-weight: 200;
+    color: #d7dbe4;
+    header {
+        font-size: 30px;
+        font-weight: 400;
+    }
     .title {
         font-weight: 700;
+        font-size: 20px;
+        display: flex;
+        align-items: baseline;
     }
     .label {
         opacity: 0.7;
         font-size: 14px;
         margin-top: 5px;
+        word-break: break-word;
     }
     .json {
         width: 320px;
@@ -315,6 +329,11 @@ canvas {
     .value {
         word-break: break-all;
         font-weight: 200;
+        font-size: 17px;
+        margin-left: 5px;
+        &.mla {
+            margin-left: auto;
+        }
     }
     .hide {
         position: absolute;
@@ -332,6 +351,9 @@ canvas {
     }
     details.uaddress {
         height: 100px;
+    }
+    .raw {
+        font-size: 12px;
     }
 }
 
