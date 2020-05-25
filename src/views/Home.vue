@@ -191,6 +191,7 @@ export default {
         this.$store.dispatch('app/history', this.address)
         this.$store.dispatch('app/pending', this.address)
         this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
+        this.representative = this.details.representative;
     },
     async genWork (key, details){
       let hash
@@ -271,7 +272,6 @@ export default {
             
             this.open = true
             this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
-            this.representative = this.details.representative;
           }
 
         } catch(e) {
