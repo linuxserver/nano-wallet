@@ -218,7 +218,7 @@ canvas {
                 left: 0;
                 right: 0;
                 background: #1f263cad;
-                backdrop-filter: blur(10px)
+                backdrop-filter: blur(10px);
             }
             .content {
                 position: absolute;
@@ -229,6 +229,14 @@ canvas {
                 display: flex;
                 justify-content: space-evenly;
                 align-items: center;
+                div {
+                  cursor: pointer;
+                  flex: 1;
+                  height: 100%;
+                  justify-content: center;
+                  align-items: center;
+                  display: flex;
+                }
                 a {
                     color: white;
                     text-decoration: none;
