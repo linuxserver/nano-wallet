@@ -327,7 +327,7 @@ canvas {
         word-break: break-all;
         font-weight: 200;
         font-size: 17px;
-        margin-left: 5px;
+        margin-left: 25px;
         &.mla {
             margin-left: auto;
         }

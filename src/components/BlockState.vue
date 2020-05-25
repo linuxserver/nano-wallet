@@ -7,8 +7,8 @@
             <div class="label">The type of transaction that created this state block</div>
           </div>
           <div class="block">
-            <div class="title">Account <span @click="copyToClipboard(blockstate.contents.account)" class="value"><i class="fad fa-clone"></i></span></div>
-            <div @click="link('address',blockstate.contents.account)" class="account">{{ blockstate.contents.account }}</div>
+            <div class="title">Account <span @click="copyToClipboard(blockstate.contents.account)" class="value"><i class="fad fa-clone"></i></span><span @click="link('block',blockstate.contents.account)" class="value"><i class="fad fa-external-link"></i></span></div>
+            <div class="account">{{ blockstate.contents.account }}</div>
             <div class="label">The account represented by this state block</div>
           </div>
           <div class="block">
@@ -22,13 +22,13 @@
             <div class="label">The amount of NANO that was sent in this transaction</div>
           </div>
           <div class="block">
-            <div class="title">Representative <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span></div>
-            <div><span @click="link('address',blockstate.contents.representative)" class="rep_raw">{{ blockstate.contents.representative }}</span></div>
+            <div class="title">Representative <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span><span @click="link('block',blockstate.contents.representative)" class="value"><i class="fad fa-external-link"></i></span></div>
+            <div><span class="rep_raw">{{ blockstate.contents.representative }}</span></div>
             <div class="label">The account's representative</div>
           </div>
           <div class="block">
-            <div class="title">Recipient <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span></div>
-            <div><span @click="link('address',blockstate.contents.link_as_account)" class="rec_raw">{{ blockstate.contents.link_as_account }}</span></div>
+            <div class="title">Recipient <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span> <span @click="link('block',blockstate.contents.link_as_account)" class="value"><i class="fad fa-external-link"></i></span></div>
+            <div><span class="rec_raw">{{ blockstate.contents.link_as_account }}</span></div>
             <div class="label">The account that is receiving the transaction</div>
           </div>
           <div class="block">
@@ -36,8 +36,10 @@
             <div class="label">The date and time this block was discovered (converted to your local time)</div>
           </div>
           <div class="block">
-            <div class="title">Previous Block</div>
-            <div @click="link('block',blockstate.contents.previous)">{{ blockstate.contents.previous }}</div>
+            <div class="title">Previous Block <span @click="link('block',blockstate.contents.previous)" class="value"><i class="fad fa-external-link"></i></span></div>
+            <div>
+              {{ blockstate.contents.previous }}
+            </div>
             <div class="label">The previous block in this account's chain</div>
           </div>
           <div class="block">
