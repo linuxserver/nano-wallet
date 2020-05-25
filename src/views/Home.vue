@@ -5,7 +5,7 @@
         <div class="title">&nbsp;</div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
-          <label for="key">Private Key:</label>
+          <label for="key">Private Key: <span @click="keyFromClipboard"><i class="fad fa-clipboard"></i></span></label>
           <div class="login">
             <input v-model="key" :type="logintype" id="key" name="key">
             <span class="eye" @click="togglevisibility">
@@ -13,7 +13,6 @@
               <span :class="{ active: logintype === 'text'}"><i class="far fa-eye-slash"></i></span>
             </span>
           </div>
-          
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
         </div>
         <div id="buttons">
@@ -168,6 +167,9 @@ export default {
     }
   },
   methods: {
+    pasteKey () {
+      this.key = this.pasteFromClipboard()
+    },
     logout () {
         Object.assign(this.$data, initialState());
         this.$store.commit('app/pending', [])
@@ -236,9 +238,6 @@ export default {
         this.$store.commit('app/ready', true)
 
       }
-
-
-
       // worker.postMessage(hash);
     },
 
