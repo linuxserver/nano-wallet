@@ -5,7 +5,7 @@
         <div class="title">&nbsp;</div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
-          <label for="key">Private Key: <span @click="keyFromClipboard"><i class="fad fa-clipboard"></i></span></label>
+          <label for="key">Private Key</label>
           <div class="login">
             <input v-model="key" :type="logintype" id="key" name="key">
             <span class="eye" @click="togglevisibility">
@@ -167,9 +167,9 @@ export default {
     }
   },
   methods: {
-    pasteKey () {
+    /* pasteKey () {
       this.key = this.pasteFromClipboard()
-    },
+    }, */
     logout () {
         Object.assign(this.$data, initialState());
         this.$store.commit('app/pending', [])

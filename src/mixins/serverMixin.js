@@ -36,14 +36,14 @@ export const serverMixin = {
 
     },
 
-    async keyFromClipboard() {
+    /*async keyFromClipboard() {
       try {
         const text = await navigator.clipboard.readText()
         this.key = text
       } catch(e) {
         alert('This bowser does not support pasting from clipboard')
       }
-    },
+    },*/
     
     abbreviateAddress (address) {
       return address.substring(0, 11) + '...' + address.slice(address.length - 6)
