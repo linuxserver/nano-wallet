@@ -4,6 +4,7 @@
           <div class="headingtitle top"><span>Wallet</span></div>
           <div id="output">
             <div class="balance">
+              <div @click="copyToClipboard($route.params.address)" class="raw">{{ this.$route.params.address }}</div>
               <div class="value" v-html="abbreviateNumber(balance)"></div>
               <div class="raw">{{ balance }}</div>
             </div>

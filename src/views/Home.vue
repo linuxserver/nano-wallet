@@ -2,7 +2,7 @@
   <div class="wallet">
     <div type="hidden" id="workstorage"></div>
       <div id="login" class="page active" :class="{ active: open===false }">
-        <div class="title">&nbsp;</div>
+        <div class="title">Current RPC Server: {{ $route.params.node }}</div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
           <label for="key">Private Key</label>
@@ -28,6 +28,7 @@
           <div class="headingtitle top"><span>Wallet<span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fad fa-sync-alt"></i></span></span> <span id="closewallet" class="mla" @click="logout"><i class="fad fa-sign-out-alt"></i></span></div>
           <div id="output">
             <div class="balance">
+              <div @click="copyToClipboard(address)" class="raw">{{ address }}</div>
               <div class="value" v-html="abbreviateNumber(balance)"></div>
               <div class="raw">{{ balance }}</div>
             </div>

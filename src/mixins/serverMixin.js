@@ -38,7 +38,7 @@ export const serverMixin = {
     
     link(type,data) {
       const baseurl = window.location.origin;
-      const server = this.$route.path.split('/')[1];
+      const server = this.$route.params.node;
       if (type == 'address'){
 	window.open(baseurl + '/#/' + server + '/address/' + data);
       }
