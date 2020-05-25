@@ -1,30 +1,36 @@
 <template>
-  <div class="settings">
+  <div class="settings inner">
     <div class="details">
         <label for="representative">Current Representative</label>
         <a href="#" class="copy" @click="copyToClipboard(representative)"><i class="fad fa-clone"></i></a>
-        <input class="copytext" type="text" name="representative" :value="representative" />
+        <div class="address" style="margin-bottom: 30px; background: #00000014; padding: 4px 14px;" v-html="highlightAddress(representative)"></div>
     </div>
-    <div class="details">
+    <div v-if="change" class="details">
         <label for="newrep">Change Representative</label>
-        <a href="#" class="copy" @click="copyToClipboard(newrep)"><i class="fad fa-clone"></i></a>
         <input class="newrep" type="text" v-model="newrep" name="newrep" />
     </div>
-    <button @click="changeRep" class="repchange btn">Change Representative</button>
+    <div class="inline-buttons">
+      <button v-if="!change" @click="change = true" class="repchange btn">Change Representative</button>
+      <button v-if="change" @click="changeRep" class="repchange btn">Confirm</button>
+      <button v-if="change" @click="change = false" class="repchange btn outline">Cancel</button>
+    </div>
   </div>
 </template>
 
 <script>
 import * as NanoCurrency from 'nanocurrency'
+import { serverMixin } from '../mixins/serverMixin.js'
 
 export default {
   name: 'Settings',
   props: {
     representative: String
   },
+  mixins: [ serverMixin ],
   data() {
     return {
-      newrep: ''
+      newrep: '',
+      change: false
     }
   },
   computed: {

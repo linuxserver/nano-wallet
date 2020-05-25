@@ -7,7 +7,7 @@
             <div class="label">The type of transaction that created this state block</div>
           </div>
           <div class="block">
-            <div class="title">Account <span @click="copyToClipboard(blockstate.contents.account)" class="value mla"><i class="fad fa-clone"></i></span></div>
+            <div class="title">Account <span @click="copyToClipboard(blockstate.contents.account)" class="value"><i class="fad fa-clone"></i></span></div>
             <div class="account">{{ blockstate.contents.account }}</div>
             <div class="label">The account represented by this state block</div>
           </div>
@@ -22,12 +22,12 @@
             <div class="label">The amount of NANO that was sent in this transaction</div>
           </div>
           <div class="block">
-            <div class="title">Representative <span @click="copyToClipboard(blockstate.contents.representative)" class="value mla"><i class="fad fa-clone"></i></span></div>
+            <div class="title">Representative <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span></div>
             <div><span class="rep_raw">{{ blockstate.contents.representative }}</span></div>
             <div class="label">The account's representative</div>
           </div>
           <div class="block">
-            <div class="title">Recipient <span @click="copyToClipboard(blockstate.contents.representative)" class="mla value"><i class="fad fa-clone"></i></span></div>
+            <div class="title">Recipient <span @click="copyToClipboard(blockstate.contents.representative)" class="value"><i class="fad fa-clone"></i></span></div>
             <div><span class="rec_raw">{{ blockstate.contents.link_as_account }}</span></div>
             <div class="label">The account that is receiving the transaction</div>
           </div>
@@ -46,14 +46,15 @@
             <div class="label">The destination address encoded in hex format</div>
           </div>
           <div class="block">
-            <div class="title">Proof of Work <span class="proof value">{{ blockstate.contents.work }}</span></div>
+            <div class="title">Proof of Work</div>
+            <div>{{ blockstate.contents.work }}</div>
           </div>
           <div class="block">
             <div class="title">Signature</div>
             <div>{{ blockstate.contents.signature }}</div>
           </div>
           <div class="block">
-            <div class="title">JSON <span @click="copyToClipboard(JSON.stringify(blockstate))" class="mla value"><i class="fad fa-clone"></i></span></div>
+            <div class="title">JSON <span @click="copyToClipboard(JSON.stringify(blockstate))" class="value"><i class="fad fa-clone"></i></span></div>
             <div class="json">
               <pre>{{ JSON.stringify(blockstate, null, 4) }}</pre>
             </div>
@@ -126,4 +127,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+#app .page {
+  padding: 30px;
+}
 </style>

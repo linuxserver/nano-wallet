@@ -53,15 +53,11 @@ html, body {
     margin: 0;
 }
 pre {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 200;
-    line-height: 1.2;
+    overflow-x: auto;
+    font-size: 14px;
 }
 * {
     box-sizing: border-box;
-}
-#breakdown {
-  word-break: break-all;
 }
 .rotate{
   svg {
@@ -143,7 +139,7 @@ canvas {
         background: linear-gradient(to bottom, $body-bg1, $body-bg2);
         width: 100vw;
         height: 100%;
-        padding: 40px;    
+        padding: 30px;    
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -300,6 +296,8 @@ canvas {
     overflow: auto;
     font-weight: 200;
     color: #d7dbe4;
+    word-break: break-all;
+    width: 100%;
     header {
         font-size: 30px;
         font-weight: 400;
@@ -317,7 +315,6 @@ canvas {
         word-break: break-word;
     }
     .json {
-        width: 320px;
         overflow: auto;
     }
     .block {
@@ -485,15 +482,26 @@ input[type=text], input[type=password] {
 
 .details {
     position: relative;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ffffff21;
+    position: relative;
+    &:after {
+        position: absolute;
+        content: "";
+        border-bottom: 1px solid #00000036;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
     label {
         display: block;
     }
     input {
-        background: #00000014;
+        /* background: #00000014;
         padding: 6px;
         font-size: 16px;
         width: 100%;
-        border: none;
+        border: none; */
     }
     .copy {
         position: absolute;
@@ -524,9 +532,16 @@ input[type=text], input[type=password] {
     display: inline-block;
 
     &.outline {
+        padding: 7px 17px;
         border: 3px solid $highlight;
         background: transparent;
         color: $highlight;
+    }
+}
+.inline-buttons {
+    display: flex;
+    .btn {
+        flex: 1;
     }
 }
 input:-webkit-autofill,
