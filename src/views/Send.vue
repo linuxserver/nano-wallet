@@ -95,7 +95,7 @@ export default {
     },
     async scanQR () {
       this.scan = true
-
+      this.continue = true
 
       var canvasElement = document.getElementById("canvas")
       this.canvas = canvasElement.getContext("2d")
@@ -145,7 +145,7 @@ export default {
             that.continue = false
             setTimeout(function(){ 
               that.scan = false
-            }, 2000);
+            }, 1200);
           }
         }
         if(that.continue === true) {
