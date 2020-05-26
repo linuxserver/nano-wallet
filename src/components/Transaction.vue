@@ -1,6 +1,6 @@
 <template>
   <div class="transaction" :class="type">
-    <div class="type icon" :value="transaction.hash" @click="$emit('blockdetails', transaction.hash)">
+    <div class="type icon" :value="hash" @click="$emit('blockdetails', hash)">
       <i v-if="type === 'send'" class="fal fa-minus-circle"></i>
       <i v-else-if="type === 'pending'" class="fal fa-exclamation-circle"></i>
       <i v-else class="fal fa-plus-circle"></i>
@@ -55,6 +55,12 @@ export default {
     },
     privatekey () {
       return this.$store.state.app.privatekey
+    },
+    hash () {
+      if (this.type === 'pending') {
+        return this.index
+      }
+      return this.transaction.hash
     }
 
   },
