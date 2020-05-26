@@ -257,63 +257,66 @@ canvas {
                 }
             }
         }
-        .balance {
-            background: #3e4761;
-            margin: 10px 10px 40px;
-            padding: 20px 40px;
-            border-radius: 10px;
-            word-break: break-all;
-            text-align: center;
-            border: 1px solid #ffffff12;
-            box-shadow: 0 0 11px #00000038;
-            position: relative;
-            .balanceextra {
-                position: absolute;
-                bottom: 8px;
-                right: 8px;
-                padding: 0 10px;
-                color: $text;
-                font-size: 12px;
+    }
+}
+#output {
+    .balance {
+        background: #3e4761;
+        margin: 10px 10px 40px;
+        padding: 20px 40px;
+        border-radius: 10px;
+        word-break: break-all;
+        text-align: center;
+        border: 1px solid #ffffff12;
+        box-shadow: 0 0 11px #00000038;
+        position: relative;
+        .balanceextra {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            padding: 0 10px;
+            color: $text;
+            font-size: 12px;
+        }
+        .value {
+            font-size: 44px;
+            color: #d1d5e2;
+            font-weight: bold;
+            margin: 30px 0;
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                display: inline-block;
+                width: 40px;
+                margin-right: 10px;
             }
-            .value {
-                font-size: 44px;
-                color: #d1d5e2;
-                font-weight: bold;
-                margin: 30px 0;
-                line-height: 1;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                img {
-                    display: inline-block;
-                    width: 40px;
-                    margin-right: 10px;
-                }
-                .suffix {
-                    font-size: 30px;
-                    color: #bec3d2c9;
-                    margin-left: 6px;
-                }
+            .suffix {
+                font-size: 30px;
+                color: #bec3d2c9;
+                margin-left: 6px;
             }
-            .raw {
-                font-size: 12px;
-                line-height: 1;
+        }
+        .raw {
+            font-size: 12px;
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+            display: none;
+            letter-spacing: 2px;
+            font-weight: 200;
+            &.active {
                 display: flex;
-                justify-content: center;
-                display: none;
-                letter-spacing: 2px;
-                font-weight: 200;
-                &.active {
-                    display: flex;
-                }
-                img {
-                    width: 12px;
-                    margin-right:4px;
-                }
+            }
+            img {
+                width: 12px;
+                margin-right:4px;
             }
         }
     }
 }
+
 .headingtitle {
     font-size: 16px;
     font-weight: 400;
