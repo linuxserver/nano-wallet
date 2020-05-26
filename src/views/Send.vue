@@ -140,9 +140,9 @@ export default {
 
 }
 </script>
-<style lang="scss" scoped>
+<!--<style lang="scss" scoped>
 #canvas {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
-</style>
+</style>-->
