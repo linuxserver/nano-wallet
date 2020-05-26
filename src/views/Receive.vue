@@ -24,7 +24,7 @@ export default {
   watch: {
     address: function (address) {
       if(address !== null) {
-        QRCode.toCanvas(document.getElementById('qrcode'), 'nano:' + this.address, { width: 512 })
+        QRCode.toCanvas(document.getElementById('qrcode'), 'nano:' + this.address, { width: 512, errorCorrectionLevel: 'H' })
     
       }
     },
