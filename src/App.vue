@@ -36,10 +36,11 @@ $line-height-base: 1.6;
 
 // Colors
 $active: #0075c2;
-$text: #bec3d2;
+$text: #a7b0ca;
 $lighter-text: #959da0;
 
-$highlight: #2cc2ca;
+//$highlight: #2cc2ca;
+$highlight: #59c7f1;
 $highlight2: #af73d2;
 $highlight3: #e2ac39;
 
@@ -70,8 +71,6 @@ pre {
   }
 }
 .refresh {
-    font-size: 20px;
-    margin-left: 10px
 }
 .error {
   background: #ca4b4b;
@@ -109,6 +108,10 @@ canvas {
         left: 0;
         right: 0;
         height: 32px;
+        text-shadow: 0 0 6px #00000045;
+        svg {
+            filter: drop-shadow(0 0 6px #00000045);
+        }
         &.busy {
             background: #363e58;
             top: -32px;
@@ -117,7 +120,7 @@ canvas {
             }
         }
         &.ready {
-            background: #14af70;
+            background: $highlight;
             color: white;
             top: 32px;
             &.active {
@@ -136,7 +139,10 @@ canvas {
     overflow: hidden;
     position: relative;
     .page {
-        background: linear-gradient(to bottom, $body-bg1, $body-bg2);
+        background: $body-bg2;
+        background-image: url('../public/app-overlay.png');
+        background-image: url('../public/app-overlay.png'), linear-gradient(to bottom, $body-bg1, $body-bg2);
+        background-size: contain;
         width: 100vw;
         height: 100%;
         padding: 30px;    
@@ -198,7 +204,9 @@ canvas {
         justify-content: flex-start;
     }
     .genwallet {
-        color:white;
+        color:$text;
+        font-size: 14px;
+        font-weight: 400;
     }
     #wallet {
         z-index: 1;
@@ -220,6 +228,20 @@ canvas {
                 background: #1f263cad;
                 backdrop-filter: blur(10px);
             }
+            .tab {
+                cursor: pointer;
+                flex: 1;
+                height: 100%;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                font-weight: 400;
+                font-size: 14px;
+                .menuicon {
+                    margin-bottom: 4px;
+                }
+            }
             .content {
                 position: absolute;
                 bottom:0;
@@ -229,41 +251,33 @@ canvas {
                 display: flex;
                 justify-content: space-evenly;
                 align-items: center;
-                div {
-                  cursor: pointer;
-                  flex: 1;
-                  height: 100%;
-                  justify-content: center;
-                  align-items: center;
-                  display: flex;
-                }
                 a {
                     color: white;
                     text-decoration: none;
                 }
             }
         }
-        .headingtitle {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 40px 30px 5px;
-            color: white;
-            display: flex;
-            &.top {
-                margin: 20px 30px 15px;               
-            }
-        }
         .balance {
-            background: rgba(0,0,0,0.2);
+            background: #3e4761;
             margin: 10px 10px 40px;
             padding: 20px 40px;
             border-radius: 10px;
             word-break: break-all;
             text-align: center;
-            color: #bec3d273;
+            border: 1px solid #ffffff12;
+            box-shadow: 0 0 11px #00000038;
+            position: relative;
+            .balanceextra {
+                position: absolute;
+                bottom: 8px;
+                right: 8px;
+                padding: 0 10px;
+                color: $text;
+                font-size: 12px;
+            }
             .value {
                 font-size: 44px;
-                color: white;
+                color: #d1d5e2;
                 font-weight: bold;
                 margin: 30px 0;
                 line-height: 1;
@@ -286,6 +300,12 @@ canvas {
                 line-height: 1;
                 display: flex;
                 justify-content: center;
+                display: none;
+                letter-spacing: 2px;
+                font-weight: 200;
+                &.active {
+                    display: flex;
+                }
                 img {
                     width: 12px;
                     margin-right:4px;
@@ -294,6 +314,19 @@ canvas {
         }
     }
 }
+.headingtitle {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 40px 25px 5px;
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    &.top {
+        margin: 25px 20px 25px;               
+    }
+}
+
 .address {
     word-break: break-all;
     font-size: 16px;
@@ -303,18 +336,20 @@ canvas {
     height: calc(100% - 30px);
     overflow: auto;
     font-weight: 200;
-    color: #d7dbe4;
     word-break: break-all;
     width: 100%;
     header {
-        font-size: 30px;
-        font-weight: 400;
+        font-size: 24px;
+        justify-content: flex-start;
+        margin: 0;
     }
     .title {
-        font-weight: 700;
-        font-size: 20px;
+        font-weight: 400;
+        font-size: 18px;
         display: flex;
         align-items: baseline;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
     .label {
         opacity: 0.7;
@@ -334,8 +369,10 @@ canvas {
     .value {
         word-break: break-all;
         font-weight: 200;
-        font-size: 17px;
+        font-size: 16px;
         margin-left: 25px;
+        letter-spacing: 0;
+        text-transform: none;
         &.mla {
             margin-left: auto;
         }
@@ -383,7 +420,16 @@ canvas {
     display: flex;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255, 0.1);
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255, 0.05);
+    &:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom: 1px solid #00000052;
+    }
     .innerdetails {
         flex: 1;
     }
@@ -402,6 +448,7 @@ canvas {
         display: flex;
         align-items: center;
         line-height: 1;
+        font-size: 14px;
         svg {
             margin-left: 5px;
         }
@@ -519,13 +566,35 @@ input[type=text], input[type=password] {
         text-decoration: underline;
     }
 }
-
+.rpc {
+    margin: -30px 0;
+    width: calc(100% + 60px);
+    position: relative;
+    text-align: center;
+    font-weight: 400;
+    padding: 10px;
+    background: #00000026;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: lowercase;
+    span {
+        color: $highlight;
+        letter-spacing: 0;
+        text-transform: none;
+        margin-left: 10px;
+    }
+}
 #inputs {
     display: flex;
     flex-direction: column;
     width: 100%;
+    label {
+        font-size: 16px;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+    }
     button {
-        background: $highlight;
         padding: 15px;
     }
 }
@@ -536,12 +605,14 @@ input[type=text], input[type=password] {
     color: $body-bg2;
     cursor: pointer;
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 16px;
     display: inline-block;
+    justify-content: center;
+    letter-spacing: 3px;
 
     &.outline {
-        padding: 7px 17px;
-        border: 3px solid $highlight;
+        padding: 8px 18px;
+        border: 2px solid $highlight;
         background: transparent;
         color: $highlight;
     }

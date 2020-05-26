@@ -2,7 +2,7 @@
   <div class="wallet">
     <div type="hidden" id="workstorage"></div>
       <div id="login" class="page active" :class="{ active: open===false }">
-        <div class="title">Current RPC Server: {{ $route.params.node }}</div>
+        <div class="title rpc">RPC Server : <span>{{ $route.params.node }}</span></div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
           <label for="key">Private Key</label>
@@ -25,12 +25,13 @@
             <div class="status ready" :class="{active: ready === true}">Ready <i class="fas fa-check"></i></div>
         </div>
         <div class="inner">
-          <div class="headingtitle top"><span>Wallet<span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fad fa-sync-alt"></i></span></span> <span id="closewallet" class="mla" @click="logout"><i class="fad fa-sign-out-alt"></i></span></div>
+          <div class="headingtitle top"><span id="closewallet" class="" @click="logout"><i class="fal fa-sign-out fa-flip-horizontal"></i></span><span>Wallet</span><span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fal fa-sync"></i></span></div>
           <div id="output">
             <div class="balance">
-              <div @click="copyToClipboard(address)" class="raw">{{ address }}</div>
+              <div @click="copyToClipboard(address)" :class="{ active: balanceextra }" class="raw">{{ address }}</div>
               <div class="value" v-html="abbreviateNumber(balance)"></div>
-              <div class="raw">{{ balance }}</div>
+              <div class="raw" :class="{ active: balanceextra }">{{ balance }}</div>
+              <a class="balanceextra" href="" @click.prevent="balanceextra = !balanceextra"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
             </div>
           </div>
           <div class="headingtitle">History</div>
@@ -57,9 +58,18 @@
         <div id="walletmenu" class="menu">
           <div class="bg"></div>
           <div class="content">
-            <div data-tab="#receive" @click="receive = true">Receive</div>
-            <div data-tab="#send" @click="send = true">Send</div>
-            <div data-tab="#settings" @click="settings = true">Settings</div>
+            <div class="tab" data-tab="#receive" @click="receive = true">
+              <span class="menuicon"><i data-fa-transform="grow-8" class="fal fa-wallet"></i></span>
+              <span>Receive</span>
+            </div>
+            <div class="tab" data-tab="#send" @click="send = true">
+              <span class="menuicon"><i data-fa-transform="grow-8" class="fal fa-coins"></i></span>
+              <span>Send</span>
+            </div>
+            <div class="tab" data-tab="#settings" @click="settings = true">
+              <span class="menuicon"><i data-fa-transform="grow-8" class="fal fa-cog"></i></span>
+              <span>Settings</span>
+            </div>
           </div>
         </div>
       </div>
@@ -115,7 +125,8 @@ function initialState (){
     address: null,
     logintype: 'password',
     walletdata: null,
-    isActive: false
+    isActive: false,
+    balanceextra: false
   }
 }
 

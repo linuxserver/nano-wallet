@@ -1,6 +1,6 @@
 <template>
           <div v-if="blockstate !== null" id="breakdown">
-          <header>State Block</header>
+          <header class="headingtitle">State Block</header>
           <div class="stateblock block">{{ hash }}</div>
           <div class="block">
             <div class="title">Block subtype <span class="subtype value">{{ blockstate.subtype }}</span></div>
