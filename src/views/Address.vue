@@ -29,7 +29,7 @@
             :type="transaction.type"
           ></transaction>
         </div>
-        <div id="blockdetails" class="page" :class="{active: blockdetails !== null}">
+        <div id="blockdetails" style="top: 0" class="page" :class="{active: blockdetails !== null}">
           <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
           <block-state :details="blockdetails"></block-state>
         </div>
