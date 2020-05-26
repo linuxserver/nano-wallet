@@ -11,7 +11,7 @@
     <div id="scan" class="page" :class="{active: scan !== false}">
         <a class="close" @click="closeScan"><i class="fal fa-times"></i></a>
         <div v-if="loadingMsg" id="loadingMessage">{{ loadingMsg }}</div>
-        <canvas id="canvas" hidden></canvas>
+        <canvas id="canvas"></canvas>
     </div>
 
   </div>
@@ -39,6 +39,7 @@ export default {
       scanner: null,
       canvas: null,
       stream: null,
+      continue: true,
       loadingMsg: 'Unable to access video stream (please make sure you have a webcam enabled)',
     }
   },
@@ -101,6 +102,15 @@ export default {
 
       const that = this
 
+      function drawLine(begin, end, color) {
+        that.canvas.beginPath();
+        that.canvas.moveTo(begin.x, begin.y);
+        that.canvas.lineTo(end.x, end.y);
+        that.canvas.lineWidth = 4;
+        that.canvas.strokeStyle = color;
+        that.canvas.stroke();
+      }
+
       // Use facingMode: environment to attemt to get the back camera on phones
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
         video.srcObject = stream
@@ -113,7 +123,6 @@ export default {
         that.loadingMsg = "Loading video..."
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
           that.loadingMsg = null
-          canvasElement.hidden = false
 
           canvasElement.height = video.videoHeight
           canvasElement.width = video.videoWidth
@@ -123,16 +132,25 @@ export default {
             inversionAttempts: "dontInvert",
           })
           if (code) {
+            drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58")
+            drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58")
+            drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58")
+            drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58")
+            // console.log(code.data.replace('nano:',''))
+            that.destination = code.data.replace('nano:','')
             video.srcObject.getTracks().forEach(function(track) {
               track.stop()
             })
-            that.destination = code.data.replace('nano:','')
-            that.scan = false
-            return true
+
+            that.continue = false
+            setTimeout(function(){ 
+              that.scan = false
+            }, 2000);
           }
         }
-        if(that.scan === false) return
-        requestAnimationFrame(tick)
+        if(that.continue === true) {
+          requestAnimationFrame(tick)
+        }
       }
 
     }
