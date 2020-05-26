@@ -85,6 +85,9 @@ export default {
     }
   },
   mounted() {
+    this.$store.commit('app/history', [])
+    this.$store.commit('app/history', [])
+    this.$store.commit('app/pending', this.$route.params.node)
     this.$store.commit('app/node', this.$route.params.node)
     this.getDetails()
 
