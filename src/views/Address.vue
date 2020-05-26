@@ -1,6 +1,6 @@
 <template>
   <div style="top: 0;" id="wallet" class="page active">
-        <div class="inner">
+        <div style="padding: 0" class="inner">
           <div class="headingtitle top"><span>Wallet</span></div>
           <div id="output">
             <div class="balance">
@@ -80,13 +80,12 @@ export default {
       this.$store.dispatch('app/history', this.$route.params.address)
       this.$store.dispatch('app/pending', this.$route.params.address)
       this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
-
+      this.representative = this.details.representative;
 
     }
   },
   mounted() {
-    this.$store.commit('app/history', [])
-    this.$store.commit('app/pending', [])
+    this.$store.commit('app/resetState')
     this.$store.commit('app/node', this.$route.params.node)
     this.getDetails()
 

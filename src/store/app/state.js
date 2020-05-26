@@ -1,4 +1,4 @@
-export default function () {
+export function initialState () {
   return {
     privatekey: null,
     pow: null,
@@ -7,4 +7,8 @@ export default function () {
     pending: [],
     node: null
   }
+}
+
+export default function () {
+  return initialState()
 }

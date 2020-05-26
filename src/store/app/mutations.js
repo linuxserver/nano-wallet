@@ -1,3 +1,5 @@
+import initialState from './state.js'
+
 export function pow(state, data) {
   if(data !== null) {
     console.log('Finished calculating')
@@ -20,4 +22,8 @@ export function history(state, data) {
 }
 export function pending(state, data) {
   state.pending = data
+}
+
+export function resetState(state) {
+  Object.assign(state, initialState())
 }
