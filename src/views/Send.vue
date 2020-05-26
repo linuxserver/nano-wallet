@@ -87,8 +87,8 @@ export default {
       this.scan = true
       this.scanner = new Instascan.Scanner({ video: document.getElementById('qrpreview') })
       this.scanner.addListener('scan', function (content) {
-        this.destination = content.replace('nano:','')
-        this.closeScan()
+        that.destination = content.replace('nano:','')
+        that.closeScan()
       })
       let that = this
       Instascan.Camera.getCameras().then(function (cameras) {
