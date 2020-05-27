@@ -67,7 +67,6 @@ export async function pending (context, address) {
 
   const details = await context.dispatch('rpCall', pending);
   console.log('pending1')
-  console.log(details)
 
   if (typeof details.blocks === 'object'){
     console.log('pending')

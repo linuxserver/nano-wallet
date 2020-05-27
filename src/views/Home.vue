@@ -118,7 +118,7 @@ function initialState (){
   return {
     key: null,
     open: false,
-    details: null,
+    details: {},
     error: null,
     balance: 0,
     receive: false,
@@ -151,11 +151,13 @@ export default {
   watch: {
     open: function (newopen) {
       if(newopen === true && this.key !== null) {
+        console.log('open')
         this.refreshDetails(true)
       }
     },
     pow: async function (newpow, oldpow) {
       if(this.open === true && newpow !== oldpow && newpow === null) {
+        console.log('pow change')
         this.refreshDetails()
       }
     }
@@ -200,7 +202,10 @@ export default {
       this.refreshDetails()
     },
     async refreshDetails (open = false) {
-      const current = this.details.frontier || null
+      let current = null
+      if('frontier' in this.details) {
+        current = this.details.frontier
+      }
       await this.getDetails(this.privatekey)
       if(current !== this.details.frontier || open === true) {
         this.genWork(this.privatekey, this.details)
@@ -275,14 +280,13 @@ export default {
       this.error = null
       if(this.key) {
         try {
-          await this.getDetails(this.key)
-          if('error' in this.details && this.details.error !== 'Account not found') {
-            this.error = this.details.error
+          const checkKey = NanoCurrency.checkKey(this.key)
+          if(checkKey === false) {
+            this.error = 'Invalid key'
           } else {
             this.$store.commit('app/privatekey', this.key)
             
             this.open = true
-            this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
           }
 
         } catch(e) {
