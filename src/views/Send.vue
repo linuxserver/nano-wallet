@@ -132,10 +132,10 @@ export default {
             inversionAttempts: "dontInvert",
           })
           if (code) {
-            drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58")
-            drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58")
-            drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58")
-            drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58")
+            drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#0cd21a")
+            drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#0cd21a")
+            drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#0cd21a")
+            drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#0cd21a")
             // console.log(code.data.replace('nano:',''))
             that.destination = code.data.replace('nano:','')
             video.srcObject.getTracks().forEach(function(track) {
