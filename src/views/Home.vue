@@ -212,7 +212,11 @@ export default {
       }
       this.$store.dispatch('app/history', this.address)
       this.$store.dispatch('app/pending', this.address)
-      this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
+      if (this.details.balance) {
+        this.balance = NanoCurrency.convert(this.details.balance, this.rawconv);
+      } else {
+        this.balance = 0;
+      }
       this.representative = this.details.representative;
     },
     async genWork (key, details){
