@@ -26,6 +26,16 @@ export async function getSeed () {
   return payload;
 }
 
+export async function getDetails (context, address) {
+  const info = {
+    action: 'account_info',
+    representative: 'true',
+    account: address
+  }
+  const details = await rpCall(context, info)
+  return details
+}
+
 export async function rpCall (context, body) {
   var rpcurl = protocol() + '//' + router.currentRoute.params.node + ':' + port()
   var Init = { method:'POST',body: JSON.stringify(body)}

@@ -70,13 +70,7 @@ export default {
   },
   methods: {
     async getDetails () {
-      const info = {
-        action: 'account_info',
-        representative: 'true',
-        account: this.$route.params.address
-      }
-      console.log(info)
-      this.details = await this.$store.dispatch('app/rpCall', info)
+      this.details = await this.$store.dispatch('app/getDetails', this.$route.params.address)
       this.$store.dispatch('app/history', this.$route.params.address)
       this.$store.dispatch('app/pending', this.$route.params.address)
       this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);

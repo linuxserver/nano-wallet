@@ -146,11 +146,11 @@ export default {
   watch: {
     open: function (newopen) {
       if(newopen === true && this.key !== null) {
-        this.refreshDetails()
+        this.refreshDetails(true)
       }
     },
-    pow: async function (newpow/*, oldpow */) {
-      if(this.open === true && newpow === null) {
+    pow: async function (newpow, oldpow) {
+      if(this.open === true && newpow !== oldpow && newpow === null) {
         this.refreshDetails()
       }
     }
@@ -183,28 +183,28 @@ export default {
       this.key = this.pasteFromClipboard()
     }, */
     logout () {
-        Object.assign(this.$data, initialState());
-        this.$store.commit('app/pending', [])
-        this.$store.commit('app/history', [])
-        this.$store.commit('app/ready', false)
-        this.$store.commit('app/pow', null)
-        this.$store.commit('app/privatekey', null)
+      Object.assign(this.$data, initialState());
+      this.$store.commit('app/resetState')
     },
     refresh () {
       this.isActive = !this.isActive
       this.refreshDetails()
     },
-    async refreshDetails () {
-        await this.getDetails(this.privatekey)
-        this.$store.commit('app/pow', null)
-        this.$store.commit('app/ready', false)
+    async refreshDetails (open = false) {
+      const current = this.details.frontier || null
+      await this.getDetails(this.privatekey)
+      if(current !== this.details.frontier || open === true) {
         this.genWork(this.privatekey, this.details)
-        this.$store.dispatch('app/history', this.address)
-        this.$store.dispatch('app/pending', this.address)
-        this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
-        this.representative = this.details.representative;
+      }
+      this.$store.dispatch('app/history', this.address)
+      this.$store.dispatch('app/pending', this.address)
+      this.balance = NanoCurrency.convert(this.details.balance,this.rawconv);
+      this.representative = this.details.representative;
     },
     async genWork (key, details){
+      this.$store.commit('app/pow', null)
+      this.$store.commit('app/ready', false)
+
       let hash
       if ('frontier' in details){
         console.log('Frontier in details');
@@ -264,12 +264,7 @@ export default {
     },
     async getDetails (key) {
       this.address = this.getAddress(key)
-      const info = {
-        action: 'account_info',
-        representative: 'true',
-        account: this.address
-      }
-      this.details = await this.$store.dispatch('app/rpCall', info)
+      this.details = await this.$store.dispatch('app/getDetails', this.address)
     },
     async openWallet () {
       this.error = null
