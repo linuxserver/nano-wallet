@@ -591,6 +591,7 @@ input[type=text], input[type=password] {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 500px;
     label {
         font-size: 16px;
         font-weight: 400;
