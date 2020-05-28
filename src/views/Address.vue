@@ -5,9 +5,10 @@
           <div class="headingtitle top"><span>Wallet</span></div>
           <div id="output">
             <div class="balance">
-              <div @click="copyToClipboard($route.params.address)" class="raw">{{ this.$route.params.address }}</div>
+              <div @click="copyToClipboard($route.params.address)" :class="{ active: balanceextra }" class="raw">{{ $route.params.address }}</div>
               <div class="value" v-html="abbreviateNumber(balance)"></div>
-              <div class="raw">{{ balance }}</div>
+              <div class="raw" :class="{ active: balanceextra }">{{ balance }}</div>
+              <a class="balanceextra" href="" @click.prevent="balanceextra = !balanceextra"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
             </div>
           </div>
           </div>
@@ -61,7 +62,8 @@ export default {
     return {
       details: null,
       balance: 0,
-      blockdetails: null
+      blockdetails: null,
+      balanceextra: false
     }
   },
   computed: {
