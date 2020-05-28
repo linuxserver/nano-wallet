@@ -11,27 +11,27 @@
             </div>
           </div>
           </div>
-          <div class="block history">
-          <div class="headingtitle">History</div>
-          <div id="pendingblocks"></div>
-          <transaction
-            v-for="(transaction, index) in pending"
-            :key="index"
-            :index="index"
-            :transaction="transaction"
-            v-on:blockdetails="blockdetails = $event"
-            type="pending"
-          ></transaction>
+          <simplebar class="block history">
+            <div class="headingtitle">History</div>
+            <div id="pendingblocks"></div>
+            <transaction
+              v-for="(transaction, index) in pending"
+              :key="index"
+              :index="index"
+              :transaction="transaction"
+              v-on:blockdetails="blockdetails = $event"
+              type="pending"
+            ></transaction>
 
-          <transaction
-            v-for="(transaction, index) in history"
-            :key="index"
-            :index="index"
-            :transaction="transaction"
-            v-on:blockdetails="blockdetails = $event"
-            :type="transaction.type"
-          ></transaction>
-        </div>
+            <transaction
+              v-for="(transaction, index) in history"
+              :key="index"
+              :index="index"
+              :transaction="transaction"
+              v-on:blockdetails="blockdetails = $event"
+              :type="transaction.type"
+            ></transaction>
+          </simplebar>
         </div>
         <div id="blockdetails" style="top: 0" class="page" :class="{active: blockdetails !== null}">
           <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
@@ -46,12 +46,15 @@ import BlockState from '@/components/BlockState.vue'
 import Transaction from '@/components/Transaction.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
+import simplebar from 'simplebar-vue';
+import 'simplebar/dist/simplebar.min.css';
 
 export default {
   name: 'Address',
   components: {
     Transaction,
-    BlockState
+    BlockState,
+    simplebar
   },
   mixins: [ serverMixin ],
   data() {

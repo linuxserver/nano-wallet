@@ -1,5 +1,5 @@
 <template>
-          <div v-if="blockstate !== null" id="breakdown">
+        <simplebar v-if="blockstate !== null" id="breakdown">
           <header class="headingtitle">State Block <span @click="copyToClipboard(hash)" class="value"><i class="fad fa-clone"></i></span><span @click="link('block',hash)" class="value"><i class="fad fa-external-link"></i></span></header>
           <div class="stateblock block">{{ hash }}</div>
           <div class="block">
@@ -62,16 +62,21 @@
             </div>
           </div>
   
-        </div>
+        </simplebar>
 
 </template>
 
 <script>
 import * as NanoCurrency from 'nanocurrency'
 import { serverMixin } from '../mixins/serverMixin.js'
+import simplebar from 'simplebar-vue';
+import 'simplebar/dist/simplebar.min.css';
 
 export default {
   name: 'BlockState',
+  components: {
+    simplebar
+  },
   props: {
     details: {
       default: null,
