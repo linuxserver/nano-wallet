@@ -169,6 +169,7 @@ canvas {
             @media all and (min-width: 900px) {
                 display: flex;
                 justify-content: center;
+                overflow-y: visible;
                 &.settings {
                     .block {
                         max-width: 500px;
@@ -184,8 +185,9 @@ canvas {
                         }
                     }
                     &.history {
-                        height: calc(100% - 75px);
-                        overflow: auto;
+                      height: calc(100vh - 75px);
+                      padding-bottom: 75px;
+                      overflow: auto;
                     }
                     canvas {
                         max-width: 300px;
