@@ -19,7 +19,7 @@ export const serverMixin = {
       if (precision === 2) {
         return numeral(number).format('0.[00]a')
       }
-      return numeral(number).format('0.0[0000000000000000000]a')
+      return numeral(number).format('0.[00000000000000000000]a')
 
       //return scaled.toFixed(precision) + '<span class="suffix">' + suffix + '</span>';
     },
