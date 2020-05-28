@@ -36,7 +36,7 @@
               </div>
             </div>
           </div>
-          <div class="block history">
+          <simplebar class="block history">
             <div class="headingtitle">History</div>
             <div id="pendingblocks"></div>
             <transaction
@@ -57,7 +57,7 @@
               v-on:blockdetails="blockdetails = $event"
               :type="transaction.type"
             ></transaction>
-          </div>
+          </simplebar>
         </div>
         <div id="walletmenu" class="menu">
           <div class="bg"></div>
@@ -112,6 +112,8 @@ import BlockState from '@/components/BlockState.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
+import simplebar from 'simplebar-vue';
+import 'simplebar/dist/simplebar.min.css';
 
 const hardwareConcurrency = window.navigator.hardwareConcurrency || 2
 const workerCount = Math.max(hardwareConcurrency - 1, 1)
@@ -146,7 +148,8 @@ export default {
     Send,
     Receive,
     Settings,
-    BlockState
+    BlockState,
+    simplebar
   },
   mixins: [ serverMixin ],
   data() {
