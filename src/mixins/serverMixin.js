@@ -1,3 +1,4 @@
+var numeral = require('numeral')
 
 export const serverMixin = {
   data() {
@@ -15,13 +16,12 @@ export const serverMixin = {
   methods: {
        
     abbreviateNumber (number, precision = 2) {
-      const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
-      let tier = Math.log10(number) / 3 | 0;
-      if(tier == 0) return Number.parseFloat(number).toFixed(precision);
-      let suffix = SI_SYMBOL[tier];
-      let scale = Math.pow(10, tier * 3);
-      let scaled = number / scale;
-      return scaled.toFixed(precision) + '<span class="suffix">' + suffix + '</span>';
+      if (precision === 2) {
+        return numeral(number).format('0.0[000]a')
+      }
+      return numeral(number).format('0.0[0000000000000000000]a')
+
+      //return scaled.toFixed(precision) + '<span class="suffix">' + suffix + '</span>';
     },
     
     copyToClipboard(text) {
