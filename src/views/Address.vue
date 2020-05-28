@@ -1,6 +1,7 @@
 <template>
   <div style="top: 0;" id="wallet" class="page active">
-        <div style="padding: 0" class="inner">
+        <div class="inner">
+          <div class="block">
           <div class="headingtitle top"><span>Wallet</span></div>
           <div id="output">
             <div class="balance">
@@ -9,6 +10,8 @@
               <div class="raw">{{ balance }}</div>
             </div>
           </div>
+          </div>
+          <div class="block history">
           <div class="headingtitle">History</div>
           <div id="pendingblocks"></div>
           <transaction
@@ -28,6 +31,7 @@
             v-on:blockdetails="blockdetails = $event"
             :type="transaction.type"
           ></transaction>
+        </div>
         </div>
         <div id="blockdetails" style="top: 0" class="page" :class="{active: blockdetails !== null}">
           <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
@@ -86,6 +90,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-</style>
