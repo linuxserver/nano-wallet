@@ -1,19 +1,18 @@
 <template>
   <div style="top: 0;" id="wallet" class="page active">
-        <div class="inner">
-          <div class="block">
-          <div class="headingtitle top"><span>Wallet</span></div>
-          <div id="output">
-            <div class="balance">
-              <div @click="copyToClipboard($route.params.address)" :class="{ active: balanceextra }" class="raw">{{ $route.params.address }}</div>
-              <div class="value" v-html="abbreviateNumber(balance)"></div>
-              <div class="raw" :class="{ active: balanceextra }">{{ balance }}</div>
-              <a class="balanceextra" href="" @click.prevent="balanceextra = !balanceextra"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
-            </div>
+    <div class="inner">
+      <div class="block">
+        <div class="headingtitle top"><span>Wallet</span></div>
+        <div id="output">
+          <div class="balance">
+            <div @click="copyToClipboard($route.params.address)" :class="{ active: balanceextra }" class="raw">{{ $route.params.address }}</div>
+            <div class="value" v-html="abbreviateNumber(balance)"></div>
+            <div class="raw" :class="{ active: balanceextra }">{{ balance }}</div>
+            <a class="balanceextra" href="" @click.prevent="balanceextra = !balanceextra"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
           </div>
-          </div>
+        </div>
           <simplebar class="block history">
-            <div class="headingtitle">History</div>
+            <div class="headingtitle showmobile">History</div>
             <div id="pendingblocks"></div>
             <transaction
               v-for="(transaction, index) in pending"
@@ -23,6 +22,11 @@
               v-on:blockdetails="blockdetails = $event"
               type="pending"
             ></transaction>
+          </simplebar>
+        </div>
+
+          <simplebar class="block history">
+            <div class="headingtitle hidemobile">History</div>
 
             <transaction
               v-for="(transaction, index) in history"
