@@ -1,8 +1,12 @@
 <template>
-  <div class="receive">
-    <div class="address">Address: <span @click="copyToClipboard(address)" class="value"><i class="fad fa-clone"></i></span> <span @click="link('address',address)" class="value"><i class="fad fa-external-link"></i></span></div>
-    <div class="address" v-html="highlightAddress(address)"></div>
-    <canvas id="qrcode"></canvas>
+  <div class="receive inner">
+    <div class="block">
+      <div class="address">Address: <span @click="copyToClipboard(address)" class="value"><i class="fad fa-clone"></i></span> <span @click="link('address',address)" class="value"><i class="fad fa-external-link"></i></span></div>
+      <div class="address" v-html="highlightAddress(address)"></div>
+    </div>
+    <div class="block">
+      <canvas id="qrcode"></canvas>
+    </div>
   </div>
 </template>
 

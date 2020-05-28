@@ -25,35 +25,39 @@
             <div class="status ready" :class="{active: ready === true}">Ready <i class="fas fa-check"></i></div>
         </div>
         <div class="inner">
-          <div class="headingtitle top"><span id="closewallet" class="" @click="logout"><i class="fal fa-sign-out fa-flip-horizontal"></i></span><span>Wallet</span><span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fal fa-sync"></i></span></div>
-          <div id="output">
-            <div class="balance">
-              <div @click="copyToClipboard(address)" :class="{ active: balanceextra }" class="raw">{{ address }}</div>
-              <div class="value" v-html="abbreviateNumber(balance)"></div>
-              <div class="raw" :class="{ active: balanceextra }">{{ balance }}</div>
-              <a class="balanceextra" href="" @click.prevent="balanceextra = !balanceextra"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
+          <div class="block">
+            <div class="headingtitle top"><span id="closewallet" class="" @click="logout"><i class="fal fa-sign-out fa-flip-horizontal"></i></span><span>Wallet</span><span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fal fa-sync"></i></span></div>
+            <div id="output">
+              <div class="balance">
+                <div @click="copyToClipboard(address)" :class="{ active: balanceextra }" class="raw">{{ address }}</div>
+                <div class="value" v-html="abbreviateNumber(balance)"></div>
+                <div class="raw" :class="{ active: balanceextra }">{{ balance }}</div>
+                <a class="balanceextra" href="" @click.prevent="balanceextra = !balanceextra"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
+              </div>
             </div>
           </div>
-          <div class="headingtitle">History</div>
-          <div id="pendingblocks"></div>
-          <transaction
-            v-for="(transaction, index) in pending"
-            :key="index"
-            :index="index"
-            :transaction="transaction"
-            v-on:blockdetails="blockdetails = $event"
-            type="pending"
-            @receive="refreshDetails"
-          ></transaction>
+          <div class="block history">
+            <div class="headingtitle">History</div>
+            <div id="pendingblocks"></div>
+            <transaction
+              v-for="(transaction, index) in pending"
+              :key="index"
+              :index="index"
+              :transaction="transaction"
+              v-on:blockdetails="blockdetails = $event"
+              type="pending"
+              @receive="refreshDetails"
+            ></transaction>
 
-          <transaction
-            v-for="(transaction, index) in history"
-            :key="index"
-            :index="index"
-            :transaction="transaction"
-            v-on:blockdetails="blockdetails = $event"
-            :type="transaction.type"
-          ></transaction>
+            <transaction
+              v-for="(transaction, index) in history"
+              :key="index"
+              :index="index"
+              :transaction="transaction"
+              v-on:blockdetails="blockdetails = $event"
+              :type="transaction.type"
+            ></transaction>
+          </div>
         </div>
         <div id="walletmenu" class="menu">
           <div class="bg"></div>

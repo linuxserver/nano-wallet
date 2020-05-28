@@ -86,6 +86,7 @@ pre {
     right: 20px;
     color: $highlight;
     font-size: 24px;
+    z-index: 2;
 }
 canvas {
     display: inline-block!important;
@@ -161,8 +162,36 @@ canvas {
             overflow-y: auto;
             padding-bottom: 65px;
             position: relative;
-            width: 100%;
-            padding-top: 32px;
+            width: calc(100% + 60px);
+            padding: 30px;
+            padding-top: 62px;
+            margin: -30px;
+            @media all and (min-width: 900px) {
+                display: flex;
+                justify-content: center;
+                &.settings {
+                    .block {
+                        max-width: 500px;
+                    }
+                }
+                .block {
+                    flex: 1;
+                    padding: 10px 30px;                    
+                    .details {
+                        margin-bottom: 15px;
+                        input {
+                            margin-bottom: 22px;
+                        }
+                    }
+                    &.history {
+                        height: calc(100% - 75px);
+                        overflow: auto;
+                    }
+                    canvas {
+                        max-width: 300px;
+                    }
+                }
+            }
         }
     }
     #login {
@@ -511,6 +540,11 @@ input[type=text], input[type=password] {
     width: 100%;
     &.copytext {
     }
+    @media all and (min-width: 900px) {
+        font-size: 15px;
+        padding: 12px;
+    }
+
 }
 .login {
     position: relative;
@@ -534,6 +568,11 @@ input[type=text], input[type=password] {
     }
     input[type=text], input[type=password] {
         padding-right: 60px;
+        @media all and (min-width: 900px) {
+            font-size: 22px;
+            padding: 15px;
+        }
+
     }
 
 }

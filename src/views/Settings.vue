@@ -1,5 +1,6 @@
 <template>
   <div class="settings inner">
+    <div class="block">
     <div class="details">
         <label for="representative">Current Representative</label>
         <a href="#" class="copy" @click="copyToClipboard(representative)"><i class="fad fa-clone"></i></a>
@@ -14,6 +15,7 @@
       <button v-if="change" @click="changeRep" class="repchange btn">Confirm</button>
       <button v-if="change" @click="change = false" class="repchange btn outline">Cancel</button>
     </div>
+  </div>
   </div>
 </template>
 
