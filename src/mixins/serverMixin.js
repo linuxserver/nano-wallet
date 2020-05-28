@@ -17,7 +17,7 @@ export const serverMixin = {
        
     abbreviateNumber (number, precision = 2) {
       if (precision === 2) {
-        return numeral(number).format('0.0[000]a')
+        return numeral(number).format('0.[00]a')
       }
       return numeral(number).format('0.0[0000000000000000000]a')
 
