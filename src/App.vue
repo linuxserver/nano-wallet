@@ -130,6 +130,18 @@ canvas {
         }
     }
 }
+.showmobile {
+  display: block!important;
+  @media all and (min-width: 900px) {
+    display: none!important;
+  }
+}
+.hidemobile {
+  display: none!important;
+  @media all and (min-width: 900px) {
+    display: block!important;
+  }
+}
 #app {
     width: 100vw;
     height: 100%;
@@ -186,6 +198,11 @@ canvas {
                     }
                     &.history {
                       height: calc(100vh - 75px);
+                      padding-bottom: 75px;
+                      overflow: auto;
+                    }
+                    &.pending {
+                      height: calc(100vh - 120px);
                       padding-bottom: 75px;
                       overflow: auto;
                     }
