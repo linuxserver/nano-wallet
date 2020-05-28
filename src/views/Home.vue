@@ -109,10 +109,9 @@ import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
 
-const hardwareConcurrency = window.navigator.hardwareConcurrency || 2;
-const workerCount = Math.max(hardwareConcurrency - 1, 1);
-const worker = new Worker()
-const workerList = [];
+const hardwareConcurrency = window.navigator.hardwareConcurrency || 2
+const workerCount = Math.max(hardwareConcurrency - 1, 1)
+let workerList = []
 
 function initialState (){
   return {
@@ -131,7 +130,8 @@ function initialState (){
     logintype: 'password',
     walletdata: null,
     isActive: false,
-    balanceextra: false
+    balanceextra: false,
+    terminate: false
   }
 }
 
@@ -235,7 +235,9 @@ export default {
       if (window.Worker) {
         console.log('Calculating pow for ' + hash + ' this may take some time');
         const work = () => new Promise(resolve => {
+          workerList = []
           for (let i = 0; i < workerCount; i++) {
+            const worker = new Worker()
             worker.postMessage({
               blockHash: hash,
               workerIndex: i,
@@ -246,7 +248,6 @@ export default {
               
               this.$store.commit('app/pow', work.data)
               this.$store.commit('app/ready', true)
-
               for (let workerIndex in workerList) {
                 console.log('Terminate: ' + workerIndex)
                 workerList[workerIndex].terminate();
@@ -255,6 +256,7 @@ export default {
             };
             workerList.push(worker);
           }
+
         });
         await work();
       }
