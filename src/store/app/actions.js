@@ -68,15 +68,14 @@ export async function rpCall ({commit, state}, body) {
   var res = await fetch(rpcurl,Init)
   var data = await res.json()
   console.log(data)
-  console.log(commit)
+  // console.log(commit)
   return data
 }
 
 export async function history (context, address) {
-  const history = {
-    action: 'account_history',
-    account: address
-  }
+  let history = {}
+  history['action'] = 'account_history'
+  history['account'] = address
   console.log('history')
 
   const details = await context.dispatch('rpCall', history);
