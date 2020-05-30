@@ -201,7 +201,7 @@ export default {
     }, */
     logout () {
       Object.assign(this.$data, initialState());
-      this.$store.commit('app/resetState')
+      this.$store.dispatch('app/resetState')
       for (let workerIndex in workerList) {
         console.log('Terminate: ' + workerIndex)
         workerList[workerIndex].terminate();

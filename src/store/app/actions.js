@@ -103,3 +103,8 @@ export async function pending (context, address) {
   }
 
 }
+
+export function resetState ({ dispatch, commit }) {
+  commit('resetState')
+  dispatch('node')
+}
