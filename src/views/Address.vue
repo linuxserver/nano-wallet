@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('app/resetState')
+    this.$store.dispatch('app/resetState')
     this.getDetails()
 
   }
