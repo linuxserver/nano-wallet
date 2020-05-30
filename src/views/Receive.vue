@@ -5,14 +5,14 @@
       <div class="address" v-html="highlightAddress(address)"></div>
     </div>
     <div class="block">
-      <canvas id="qrcode"></canvas>
+      <div id="qrcode"></div>
     </div>
   </div>
 </template>
 
 <script>
 import { serverMixin } from '../mixins/serverMixin.js'
-import QRCode from 'qrcode'
+import QRCodeStyling from 'qr-code-styling'
 
 export default {
   name: 'Receive',
@@ -28,8 +28,19 @@ export default {
   watch: {
     address: function (address) {
       if(address !== null) {
-        QRCode.toCanvas(document.getElementById('qrcode'), 'nano:' + this.address, { width: 512, errorCorrectionLevel: 'H' })
-    
+        const qrCode = new QRCodeStyling({
+          width: 512,
+          height: 512,
+          data: 'nano:' + this.address,
+          image: 'nano_logo.png',
+          dotsOptions: {
+            type: 'rounded'
+          },
+          imageOptions: {
+            hideBackgroundDots: false
+          }
+        });
+        qrCode.append(document.getElementById('qrcode'));
       }
     },
   }

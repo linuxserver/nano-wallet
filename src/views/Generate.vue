@@ -27,7 +27,7 @@
       </div>
       <div class="block">
         <div class="canvas-bag">
-          <canvas id="genqrcode"></canvas>
+          <div id="genqrcode"></div>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
 
 <script>
 import { serverMixin } from '../mixins/serverMixin.js'
-import QRCode from 'qrcode'
+import QRCodeStyling from 'qr-code-styling'
 
 export default {
   name: 'Generate',
@@ -52,7 +52,19 @@ export default {
   mounted () {
     this.$store.dispatch('app/getSeed').then(data => {
       this.walletdata = data
-      QRCode.toCanvas(document.getElementById('genqrcode'), data.address, { width: 512 })
+      const qrCode = new QRCodeStyling({
+        width: 512,
+        height: 512,
+        data: 'nanoseed:' + data.seed,
+        image: 'nano_logo.png',
+        dotsOptions: {
+          type: 'rounded'
+        },
+        imageOptions: {
+          hideBackgroundDots: false
+        }
+      });
+      qrCode.append(document.getElementById('genqrcode'));
     }) 
   }
 }
