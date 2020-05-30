@@ -5,7 +5,12 @@ export function initialState () {
     ready: false,
     history: [],
     pending: [],
-    node: null
+    node: {
+      address: null,
+      port: null,
+      path: '',
+      auth: null
+    }
   }
 }
 

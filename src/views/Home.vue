@@ -174,7 +174,6 @@ export default {
     }
   },
   mounted () {
-    this.$store.commit('app/node', this.$route.params.node)
   },
   computed: {
     loginicon () {

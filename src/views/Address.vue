@@ -93,7 +93,6 @@ export default {
   },
   mounted() {
     this.$store.commit('app/resetState')
-    this.$store.commit('app/node', this.$route.params.node)
     this.getDetails()
 
   }

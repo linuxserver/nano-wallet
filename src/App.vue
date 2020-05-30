@@ -15,7 +15,8 @@ export default {
       key: null
     }
   },
-  computed: {
+  mounted () {
+    this.$store.dispatch('app/node')
   }
 }
 </script>

@@ -2,14 +2,34 @@ import * as NanoCurrency from 'nanocurrency'
 import router from '@/router'
 
 function protocol() {
-  return window.location.protocol
+  return window.location.protocol.replace(':', '')
 }
 
 function port() {
-  if (protocol() == 'https:'){
+  if (protocol() == 'https'){
       return '7077'
   }
   return '7076'
+}
+
+export function node ({ commit, state }) {
+  let newnode = {...state.node}
+  newnode.address = router.currentRoute.params.node
+  newnode.port = port()
+  newnode.protocol = protocol()
+  if('protocol' in router.currentRoute.query) {
+    newnode.protocol = router.currentRoute.query.protocol
+  }
+  if('port' in router.currentRoute.query) {
+    newnode.port = router.currentRoute.query.port
+  }
+  if('path' in router.currentRoute.query) {
+    newnode.path = router.currentRoute.query.path
+  }
+  if('auth' in router.currentRoute.query) {
+    newnode.auth = router.currentRoute.query.auth
+  }
+  commit('node', newnode)
 }
 
 export async function getSeed () {
@@ -36,12 +56,19 @@ export async function getDetails (context, address) {
   return details
 }
 
-export async function rpCall (context, body) {
-  var rpcurl = protocol() + '//' + router.currentRoute.params.node + ':' + port()
+export async function rpCall ({commit, state}, body) {
+  var rpcurl = state.node.protocol + '://' + state.node.address + ':' + state.node.port + state.node.path
   var Init = { method:'POST',body: JSON.stringify(body)}
+  if (state.node.auth !== null) {
+    Init.headers = {
+      'Authorization': state.node.auth,
+      'Content-Type': 'application/json'
+    }
+  }
   var res = await fetch(rpcurl,Init)
   var data = await res.json()
   console.log(data)
+  console.log(commit)
   return data
 }
 
