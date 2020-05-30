@@ -1,6 +1,14 @@
 import * as NanoCurrency from 'nanocurrency'
 import router from '@/router'
 
+const presets = {
+  'mynano.ninja': {
+    port: 443,
+    path: '/api/node',
+    protocol: 'https'
+  }
+}
+
 function protocol() {
   return window.location.protocol.replace(':', '')
 }
@@ -17,14 +25,12 @@ export function node ({ commit, state }) {
   newnode.address = router.currentRoute.params.node
   newnode.port = port()
   newnode.protocol = protocol()
-  if('protocol' in router.currentRoute.query) {
-    newnode.protocol = router.currentRoute.query.protocol
-  }
-  if('port' in router.currentRoute.query) {
-    newnode.port = router.currentRoute.query.port
-  }
-  if('path' in router.currentRoute.query) {
-    newnode.path = router.currentRoute.query.path
+  if(router.currentRoute.params.node in presets) {
+    const preset = presets[router.currentRoute.params.node]
+    newnode = {
+      ...newnode,
+      ...preset
+    }
   }
   if('auth' in router.currentRoute.query) {
     newnode.auth = router.currentRoute.query.auth
@@ -68,7 +74,7 @@ export async function rpCall ({commit, state}, body) {
   var res = await fetch(rpcurl,Init)
   var data = await res.json()
   console.log(data)
-  // console.log(commit)
+  console.log(commit)
   return data
 }
 
