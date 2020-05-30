@@ -82,6 +82,7 @@ export async function history (context, address) {
   let history = {}
   history['action'] = 'account_history'
   history['account'] = address
+  history['count'] = -1
   console.log('history')
 
   const details = await context.dispatch('rpCall', history);
