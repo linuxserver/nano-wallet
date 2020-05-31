@@ -20,7 +20,7 @@ export default {
       this.$store.dispatch('app/node')
     }
   },
-  mounted () {
+  created () {
     this.$store.dispatch('app/node')
   }
 }

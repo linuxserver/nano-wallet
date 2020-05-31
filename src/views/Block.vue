@@ -17,8 +17,9 @@ export default {
       blockdetails: null
     }
   },
-  created() {
-    this.$store.dispatch('app/resetState')
+  watch: {
+  },
+  mounted() {
     this.blockdetails = this.$route.params.hash
   }
 }
