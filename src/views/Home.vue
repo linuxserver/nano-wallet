@@ -14,7 +14,7 @@
             </span>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
-          <scan-qr></scan-qr>
+          <scan-qr @scanned="scanDone"></scan-qr>
         </div>
         <div id="buttons">
           <router-link class="genwallet" :to="'/' + $route.params.node + '/generate'">Generate Wallet</router-link>

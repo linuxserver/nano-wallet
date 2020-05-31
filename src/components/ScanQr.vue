@@ -37,6 +37,7 @@ export default {
         track.stop()
       })
       this.scan = false
+      this.continue = false
 
     },
     async scanQR () {
