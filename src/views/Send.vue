@@ -46,7 +46,7 @@ export default {
 
   methods: {
     scanDone: function (data) {
-      this.destination = data.replace('nano:','')
+      this.destination = data.replace('nano:','').split('?')[0]
     },
     async send() {
       if(this.pow === null) {
