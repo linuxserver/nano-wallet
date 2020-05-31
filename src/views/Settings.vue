@@ -7,6 +7,7 @@
         <div class="address" style="margin-bottom: 30px; background: #00000014; padding: 4px 14px;" v-html="highlightAddress(representative)"></div>
     </div>
     <div v-if="change" class="details">
+        <div v-if="error !== null" class="error">{{ error }}</div>
         <label for="newrep">Change Representative</label>
         <input class="newrep" type="text" v-model="newrep" name="newrep" />
     </div>
@@ -14,6 +15,7 @@
       <button v-if="!change" @click="change = true" class="repchange btn">Change Representative</button>
       <button v-if="change" @click="changeRep" class="repchange btn">Confirm</button>
       <button v-if="change" @click="change = false" class="repchange btn outline">Cancel</button>
+      <scan-qr @scanned="scanDone"></scan-qr>
     </div>
   </div>
   </div>
@@ -22,9 +24,13 @@
 <script>
 import * as NanoCurrency from 'nanocurrency'
 import { serverMixin } from '../mixins/serverMixin.js'
+import ScanQr from '../components/ScanQr.vue'
 
 export default {
   name: 'Settings',
+  components: {
+    ScanQr
+  },
   props: {
     representative: String
   },
@@ -32,7 +38,8 @@ export default {
   data() {
     return {
       newrep: '',
-      change: false
+      change: false,
+      error: null
     }
   },
   computed: {
@@ -78,8 +85,14 @@ export default {
       repchange['block'] = block.block;
       await this.$store.dispatch('app/rpCall', repchange)
       this.$emit('change', true)
+    },
+    scanDone: function (data) {
+      if (data.startsWith('nanorep:')){
+        this.newrep = data.replace('nanorep:','').split('?')[0]
+      } else {
+        this.error = 'Invalid QR'
+      }
     }
   }
-
 }
 </script>
