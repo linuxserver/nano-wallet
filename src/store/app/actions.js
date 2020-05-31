@@ -6,6 +6,10 @@ const presets = {
     port: 443,
     path: '/api/node',
     protocol: 'https'
+  },
+  'api.nanos.cc': {
+    port: 443,
+    protocol: 'https'
   }
 }
 
