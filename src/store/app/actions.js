@@ -77,7 +77,7 @@ export async function rpCall ({commit, state}, body) {
   var rpcurl = state.node.protocol + '://' + state.node.address + ':' + state.node.port + state.node.path
   var Init = { method:'POST',body: JSON.stringify(body)}
   Init.headers = {}
-  if (headers in state.node) {
+  if ('headers' in state.node) {
     Init.headers = state.node.headers
   }
   if (state.node.auth !== null) {
