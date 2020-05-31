@@ -1,5 +1,5 @@
+![LSIO Nano Waller](https://i.imgur.com/HZzgy8q.gif)
 # LinuxServer Nano Wallet
-
 ## Intro
 This project has some core goals that are very different from a conventional CryptoCurrency wallet: 
 * Ability to hook into a user defined network
