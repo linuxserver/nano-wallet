@@ -24,7 +24,8 @@ export default {
     ScanQr
   },
   props: {
-    address: String
+    address: String,
+    open: Boolean
   },
   data() {
     return {
@@ -43,7 +44,14 @@ export default {
       return this.$store.state.app.privatekey
     }
   },
-
+  watch: {
+    open: function (newopen, oldopen) {
+      if(newopen === true && oldopen === false) {
+        this.amount = ''
+        this.destination = ''
+      }
+    }
+  },
   methods: {
     scanDone: function (data) {
       this.destination = data.replace('nano:','')
@@ -76,6 +84,8 @@ export default {
       send['block'] = block.block
       await this.$store.dispatch('app/rpCall', send)
       this.$store.commit('app/pow', null)
+      this.amount = ''
+      this.destination = ''
       this.$emit('close', 'true')
     },
   }

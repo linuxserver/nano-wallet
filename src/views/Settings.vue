@@ -32,7 +32,8 @@ export default {
     ScanQr
   },
   props: {
-    representative: String
+    representative: String,
+    open: Boolean
   },
   mixins: [ serverMixin ],
   data() {
@@ -51,7 +52,15 @@ export default {
     }
 
   },
-
+  watch: {
+    open: function (newopen, oldopen) {
+      if(newopen === false && oldopen === true) {
+        this.newrep = ''
+        this.change = false
+        this.error = null
+      }
+    }
+  },
   methods: {
     async changeRep () {
       if(this.pow === null) {

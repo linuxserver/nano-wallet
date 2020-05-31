@@ -84,11 +84,12 @@
       </div>
       <div id="send" class="page" :class="{active: send !== false}">
         <a class="close" @click="send = false"><i class="fal fa-times"></i></a>
-        <send @close="send = false"></send>
+        <send :open="send" @close="send = false"></send>
       </div>
       <div id="settings" class="page" :class="{active: settings !== false}">
         <a class="close" @click="settings = false"><i class="fal fa-times"></i></a>
         <settings
+          :open="settings"
           :representative="representative"
           @change="refreshDetails"
         ></settings>
