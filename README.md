@@ -21,7 +21,15 @@ The source code for this project is built transparently and published to Github 
 
 The URL paths for public block exploration are in the following format: 
 * https://wallet.linuxserver.io/#/nano.linuxserver.io/block/YOUR_BLOCK_HASH_HERE - Displays raw block information.
-* https://wallet.linuxserver.io/#/nano.linuxserver.io/address/YOUR_ADDRESS_HERE - Displays a stripped down wallet interface with transaction history. 
+* https://wallet.linuxserver.io/#/nano.linuxserver.io/address/YOUR_ADDRESS_HERE - Displays a stripped down wallet interface with transaction history.
+
+## Live Nano network addresses
+
+We will list here Live Nano RPC provies that we add and how to use them.
+
+### [mynano.ninja](https://mynano.ninja/)
+Requires an API key to use: https://mynano.ninja/auth/login#apikey
+* Use: https://wallet.linuxserver.io/#/mynano.ninja?auth=APIKEY
 
 ## For users
 
