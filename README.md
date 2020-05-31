@@ -27,9 +27,9 @@ The URL paths for public block exploration are in the following format:
 
 We will list here Live Nano RPC provies that we add and how to use them.
 
-### https://mynano.ninja/
-Requires an API jkey to use, you can get one here: https://mynano.ninja/auth/login#apikey
-Use: https://wallet.linuxserver.io/#/mynano.ninja?auth=APIKEY
+### [mynano.ninja](https://mynano.ninja/)
+Requires an API key to use: https://mynano.ninja/auth/login#apikey
+* Use: https://wallet.linuxserver.io/#/mynano.ninja?auth=APIKEY
 
 ## For users
 
