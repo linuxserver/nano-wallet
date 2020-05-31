@@ -5,12 +5,18 @@ const presets = {
   'mynano.ninja': {
     port: 443,
     path: '/api/node',
-    protocol: 'https'
+    protocol: 'https',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   },
   'proxy.nanos.cc': {
     port: 443,
     path: '/proxy',
-    protocol: 'https'
+    protocol: 'https',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   }
 }
 
@@ -70,10 +76,10 @@ export async function getDetails (context, address) {
 export async function rpCall ({commit, state}, body) {
   var rpcurl = state.node.protocol + '://' + state.node.address + ':' + state.node.port + state.node.path
   var Init = { method:'POST',body: JSON.stringify(body)}
-  Init.headers = {
-    'Content-Type': 'application/json'
+  Init.headers = {}
+  if (headers in state.node) {
+    Init.headers = state.node.headers
   }
-
   if (state.node.auth !== null) {
     Init.headers['Authorization'] = state.node.auth
   }
