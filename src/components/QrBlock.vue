@@ -29,7 +29,7 @@ export default {
             hideBackgroundDots: false
           },
           qrOptions: {
-            errorCorrectionLevel: 'H'
+            //errorCorrectionLevel: 'H'
           }
         });
         qrCode.append(document.getElementById(this._uid));

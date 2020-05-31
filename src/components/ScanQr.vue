@@ -3,8 +3,8 @@
     <button class="scan btn outline" @click="scanQR" type="button">Scan QR</button>
     <div class="page" style="top: 0; z-index: 9;" :class="{active: scan !== false}">
       <a class="close" @click="closeScan"><i class="fal fa-times"></i></a>
-      <div v-if="loadingMsg" id="loadingMessage">{{ loadingMsg }}</div>
-      <canvas :id="_uid"></canvas>
+      <div v-if="loadingMsg">{{ loadingMsg }}</div>
+      <canvas :id="'scan_' + _uid"></canvas>
     </div>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
       this.scan = true
       this.continue = true
 
-      var canvasElement = document.getElementById(this._uid)
+      var canvasElement = document.getElementById('scan_' + this._uid)
       this.canvas = canvasElement.getContext("2d")
 
       const that = this

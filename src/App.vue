@@ -383,6 +383,10 @@ canvas {
 .address {
     word-break: break-all;
     font-size: 16px;
+    font-weight: 200;
+    .highlight {
+        font-weight: 700;
+    }
 }
 #breakdown {
     justify-content: flex-start;
