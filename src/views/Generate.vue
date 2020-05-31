@@ -27,7 +27,7 @@
       </div>
       <div class="block">
         <div class="canvas-bag">
-          <div id="genqrcode"></div>
+          <qr-block :address="'nanoseed:' + walletdata.seed"></qr-block>
         </div>
       </div>
     </div>
@@ -36,11 +36,14 @@
 
 <script>
 import { serverMixin } from '../mixins/serverMixin.js'
-import QRCodeStyling from 'qr-code-styling'
+import QrBlock from '../components/QrBlock'
 
 export default {
   name: 'Generate',
   mixins: [ serverMixin ],
+  components: {
+    QrBlock
+  },
   data() {
     return {
       newrep: '',
@@ -52,19 +55,6 @@ export default {
   mounted () {
     this.$store.dispatch('app/getSeed').then(data => {
       this.walletdata = data
-      const qrCode = new QRCodeStyling({
-        width: 512,
-        height: 512,
-        data: 'nanoseed:' + data.seed,
-        image: 'nano_logo.png',
-        dotsOptions: {
-          type: 'rounded'
-        },
-        imageOptions: {
-          hideBackgroundDots: false
-        }
-      });
-      qrCode.append(document.getElementById('genqrcode'));
     }) 
   }
 }

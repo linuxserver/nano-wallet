@@ -42,6 +42,7 @@ $lighter-text: #959da0;
 
 //$highlight: #2cc2ca;
 $highlight: #59c7f1;
+$highlightsemi: #59c7f1bb;
 $highlight2: #af73d2;
 $highlight3: #e2ac39;
 
@@ -170,6 +171,7 @@ canvas {
         left: 100vw;
         &.active {
             left: 0;
+            z-index: 2;
         } 
         .inner {
             overflow-y: auto;
@@ -215,7 +217,6 @@ canvas {
         }
     }
     #login {
-        z-index: 0;
         justify-content: space-between;
         top: 0;
     }
@@ -590,7 +591,7 @@ input[type=text], input[type=password] {
         padding-right: 60px;
         @media all and (min-width: 900px) {
             font-size: 22px;
-            padding: 15px;
+            padding: 15px 60px 15px 15px;
         }
 
     }
@@ -651,6 +652,7 @@ input[type=text], input[type=password] {
     flex-direction: column;
     width: 100%;
     max-width: 500px;
+    padding-top: 50px;
     label {
         font-size: 16px;
         font-weight: 400;
@@ -659,6 +661,7 @@ input[type=text], input[type=password] {
     }
     button {
         padding: 15px;
+        margin-bottom: 15px;
     }
 }
 .btn {
@@ -675,9 +678,13 @@ input[type=text], input[type=password] {
 
     &.outline {
         padding: 8px 18px;
-        border: 2px solid $highlight;
+        border: 2px solid $highlightsemi;
         background: transparent;
-        color: $highlight;
+        color: $highlightsemi;
+        &:hover {
+            border-color: $highlight;
+            color: $highlight;
+        }
     }
 }
 .inline-buttons {

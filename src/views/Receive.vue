@@ -5,18 +5,21 @@
       <div class="address" v-html="highlightAddress(address)"></div>
     </div>
     <div class="block">
-      <div id="qrcode"></div>
+      <qr-block :address="'nano:' + address"></qr-block>
     </div>
   </div>
 </template>
 
 <script>
 import { serverMixin } from '../mixins/serverMixin.js'
-import QRCodeStyling from 'qr-code-styling'
+import QrBlock from '../components/QrBlock'
 
 export default {
   name: 'Receive',
   mixins: [ serverMixin ],
+  components: {
+    QrBlock
+  },
   props: {
     address: String
   },
@@ -26,23 +29,6 @@ export default {
     }
   },
   watch: {
-    address: function (address) {
-      if(address !== null) {
-        const qrCode = new QRCodeStyling({
-          width: 512,
-          height: 512,
-          data: 'nano:' + this.address,
-          image: 'nano_logo.png',
-          dotsOptions: {
-            type: 'rounded'
-          },
-          imageOptions: {
-            hideBackgroundDots: false
-          }
-        });
-        qrCode.append(document.getElementById('qrcode'));
-      }
-    },
   }
 }
 </script>

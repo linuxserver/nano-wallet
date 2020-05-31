@@ -1,7 +1,7 @@
 <template>
   <div class="wallet">
     <div type="hidden" id="workstorage"></div>
-      <div id="login" class="page active" :class="{ active: open===false }">
+      <div id="login" class="page" :class="{ active: open===false }">
         <div class="title rpc">RPC Server : <span>{{ $route.params.node }}</span></div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
@@ -14,7 +14,7 @@
             </span>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
-          <br><button class="openwallet btn" type="button">Scan QR</button>
+          <scan-qr></scan-qr>
         </div>
         <div id="buttons">
           <router-link class="genwallet" :to="'/' + $route.params.node + '/generate'">Generate Wallet</router-link>
@@ -119,6 +119,8 @@ import * as NanoCurrency from 'nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
 import simplebar from 'simplebar-vue';
 import 'simplebar/dist/simplebar.min.css';
+import ScanQr from '../components/ScanQr.vue'
+
 
 const hardwareConcurrency = window.navigator.hardwareConcurrency || 2
 const workerCount = Math.max(hardwareConcurrency - 1, 1)
@@ -154,7 +156,8 @@ export default {
     Receive,
     Settings,
     BlockState,
-    simplebar
+    simplebar,
+    ScanQr
   },
   mixins: [ serverMixin ],
   data() {
@@ -197,6 +200,11 @@ export default {
     }
   },
   methods: {
+    scanDone: function (data) {
+      const seed = data.replace('nanoseed:','')
+      this.key = NanoCurrency.deriveSecretKey(seed, 0)
+    },
+
     /* pasteKey () {
       this.key = this.pasteFromClipboard()
     }, */
