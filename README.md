@@ -1,4 +1,4 @@
-![LSIO Nano Waller](https://i.imgur.com/HZzgy8q.gif)
+![LSIO Nano Wallet](https://i.imgur.com/HZzgy8q.gif)
 # LinuxServer Nano Wallet
 ## Intro
 This project has some core goals that are very different from a conventional CryptoCurrency wallet: 
