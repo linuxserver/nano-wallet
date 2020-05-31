@@ -231,18 +231,23 @@ export default {
       if('frontier' in this.details) {
         current = this.details.frontier
       }
-      await this.getDetails(this.privatekey)
-      if(current !== this.details.frontier || open === true) {
-        this.genWork(this.privatekey, this.details)
+      try {
+        await this.getDetails(this.privatekey)
+        if(current !== this.details.frontier || open === true) {
+          this.genWork(this.privatekey, this.details)
+        }
+        this.$store.dispatch('app/history', this.address)
+        this.$store.dispatch('app/pending', this.address)
+        if (this.details.balance) {
+          this.balance = NanoCurrency.convert(this.details.balance, this.rawconv);
+        } else {
+          this.balance = 0;
+        }
+        this.representative = this.details.representative;
+      } catch(e) {
+        this.error = 'Could not connect to RPC'
+        this.open = false
       }
-      this.$store.dispatch('app/history', this.address)
-      this.$store.dispatch('app/pending', this.address)
-      if (this.details.balance) {
-        this.balance = NanoCurrency.convert(this.details.balance, this.rawconv);
-      } else {
-        this.balance = 0;
-      }
-      this.representative = this.details.representative;
     },
     async genWork (key, details){
       this.$store.commit('app/pow', null)
