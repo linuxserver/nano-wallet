@@ -7,8 +7,9 @@ const presets = {
     path: '/api/node',
     protocol: 'https'
   },
-  'api.nanos.cc': {
+  'proxy.nanos.cc': {
     port: 443,
+    path: '/proxy',
     protocol: 'https'
   }
 }
@@ -69,11 +70,12 @@ export async function getDetails (context, address) {
 export async function rpCall ({commit, state}, body) {
   var rpcurl = state.node.protocol + '://' + state.node.address + ':' + state.node.port + state.node.path
   var Init = { method:'POST',body: JSON.stringify(body)}
+  Init.headers = {
+    'Content-Type': 'application/json'
+  }
+
   if (state.node.auth !== null) {
-    Init.headers = {
-      'Authorization': state.node.auth,
-      'Content-Type': 'application/json'
-    }
+    Init.headers['Authorization'] = state.node.auth
   }
   var res = await fetch(rpcurl,Init)
   var data = await res.json()
