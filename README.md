@@ -31,6 +31,10 @@ We will list here Live Nano RPC provies that we add and how to use them.
 Requires an API key to use: https://mynano.ninja/auth/login#apikey
 * Use: https://wallet.linuxserver.io/#/mynano.ninja?auth=APIKEY
 
+### [nanos.cc](https://nanos.cc/)
+Does not requires an API key to use
+* Use: https://wallet.linuxserver.io/#/proxy.nanos.cc
+
 ## For users
 
 We recommend end users looking to locally host this wallet themselves use the Docker container located [here](https://hub.docker.com/r/linuxserver/nano-wallet) it is a simple nginx wrapper for the built code from this repository. 
