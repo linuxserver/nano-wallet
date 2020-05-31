@@ -201,8 +201,14 @@ export default {
   },
   methods: {
     scanDone: function (data) {
-      const seed = data.replace('nanoseed:','')
-      this.key = NanoCurrency.deriveSecretKey(seed, 0)
+      if (data.startsWith('nanokey:')){
+        this.key = data.replace('nanokey:','').substr(0, 64)
+      } else if (data.startsWith('nanoseed:')) {
+        const seed = data.replace('nanoseed:','').substr(0, 64)
+        this.key = NanoCurrency.deriveSecretKey(seed, 0)
+      } else {
+        this.error = 'Invalid QR'
+      }
     },
 
     /* pasteKey () {
