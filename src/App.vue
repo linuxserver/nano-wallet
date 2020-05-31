@@ -15,6 +15,11 @@ export default {
       key: null
     }
   },
+  watch: {
+    $route() {
+      this.$store.dispatch('app/node')
+    }
+  },
   mounted () {
     this.$store.dispatch('app/node')
   }
