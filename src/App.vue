@@ -313,6 +313,11 @@ canvas {
             }
         }
     }
+    .scan-qr-code {
+      .page {
+        position: fixed;
+      }
+    }
 }
 #output {
     .balance {

@@ -1,7 +1,7 @@
 <template>
   <div class="scan-qr-code">
     <button class="scan btn outline" @click="scanQR" type="button">Scan QR</button>
-    <div class="page" style="top: 0; z-index: 9;" :class="{active: scan !== false}">
+    <div class="page" style="z-index: 9;" :class="{active: scan !== false}">
       <a class="close" @click="closeScan"><i class="fal fa-times"></i></a>
       <div v-if="loadingMsg">{{ loadingMsg }}</div>
       <canvas :id="'scan_' + _uid"></canvas>

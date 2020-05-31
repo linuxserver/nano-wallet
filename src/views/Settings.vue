@@ -11,11 +11,11 @@
         <label for="newrep">Change Representative</label>
         <input class="newrep" type="text" v-model="newrep" name="newrep" />
     </div>
+    <scan-qr style="margin-bottom: 20px;" v-if="change" @scanned="scanDone"></scan-qr>
     <div class="inline-buttons">
       <button v-if="!change" @click="change = true" class="repchange btn">Change Representative</button>
       <button v-if="change" @click="changeRep" class="repchange btn">Confirm</button>
       <button v-if="change" @click="change = false" class="repchange btn outline">Cancel</button>
-      <scan-qr @scanned="scanDone"></scan-qr>
     </div>
   </div>
   </div>
