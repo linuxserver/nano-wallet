@@ -91,7 +91,7 @@
         <settings
           :open="settings"
           :representative="representative"
-          @change="refreshDetails"
+          @change="repChange"
         ></settings>
       </div>
       <div id="receive" class="page" :class="{active: receive !== false}">
@@ -201,6 +201,10 @@ export default {
     }
   },
   methods: {
+    repChange () {
+      this.refreshDetails()
+      this.settings = false
+    },
     scanDone: function (data) {
       if (data.startsWith('nanokey:')){
         this.key = data.replace('nanokey:','').substr(0, 64)
