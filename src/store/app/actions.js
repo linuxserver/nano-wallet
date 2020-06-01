@@ -90,19 +90,32 @@ export async function rpCall ({commit, state}, body) {
   return data
 }
 
+let historycalls = 0
 export async function history (context, address) {
   let history = {}
   history['action'] = 'account_history'
   history['account'] = address
   history['count'] = 64
   console.log('history')
-
-  const details = await context.dispatch('rpCall', history);
-  if (Array.isArray(details.history) && details.history.length){
-    context.commit('history', details.history)
+  try {
+    const details = await context.dispatch('rpCall', history);
+    if (Array.isArray(details.history) && details.history.length){
+      context.commit('history', details.history)
+    }
+  } catch (err) {
+    console.log(err)
+    console.log('Something went wrong, rate minited maybe? try again')
+    if(historycalls < 3) {
+      setTimeout(function(){ 
+        historycalls++
+        context.dispatch('history', address)
+      }, 2000);
+    }
   }
+
 }
 
+let pendingcalls = 0
 export async function pending (context, address) {
   let pending = {}
   pending['action'] = 'pending'
@@ -110,14 +123,26 @@ export async function pending (context, address) {
   pending['sorting'] = 'true'
   pending['account'] = address
 
-  const details = await context.dispatch('rpCall', pending);
-  console.log('pending1')
+  try {
 
-  if (typeof details.blocks === 'object'){
-    console.log('pending')
-    context.commit('pending', details.blocks)
-  } else {
-    context.commit('pending', [])
+    const details = await context.dispatch('rpCall', pending);
+    console.log('pending1')
+
+    if (typeof details.blocks === 'object'){
+      console.log('pending')
+      context.commit('pending', details.blocks)
+    } else {
+      context.commit('pending', [])
+    }
+  } catch (err) {
+    console.log(err)
+    console.log('Something went wrong, rate minited maybe? try again')
+    if(pendingcalls < 3) {
+      setTimeout(function(){ 
+        pendingcalls++
+        context.dispatch('pending', address)
+      }, 2000);
+    }
   }
 
 }
