@@ -2,7 +2,7 @@
   <div class="wallet">
     <div type="hidden" id="workstorage"></div>
       <div id="login" class="page" :class="{ active: open===false }">
-        <div class="title rpc">RPC Server : <span>{{ $route.params.node }}</span></div>
+        <div class="title rpc">RPC Server : <span>{{ $store.state.app.node.address }}</span></div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
           <label for="key">Private Key</label>
@@ -17,7 +17,7 @@
           <scan-qr @scanned="scanDone"></scan-qr>
         </div>
         <div id="buttons">
-          <router-link class="genwallet" :to="'/' + $route.params.node + '/generate'">Generate Wallet</router-link>
+          <router-link class="genwallet" :to="'/' + $store.state.app.node.address + '/generate'">Generate Wallet</router-link>
         </div>
       </div>
       <div id="wallet" class="page" :class="{active: open === true}">

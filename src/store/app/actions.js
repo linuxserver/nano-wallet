@@ -1,25 +1,6 @@
 import * as NanoCurrency from 'nanocurrency'
 import router from '@/router'
 
-const presets = {
-  'mynano.ninja': {
-    port: 443,
-    path: '/api/node',
-    protocol: 'https',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  },
-  'proxy.nanos.cc': {
-    port: 443,
-    path: '/proxy',
-    protocol: 'https',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-}
-
 function protocol() {
   return window.location.protocol.replace(':', '')
 }
@@ -33,20 +14,28 @@ function port() {
 
 export function node ({ commit, state }) {
   let newnode = {...state.node}
-  newnode.address = router.currentRoute.params.node
-  newnode.port = port()
-  newnode.protocol = protocol()
-  if(router.currentRoute.params.node in presets) {
-    const preset = presets[router.currentRoute.params.node]
+  if(state.settings.changeaddress === true) {
+    newnode.address = router.currentRoute.params.node
+    newnode.port = port()
+    newnode.protocol = protocol()
+    if(router.currentRoute.params.node in state.settings.presets) {
+      const preset = state.settings.presets[router.currentRoute.params.node]
+      newnode = {
+        ...newnode,
+        ...preset
+      }
+    }
+  } else {
     newnode = {
       ...newnode,
-      ...preset
+      ...state.settings.node
     }
   }
   if('auth' in router.currentRoute.query) {
     newnode.auth = router.currentRoute.query.auth
   }
   commit('node', newnode)
+  
 }
 
 export async function getSeed () {

@@ -51,6 +51,10 @@ docker run -d \
 
 Then access http://localhost/#/YOUR_RPC_ENDPOINT . 
 
+## Customisation
+
+If you want to lock the wallet to a specific RPC server then go to src/stores/app/state.js and change `changeaddress` to false, the node will then be locked to the node details directly beneath (only change the settings node details not the main node details).
+
 ## For developers
 
 The frontend framework for this project is [vuejs](https://vuejs.org/) below are the commands used to build this project from source and run a local development environment. We highly reccomending using [vuejs-devtools](https://github.com/vuejs/vue-devtools) locally to inspect and debug. 

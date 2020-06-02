@@ -1,5 +1,35 @@
 export function initialState () {
   return {
+    // SETTINGS CAN BE CHANGED
+    settings: {
+      pow: 1,
+      changeaddress: true,
+      node: {
+        address: 'nano.linuxserver.io',
+        protocol: 'https',
+        port: 7077,
+        path: '',
+      },
+      presets: {
+        'mynano.ninja': {
+          port: 443,
+          path: '/api/node',
+          protocol: 'https',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+        'proxy.nanos.cc': {
+          port: 443,
+          path: '/proxy',
+          protocol: 'https',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      }
+    },
+    // DO NOT CHANGE ANYTHING BELOW
     privatekey: null,
     pow: null,
     ready: false,
