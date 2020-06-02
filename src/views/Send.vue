@@ -60,6 +60,9 @@ export default {
       if(this.pow === null) {
         return alert('Please wait for the status to be ready')
       }
+      if (this.amount.startsWith('.')){
+        this.amount = '0' + this.amount
+      }
       const amount = NanoCurrency.convert(this.amount, this.nanoconv)
       const senderpublickey = NanoCurrency.derivePublicKey(this.privatekey)
       const sender = NanoCurrency.deriveAddress(senderpublickey,{useNanoPrefix:true})
