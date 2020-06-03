@@ -57,6 +57,22 @@ This wallet was designed around the software stack described [here](https://blog
 
 If you want to lock the wallet to a specific RPC server then go to src/stores/app/state.js and change `changeaddress` to false, the node will then be locked to the node details directly beneath (only change the settings node details not the main node details).
 
+From there basic branding would be to modify the site title found in `/public/index.html` and swap out our QR code icon at `/public/qr_logo.png` we have specifically made efforts to not brand this wallet to our codebase or organization to allow anyone with a public RPC endpoint to also host this wallet themselves and have their users use it as a wallet and block explorer.
+
+### Hosting your forked repo from Github Pages
+
+If you are planning on hosting this wallet on your domain pointed to your RPC servers, for transparency it is likely best to fork this repo and publish it using [Github Pages](https://pages.github.com/) . Here are the basic steps to follow to achieve that: 
+
+1. Fork this repo into your namespace in Github
+2. In your repo under `Actions` click to enable actions on your fork
+3. In your repo main settings enable Github pages and set your custom domain
+4. Generate an API key following the instructions [here](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line), you will need to select the `repo` permissions
+5. Set this API key in your repo settings under `Secrets` as `ACCESS_TOKEN` this key is needed to publish changes to the `gh-pages` branch of your repo
+6. Push your customizations to your repo on the master branch, this should trigger a build of the site and push to the gh-pages branch using the logic located [here](https://github.com/linuxserver/nano-wallet/blob/master/.github/workflows/main.yml)
+7. When built the wallet will be available at the endpoint you defined pointed to your RPC servers given you have the DNS properly setup as described [here](https://help.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site)
+
+From here you can ingest upstream changes from this repo when needed and customize it to your needs while Github deploys your site on updates to their hosted CDN. 
+
 ## For developers
 
 The frontend framework for this project is [vuejs](https://vuejs.org/) below are the commands used to build this project from source and run a local development environment. We highly reccomending using [vuejs-devtools](https://github.com/vuejs/vue-devtools) locally to inspect and debug. 
