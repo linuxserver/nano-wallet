@@ -49,7 +49,9 @@ docker run -d \
   linuxserver/nano-wallet
 ```
 
-Then access http://localhost/#/YOUR_RPC_ENDPOINT . 
+Then access http://localhost/#/YOUR_RPC_ENDPOINT .
+
+This wallet was designed around the software stack described [here](https://blog.linuxserver.io/2020/05/31/deploying-your-own-crypto/), and specifically our Nano Node image with a firewall to allow default wallet RPC calls [here](https://hub.docker.com/r/linuxserver/nano).  
 
 ## Customisation
 
