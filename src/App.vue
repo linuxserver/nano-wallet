@@ -79,6 +79,9 @@ pre {
 }
 .refresh {
 }
+.df {
+    display: flex;
+}
 .error {
   background: #ca4b4b;
   margin: 0 0 30px;
@@ -94,6 +97,11 @@ pre {
     color: $highlight;
     font-size: 24px;
     z-index: 2;
+}
+.morebutton {
+    color: #ccc;
+    font-size: 14px;
+    margin-right: 10px;
 }
 canvas {
     display: inline-block!important;

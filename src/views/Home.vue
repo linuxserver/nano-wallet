@@ -5,7 +5,10 @@
         <div class="title rpc">RPC Server : <span>{{ $store.state.app.node.address }}</span></div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
-          <label for="seed">Seed</label>
+          <label class="df" for="seed">
+            Seed
+              <a class="morebutton mla" href="" @click.prevent="showadvanced = !showadvanced"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
+            </label>
           <div class="login">
             <input v-model="seed" :type="logintype" id="seed" name="seed">
             <span class="eye" @click="togglevisibility">
@@ -28,7 +31,6 @@
             </div>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
-          <button @click="showadvanced = !showadvanced" class="openwallet btn" type="button">Advanced</button>
           <scan-qr @scanned="scanDone"></scan-qr>
         </div>
         <div id="buttons">
