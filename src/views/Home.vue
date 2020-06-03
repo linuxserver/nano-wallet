@@ -5,17 +5,15 @@
         <div class="title rpc">RPC Server : <span>{{ $store.state.app.node.address }}</span></div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
-          <div class="default-inputs">
-            <label for="seed">Seed</label>
-            <div class="login">
-              <input v-model="seed" :type="logintype" id="seed" name="seed">
-              <span class="eye" @click="togglevisibility">
-                <span :class="{ active: logintype === 'password'}"><i class="far fa-eye"></i></span>
-                <span :class="{ active: logintype === 'text'}"><i class="far fa-eye-slash"></i></span>
-              </span>
-            </div>
+          <label for="seed">Seed</label>
+          <div class="login">
+            <input v-model="seed" :type="logintype" id="seed" name="seed">
+            <span class="eye" @click="togglevisibility">
+              <span :class="{ active: logintype === 'password'}"><i class="far fa-eye"></i></span>
+              <span :class="{ active: logintype === 'text'}"><i class="far fa-eye-slash"></i></span>
+            </span>
           </div>
-          <div class="advanced-inputs">
+          <div v-if="showadvanced === true">
             <label for="seedindex">Seed Index</label>
             <div class="login">
               <input v-model="seedindex" :type="logintype" id="seedindex" name="seedindex">
@@ -30,6 +28,7 @@
             </div>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
+          <button @click="showadvanced = !showadvanced" class="openwallet btn" type="button">Advanced</button>
           <scan-qr @scanned="scanDone"></scan-qr>
         </div>
         <div id="buttons">
@@ -163,7 +162,8 @@ function initialState (){
     walletdata: null,
     isActive: false,
     balanceextra: false,
-    terminate: false
+    terminate: false,
+    showadvanced: false
   }
 }
 
