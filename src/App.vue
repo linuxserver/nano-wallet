@@ -739,5 +739,7 @@ input:-webkit-autofill:active {
         font-size: 14px;
     }
 }
-
+.advanced-inputs {
+    //display: none;
+}
 </style>
