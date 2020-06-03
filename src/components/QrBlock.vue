@@ -1,5 +1,5 @@
 <template>
-  <div :id="_uid"></div>
+  <div class="qrcode" :id="_uid"></div>
 </template>
 
 <script>
@@ -43,3 +43,14 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.qrcode {
+    max-width: 260px;
+    width: 100%;
+    height: auto !important;
+    border-radius: 50%;
+    padding: 40px;
+    border: 5px solid #59c7f1;
+    background: #fff;
+}
+</style>

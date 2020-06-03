@@ -230,13 +230,22 @@ canvas {
         z-index: 2;
     }
     #receive {
-        #qrcode {
+        .qrcode {
             text-align: center;
             img {
                 display: inline-block!important;
                 max-width: 100%;
                 height: auto;
             }
+        }
+        .block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn {
+            margin-top: 30px;
+            width: 100%;
         }
         .address {
             font-size: 18px;
@@ -642,6 +651,13 @@ input[type=text], input[type=password] {
         color: $highlight;
         text-decoration: underline;
     }
+    &.smaller {
+        margin-bottom: 0;
+        border-bottom: none;
+        &:after {
+            display: none;
+        }
+    }
 }
 .rpc {
     margin: -30px 0;
@@ -689,6 +705,7 @@ input[type=text], input[type=password] {
     display: inline-block;
     justify-content: center;
     letter-spacing: 3px;
+    text-align: center;
 
     &.outline {
         padding: 8px 18px;

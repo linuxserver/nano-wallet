@@ -1,11 +1,9 @@
 <template>
   <div class="receive inner">
     <div class="block">
-      <div class="address">Address: <span @click="copyToClipboard(address)" class="value"><i class="fad fa-clone"></i></span> <span @click="link('address',address)" class="value"><i class="fad fa-external-link"></i></span></div>
-      <div class="address" v-html="highlightAddress(address)"></div>
-    </div>
-    <div class="block">
+      <div class="address" @click="link('address',address)" v-html="highlightAddress(address)"></div>
       <qr-block :address="'nano:' + address"></qr-block>
+      <a @click="copyToClipboard(address)" class="btn">Copy Address</a>
     </div>
   </div>
 </template>
@@ -32,10 +30,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-#qrcode {
-  max-width: 100%;
-  height: auto!important;
-}
-</style>
