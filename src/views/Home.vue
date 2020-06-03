@@ -212,7 +212,8 @@ export default {
         const seed = data.replace('nanoseed:','').substr(0, 64)
         this.key = NanoCurrency.deriveSecretKey(seed, 0)
       } else {
-        this.error = 'Invalid QR'
+        this.error = 'QR code data does not conform to specification'
+        this.key = data
       }
     },
 
