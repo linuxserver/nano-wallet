@@ -25,7 +25,7 @@ export const serverMixin = {
       }
       return numbro(number).format({
         trimMantissa: true,
-        mantissa: 20,
+        mantissa: 10,
         average: true
     })
 
