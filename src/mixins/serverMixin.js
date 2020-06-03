@@ -17,9 +17,17 @@ export const serverMixin = {
        
     abbreviateNumber (number, precision = 2) {
       if (precision === 2) {
-        return numbro(number).format('0.[00]a')
+        return numbro(number).format({
+          trimMantissa: true,
+          mantissa: 2,
+          average: true
+      })
       }
-      return numbro(number).format('0.[00000000000000000000]a')
+      return numbro(number).format({
+        trimMantissa: true,
+        mantissa: 20,
+        average: true
+    })
 
       //return scaled.toFixed(precision) + '<span class="suffix">' + suffix + '</span>';
     },
