@@ -227,10 +227,11 @@ export default {
     },
     scanDone: function (data) {
       if (data.startsWith('nanokey:')){
+        this.showadvanced = true
         this.key = data.replace('nanokey:','').substr(0, 64)
       } else if (data.startsWith('nanoseed:')) {
         const seed = data.replace('nanoseed:','').substr(0, 64)
-        this.key = NanoCurrency.deriveSecretKey(seed, 0)
+        this.seed = seed
       } else {
         this.error = 'QR code data does not conform to specification'
         this.key = data
