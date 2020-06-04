@@ -247,7 +247,8 @@ export default {
     },
     scanDone: function (data) {
       if (data.startsWith('nanokey:')){
-        this.showadvanced = true
+        this.seedtab = false
+        this.showadvanced = false
         this.key = data.replace('nanokey:','').substr(0, 64)
       } else if (data.startsWith('nanoseed:')) {
         const seed = data.replace('nanoseed:','').substr(0, 64)
