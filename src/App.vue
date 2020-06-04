@@ -79,6 +79,9 @@ pre {
 }
 .refresh {
 }
+.df {
+    display: flex;
+}
 .error {
   background: #ca4b4b;
   margin: 0 0 30px;
@@ -87,6 +90,24 @@ pre {
   color: white;
   font-weight: 200;
 }
+.labeltabs {
+    display: flex;
+    margin-bottom: 5px;
+    label {
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        opacity: 0.4;
+        transition: 0.3s all;
+        &.active {
+            font-weight: bold;
+            border-bottom: 2px solid $highlight;
+            opacity: 1;
+        }
+        &:first-child {
+            margin-right: 20px;
+        }
+    }
+}
 .close {
     position: absolute;
     top: 20px;
@@ -94,6 +115,11 @@ pre {
     color: $highlight;
     font-size: 24px;
     z-index: 2;
+}
+.morebutton {
+    color: #ccc;
+    font-size: 14px;
+    padding: 0 10px;
 }
 canvas {
     display: inline-block!important;
@@ -215,7 +241,7 @@ canvas {
                       overflow: auto;
                     }
                     canvas {
-                        max-width: 300px;
+                        // max-width: 300px;
                     }
                 }
             }
@@ -230,13 +256,22 @@ canvas {
         z-index: 2;
     }
     #receive {
-        #qrcode {
+        .qrcode {
             text-align: center;
             img {
                 display: inline-block!important;
                 max-width: 100%;
                 height: auto;
             }
+        }
+        .block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn {
+            margin-top: 30px;
+            width: 100%;
         }
         .address {
             font-size: 18px;
@@ -575,6 +610,10 @@ input[type=text], input[type=password] {
     width: 100%;
     &.copytext {
     }
+    &::placeholder {
+        color: #a7b0ca6e;
+        font-weight: 200;
+    }
     @media all and (min-width: 900px) {
         font-size: 15px;
         padding: 12px;
@@ -642,6 +681,13 @@ input[type=text], input[type=password] {
         color: $highlight;
         text-decoration: underline;
     }
+    &.smaller {
+        margin-bottom: 0;
+        border-bottom: none;
+        &:after {
+            display: none;
+        }
+    }
 }
 .rpc {
     margin: -30px 0;
@@ -689,6 +735,7 @@ input[type=text], input[type=password] {
     display: inline-block;
     justify-content: center;
     letter-spacing: 3px;
+    text-align: center;
 
     &.outline {
         padding: 8px 18px;
@@ -722,5 +769,4 @@ input:-webkit-autofill:active {
         font-size: 14px;
     }
 }
-
 </style>
