@@ -717,7 +717,7 @@ input[type=text], input[type=password] {
         font-size: 16px;
         font-weight: 400;
         text-transform: uppercase;
-        letter-spacing: 4px;
+        letter-spacing: 2px;
     }
     button {
         padding: 15px;
