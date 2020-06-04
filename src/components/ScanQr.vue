@@ -33,9 +33,11 @@ export default {
 
   methods: {
     closeScan () {
-      video.srcObject.getTracks().forEach(function(track) {
-        track.stop()
-      })
+      if (video.srcObject){
+        video.srcObject.getTracks().forEach(function(track) {
+          track.stop()
+        })
+      }
       this.scan = false
       this.continue = false
 
