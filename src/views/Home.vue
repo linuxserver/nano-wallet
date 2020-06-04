@@ -17,7 +17,7 @@
           <scan-qr @scanned="scanDone"></scan-qr>
         </div>
         <div id="buttons">
-          <router-link class="genwallet" :to="'/' + $store.state.app.node.address + '/generate'">Generate Wallet</router-link>
+          <router-link class="genwallet" :to="$store.getters['app/nodeLink'] + 'generate'">Generate Wallet</router-link>
         </div>
       </div>
       <div id="wallet" class="page" :class="{active: open === true}">
@@ -181,6 +181,12 @@ export default {
   mounted () {
   },
   computed: {
+    genWalletLink () {
+      if('node' in this.$route.params) {
+        return this.$route.params.node
+      }
+      return ''
+    },
     loginicon () {
       return (this.logintype === 'password') ? 'fa-eye' : 'fa-eye-slash'
     },

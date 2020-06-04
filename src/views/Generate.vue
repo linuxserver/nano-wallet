@@ -1,6 +1,6 @@
 <template>
   <div id="genwallet" class="page active">
-    <router-link class="close" :to="'/' + $route.params.node"><i class="fal fa-times"></i></router-link>
+    <router-link class="close" :to="$store.getters['app/nodeLink']"><i class="fal fa-times"></i></router-link>
     <div class="inner">
       <div class="block">
         <div class="details">
@@ -51,6 +51,15 @@ export default {
     }
   },
   methods: {
+  },
+  computed: {
+    genWalletLink () {
+      if('node' in this.$route.params) {
+        return this.$route.params.node
+      }
+      return ''
+    }
+
   },
   mounted () {
     this.$store.dispatch('app/getSeed').then(data => {
