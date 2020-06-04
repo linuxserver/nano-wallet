@@ -90,6 +90,24 @@ pre {
   color: white;
   font-weight: 200;
 }
+.labeltabs {
+    display: flex;
+    margin-bottom: 5px;
+    label {
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        opacity: 0.4;
+        transition: 0.3s all;
+        &.active {
+            font-weight: bold;
+            border-bottom: 2px solid $highlight;
+            opacity: 1;
+        }
+        &:first-child {
+            margin-right: 20px;
+        }
+    }
+}
 .close {
     position: absolute;
     top: 20px;
@@ -101,7 +119,7 @@ pre {
 .morebutton {
     color: #ccc;
     font-size: 14px;
-    margin-right: 10px;
+    padding: 0 10px;
 }
 canvas {
     display: inline-block!important;
@@ -591,6 +609,10 @@ input[type=text], input[type=password] {
     margin-bottom: 30px;
     width: 100%;
     &.copytext {
+    }
+    &::placeholder {
+        color: #a7b0ca6e;
+        font-weight: 200;
     }
     @media all and (min-width: 900px) {
         font-size: 15px;

@@ -5,29 +5,35 @@
         <div class="title rpc">RPC Server : <span>{{ $store.state.app.node.address }}</span></div>
         <div id="inputs">
           <div v-if="error !== null" class="error">{{ error }}</div>
-          <label class="df" for="seed">
+          <div class="labeltabs">
+          <label @click="setSeed" class="df" :class="{ active: seedtab === true}" for="seed">
             Seed
-              <a class="morebutton mla" href="" @click.prevent="showadvanced = !showadvanced"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
             </label>
-          <div class="login">
-            <input v-model="seed" :type="logintype" id="seed" name="seed">
+          <label @click="setPrivate" class="df" :class="{ active: seedtab !== true}" for="key">
+            Private Key
+            </label>
+            <a v-if="seedtab === true" class="morebutton mla" href="" @click.prevent="showadvanced = !showadvanced"><i data-fa-transform="grow-20" class="fal fa-ellipsis-h"></i></a>
+
+            </div>
+          <div v-if="seedtab === true" class="login">
+            <input v-model="seed" :type="logintype" placeholder="Seed" id="seed" name="seed">
             <span class="eye" @click="togglevisibility">
               <span :class="{ active: logintype === 'password'}"><i class="far fa-eye"></i></span>
               <span :class="{ active: logintype === 'text'}"><i class="far fa-eye-slash"></i></span>
             </span>
           </div>
-          <div v-if="showadvanced === true">
-            <label for="seedindex">Seed Index</label>
-            <div class="login">
-              <input v-model="seedindex" :type="logintype" id="seedindex" name="seedindex">
-            </div>
-            <label for="key">Private Key</label>
-            <div class="login">
-              <input v-model="key" :type="logintype" id="key" name="key">
+            <div v-if="seedtab === false" class="login">
+              <input v-model="key" :type="logintype" placeholder="Private key" id="key" name="key">
               <span class="eye" @click="togglevisibility">
                 <span :class="{ active: logintype === 'password'}"><i class="far fa-eye"></i></span>
                 <span :class="{ active: logintype === 'text'}"><i class="far fa-eye-slash"></i></span>
               </span>
+            </div>
+
+          <div v-if="showadvanced === true">
+            <label for="seedindex">Seed Index</label>
+            <div class="login">
+              <input v-model="seedindex" :type="logintype" id="seedindex" name="seedindex">
             </div>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
@@ -165,7 +171,8 @@ function initialState (){
     isActive: false,
     balanceextra: false,
     terminate: false,
-    showadvanced: false
+    showadvanced: false,
+    seedtab: true
   }
 }
 
@@ -221,6 +228,13 @@ export default {
     }
   },
   methods: {
+    setSeed () {
+      this.seedtab = true
+    },
+    setPrivate () {
+      this.seedtab = false
+      this.showadvanced = false
+    },
     repChange () {
       this.refreshDetails()
       this.settings = false
