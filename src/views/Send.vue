@@ -8,6 +8,7 @@
       </div>
       <button class="sendfunds btn" @click="send" type="button">Send</button>
       <scan-qr @scanned="scanDone"></scan-qr>
+      <button class="sendfunds btn" @click="setmax" type="button">SetMax (placeholder)</button>
   </div>
 </template>
 
@@ -90,6 +91,9 @@ export default {
       this.amount = ''
       this.destination = ''
       this.$emit('close', 'true')
+    },
+    setmax () {
+      this.amount = this.$store.state.app.balance
     },
   }
 

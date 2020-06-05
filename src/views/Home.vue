@@ -290,6 +290,7 @@ export default {
         this.$store.dispatch('app/pending', this.address)
         if (this.details.balance) {
           this.balance = NanoCurrency.convert(this.details.balance, this.rawconv);
+          this.$store.commit('app/balance', this.balance)
         } else {
           this.balance = 0;
         }
