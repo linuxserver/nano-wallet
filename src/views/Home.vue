@@ -139,6 +139,7 @@ import Receive from '@/views/Receive.vue'
 import Settings from '@/views/Settings.vue'
 import BlockState from '@/components/BlockState.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
+import * as webglpow from '../mixins/webgl-pow.js'
 import * as NanoCurrency from 'nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
 import simplebar from 'simplebar-vue';
@@ -311,43 +312,52 @@ export default {
         console.log('Frontier NOT in details');
         hash = NanoCurrency.derivePublicKey(key)
       }
-
-      if (window.Worker) {
-        console.log('Calculating pow for ' + hash + ' this may take some time');
-        const work = () => new Promise(resolve => {
-          workerList = []
-          for (let i = 0; i < workerCount; i++) {
-            const worker = new Worker()
-            worker.postMessage({
-              blockHash: hash,
-              workerIndex: i,
-              workerCount: workerCount
-            });
-            worker.onmessage = (work) => {
-              console.log('Work: ' + work.data);
+      
+      const gl = document.createElement('canvas').getContext('webgl2');
+      if (gl) {
+        console.log('Calculating pow for ' + hash + ' using WebGL this may take some time');
+        webglpow.calculate(hash, '0xFFFFFFC0', 2048, 256, (work) => {
+            this.$store.commit('app/pow', work)
+            this.$store.commit('app/ready', true)
+        })
+      } else {
+        if (window.Worker) {
+          console.log('Calculating pow for ' + hash + ' this may take some time');
+          const work = () => new Promise(resolve => {
+            workerList = []
+            for (let i = 0; i < workerCount; i++) {
+              const worker = new Worker()
+              worker.postMessage({
+                blockHash: hash,
+                workerIndex: i,
+                workerCount: workerCount
+              });
+              worker.onmessage = (work) => {
+                console.log('Work: ' + work.data);
               
-              this.$store.commit('app/pow', work.data)
-              this.$store.commit('app/ready', true)
-              for (let workerIndex in workerList) {
-                console.log('Terminate: ' + workerIndex)
-                workerList[workerIndex].terminate();
-              }
-              resolve();
-            };
-            workerList.push(worker);
-          }
+                this.$store.commit('app/pow', work.data)
+                this.$store.commit('app/ready', true)
+                for (let workerIndex in workerList) {
+                  console.log('Terminate: ' + workerIndex)
+                  workerList[workerIndex].terminate();
+                }
+                resolve();
+              };
+              workerList.push(worker);
+            }
+  
+          });
+          await work();
+        }
+        else{
+          console.log('Calculating pow for ' + hash + ' (no worker) this may take some time');
+          var work = await NanoCurrency.computeWork(hash);
+          this.$store.commit('app/pow', work)
+          this.$store.commit('app/ready', true)
 
-        });
-        await work();
+        }
       }
-      else{
-        console.log('Calculating pow for ' + hash + ' (no worker) this may take some time');
-        var work = await NanoCurrency.computeWork(hash);
-        this.$store.commit('app/pow', work)
-        this.$store.commit('app/ready', true)
 
-      }
-      // worker.postMessage(hash);
     },
 
     togglevisibility () {
