@@ -77,6 +77,7 @@ export default {
 <style lang="scss" scoped>
 .btn {
   width: 100%;
+  margin-bottom: 30px;
 }
 .canvas-bag {
   text-align: center;
