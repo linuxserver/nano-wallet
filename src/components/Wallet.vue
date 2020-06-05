@@ -4,7 +4,7 @@
     <div class="page" style="z-index: 9; justtify-content: flex-start;" :class="{active: wallet !== false}">
       <div class="inner">
       <a class="close" @click="closeWallet"><i class="fal fa-times"></i></a>
-      <canvas width="2480" height="3508" style="background: white; max-height: 360px; height: auto;" :id="'wallet_' + _uid"></canvas>
+      <canvas width="2480" height="1508" style="background: white; max-height: 360px; height: auto;" :id="'wallet_' + _uid"></canvas>
       <div id="private"></div>
       <div id="public"></div>
       <button @click="printWallet">Print</button>
@@ -39,7 +39,7 @@ export default {
       const canvas = canvasElement.getContext("2d")
 
       canvas.width = 2480
-      canvas.height = 3508
+      canvas.height = 1508
 
       const base_image = new Image()
       base_image.src = '/wallet.png'
@@ -69,16 +69,16 @@ export default {
       })
       // qrCode.append(document.getElementById('private'));
 
-      console.log(qrCode.get())
-      console.log(qrCode.get().toDataURL())
-      const privateSrc = qrCode.get()
+      console.log(qrCode._canvas)
+      console.log(qrCode._canvas.getCanvas())
+      const privateSrc = qrCode._canvas.getCanvas()
       const privateQr = new Image()
       privateQr.onload = function () {
         canvas.drawImage(privateQr, sectionwidth, 0);
         canvas.strokeRect(sectionwidth, 0, privateQr.width, privateQr.height);
       }
-      console.log(document.getElementById('private').firstElementChild.toDataURL())
-      privateQr.src = document.getElementById('private').firstElementChild.toDataURL()
+      // console.log(document.getElementById('private').firstElementChild.toDataURL())
+      // privateQr.src = document.getElementById('private').firstElementChild.toDataURL()
 
       console.log(privateSrc)
 
