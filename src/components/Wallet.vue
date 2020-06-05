@@ -87,6 +87,11 @@ export default {
       // qrCode.append(document.getElementById('private'));
 
       // Private
+      ctx.save();
+      ctx.translate(1240, 292);
+      ctx.rotate(Math.PI);
+      ctx.translate(-1240, -292);
+
       const privateSrc = await QRCode.toDataURL(this.private)
 
       ctx.font = "50px Nunito"
@@ -114,13 +119,22 @@ export default {
       ctx.fillText(text7.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 400)
       ctx.fillText(text8.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 440)
 
+      ctx.restore();
+
       const privateQr = new Image()
       privateQr.onload = function () {
         that.loaded += 1
         let y = (sectionheight - 400) / 2
+      ctx.save();
+      ctx.translate(1240, 292);
+      ctx.rotate(Math.PI);
+      ctx.translate(-1240, -292);
+
         ctx.drawImage(privateQr, sectionwidth + 400, that.startTop + y, 400, 400)
+        ctx.restore();
       }
       privateQr.src = privateSrc
+
 
       // End private
 
