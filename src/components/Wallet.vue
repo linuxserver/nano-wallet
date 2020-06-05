@@ -190,7 +190,7 @@ export default {
         '<html>',
         '   <head>',
         '   </head>',
-        '   <body onload="window.print()" onafterprint="window.close()">',
+        '   <body style="margin: 0" onload="window.print()" onafterprint="window.close()">',
         '       <img style="width:100%" src="' + this.src + '"/>',
         '   </body>',
         '</html>'
