@@ -250,12 +250,14 @@ export default {
         this.seedtab = false
         this.showadvanced = false
         this.key = data.replace('nanokey:','').substr(0, 64)
+        this.error = null
       } else if (data.startsWith('nanoseed:')) {
         const seed = data.replace('nanoseed:','').substr(0, 64)
         this.seed = seed
+        this.error = null
       } else {
         this.error = 'QR code data does not conform to specification'
-        this.key = data
+        this.seed = data
       }
     },
 
