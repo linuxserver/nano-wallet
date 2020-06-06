@@ -538,6 +538,10 @@ canvas {
         font-weight: 200;
         font-size: 12px;
         opacity: 0.7;
+        span {
+            display: flex;
+            justify-content: space-between;
+        }
     }
     .icon {
         font-size: 35px;
