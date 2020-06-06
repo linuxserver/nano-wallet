@@ -297,6 +297,13 @@ export default {
   flex-direction: column;
 }
 @media print {
+  @page{
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  html, body{margin:0; padding:0;}
   .wallet {
     canvas {
       max-width: 100%!important;
