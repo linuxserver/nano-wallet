@@ -46,12 +46,11 @@ export const serverMixin = {
     
     link(type,data) {
       const baseurl = window.location.origin;
-      const server = this.$route.params.node;
-      if (type == 'address'){
-	window.open(baseurl + '/#/' + server + '/address/' + data);
+      if (type == 'address') {
+	window.open(baseurl + '/#' + this.$store.getters['app/nodeLink'] + 'address/' + data);
       }
-      if (type == 'block'){
-        window.open(baseurl + '/#/' + server + '/block/' + data);
+      if (type == 'block') {
+        window.open(baseurl + '/#' + this.$store.getters['app/nodeLink'] + 'block/' + data);
       }
     },
 
