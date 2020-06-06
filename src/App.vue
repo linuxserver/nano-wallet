@@ -687,6 +687,11 @@ input[type=text], input[type=password] {
         &:after {
             display: none;
         }
+        input[type=text], input[type=password] {
+            padding: 10px;
+            border: none;
+            margin-bottom: 20px;
+        }
     }
 }
 .rpc {
@@ -736,7 +741,7 @@ input[type=text], input[type=password] {
     justify-content: center;
     letter-spacing: 3px;
     text-align: center;
-
+    max-width: 500px;
     &.outline {
         padding: 8px 18px;
         border: 2px solid $highlightsemi;

@@ -24,6 +24,7 @@
           <input class="copytext" type="text" name="address" :value="walletdata.address" />
         </div>
         <button class="btn" @click="copyToClipboard('Seed: ' + walletdata.seed + '\nPrivate Key: ' + walletdata.privatekey + '\nPublic Key: ' + walletdata.publickey + '\nAddress: ' + walletdata.address)">Copy All</button>
+        <wallet :private="walletdata.seed" :public="walletdata.address"></wallet>
       </div>
       <div class="block">
         <div class="canvas-bag">
@@ -37,12 +38,14 @@
 <script>
 import { serverMixin } from '../mixins/serverMixin.js'
 import QrBlock from '../components/QrBlock'
+import Wallet from '../components/Wallet'
 
 export default {
   name: 'Generate',
   mixins: [ serverMixin ],
   components: {
-    QrBlock
+    QrBlock,
+    Wallet
   },
   data() {
     return {
@@ -74,6 +77,7 @@ export default {
 <style lang="scss" scoped>
 .btn {
   width: 100%;
+  margin-bottom: 30px;
 }
 .canvas-bag {
   text-align: center;
