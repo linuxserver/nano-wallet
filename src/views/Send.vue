@@ -2,13 +2,16 @@
   <div class="send">
     <div id="sendform">
         <label for="amount">Amount:</label>
-        <input type="text" v-model="amount" id="amount" name="amount">
+          <div class="login">
+            <input type="text" v-model="amount" id="amount" name="amount">
+            <span  @click="setmax" class="max">MAX</span>
+          </div>
+
         <label for="destination">Destination:</label>
         <input type="text" v-model="destination" id="destination" name="destination">
       </div>
       <button class="sendfunds btn" @click="send" type="button">Send</button>
       <scan-qr @scanned="scanDone"></scan-qr>
-      <button class="sendfunds btn" @click="setmax" type="button">SetMax (placeholder)</button>
   </div>
 </template>
 
