@@ -5,11 +5,12 @@
       <div class="fdcol">
       <a class="close" @click="closeWallet"><i class="fal fa-times"></i></a>
       <div class="printpos">
-        <canvas width="2480" height="3508" :id="'wallet_' + _uid"></canvas>
+        <canvas width="2480" height="3508" style="" :id="'wallet_' + _uid"></canvas>
         <div class="posbuttons">
-          <button class="btn" :class="{ outline: position !== 1}" @click="position = 1">Position 1</button>
-          <button class="btn" :class="{ outline: position !== 2}" @click="position = 2">Position 2</button>
-          <button class="btn" :class="{ outline: position !== 3}" @click="position = 3">Position 3</button>
+          <div class="print-position">A4 Print position</div>
+          <button class="btn" :class="{ outline: position !== 1}" @click="position = 1"><img src="wallet_preview.png" /></button>
+          <button class="btn" :class="{ outline: position !== 2}" @click="position = 2"><img src="wallet_preview.png" /></button>
+          <button class="btn" :class="{ outline: position !== 3}" @click="position = 3"><img src="wallet_preview.png" /></button>
         </div>
       </div>
       <button style="width: 100%; margin-top: 20px;" class="btn" @click="printWallet">Print</button>
@@ -71,7 +72,43 @@ export default {
       ctx.width = 2480
       ctx.height = 3508
 
+      const sectionwidth = 827
+      const sectionheight = 585
+
       const that = this
+
+      // Base layer
+      function drawDashedLine(x1, y1, x2, y2) {
+        ctx.beginPath()
+        ctx.setLineDash([10,10])
+        ctx.moveTo(x1, y1)
+        ctx.lineTo(x2, y2)
+        ctx.stroke()
+      }
+
+      drawDashedLine(0, this.startTop + 0, ctx.width, this.startTop + 0)
+      drawDashedLine(0, this.startTop + 585, ctx.width, this.startTop + 585)
+      drawDashedLine(0, this.startTop + 1169, ctx.width, this.startTop + 1169)
+
+      drawDashedLine(820, this.startTop + 0, 820, this.startTop + 1169)
+      drawDashedLine(1661, this.startTop + 0, 1661, this.startTop + 1169)
+
+      ctx.font = "24px Nunito"
+      ctx.fillStyle='#000000'
+      ctx.fillText('To deposit funds to this paper,', sectionwidth + 40, this.startTop + sectionheight + 100)
+      ctx.fillText('wallet, send nano to the public', sectionwidth + 40, this.startTop + sectionheight + 130)
+      ctx.fillText('address on the right', sectionwidth + 40, this.startTop + sectionheight + 160)
+
+      ctx.fillText('DO NOT REVEAL THE SEED', sectionwidth + 40, this.startTop + sectionheight + 220)
+      ctx.fillText('until you are ready to import', sectionwidth + 40, this.startTop + sectionheight + 250)
+      ctx.fillText('the balance to a nano wallet,', sectionwidth + 40, this.startTop + sectionheight + 280)
+      ctx.fillText('exchange or online wallet.', sectionwidth + 40, this.startTop + sectionheight + 310)
+
+      ctx.fillText('Amount: ', sectionwidth + 40, this.startTop + sectionheight + 390)
+      ctx.fillText('Date:', sectionwidth + 40, this.startTop + sectionheight + 470)
+
+
+      // End base layer
 
       const base_image = new Image()
       base_image.src = '/wallet.png'
@@ -80,9 +117,8 @@ export default {
         ctx.drawImage(base_image, 0, parseInt(that.startTop) + 0)
       }
 
-      const sectionwidth = 828
-      const sectionheight = 585
 
+      ctx.fillStyle='#000000'
 
       // qrCode.append(document.getElementById('private'));
 
@@ -92,10 +128,10 @@ export default {
       ctx.rotate(Math.PI);
       ctx.translate(-1240, -292);
 
-      const privateSrc = await QRCode.toDataURL(this.private)
+      const privateSrc = await QRCode.toDataURL('nanoseed:' + this.private)
 
       ctx.font = "50px Nunito"
-      ctx.fillText("S E E D", sectionwidth + 40, this.startTop + 100)
+      ctx.fillText("S E E D", sectionwidth + 40, -this.startTop + 100)
 
       console.log(this.private)
 
@@ -110,14 +146,14 @@ export default {
 
       ctx.font = "38px Monospace"
 
-      ctx.fillText(text1.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 160)
-      ctx.fillText(text2.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 200)
-      ctx.fillText(text3.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 240)
-      ctx.fillText(text4.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 280)
-      ctx.fillText(text5.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 320)
-      ctx.fillText(text6.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 360)
-      ctx.fillText(text7.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 400)
-      ctx.fillText(text8.split("").join(String.fromCharCode(8202)), sectionwidth + 40, this.startTop + 440)
+      ctx.fillText(text1.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 160)
+      ctx.fillText(text2.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 200)
+      ctx.fillText(text3.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 240)
+      ctx.fillText(text4.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 280)
+      ctx.fillText(text5.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 320)
+      ctx.fillText(text6.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 360)
+      ctx.fillText(text7.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 400)
+      ctx.fillText(text8.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 440)
 
       ctx.restore();
 
@@ -130,7 +166,7 @@ export default {
       ctx.rotate(Math.PI);
       ctx.translate(-1240, -292);
 
-        ctx.drawImage(privateQr, sectionwidth + 400, that.startTop + y, 400, 400)
+        ctx.drawImage(privateQr, sectionwidth + 400, -that.startTop + y, 400, 400)
         ctx.restore();
       }
       privateQr.src = privateSrc
@@ -139,10 +175,10 @@ export default {
       // End private
 
       // Address
-      const publicSrc = await QRCode.toDataURL(this.public)
+      const publicSrc = await QRCode.toDataURL('nano:' + this.public)
 
       ctx.font = "50px Nunito"
-      ctx.fillText("A D D R E S S", (sectionwidth * 2) + 40, this.startTop + sectionheight + 100)
+      ctx.fillText("A D D R E S S", 40, this.startTop + sectionheight + 100)
 
       console.log(this.public)
 
@@ -157,22 +193,23 @@ export default {
 
       ctx.font = "38px Monospace"
       ctx.fillStyle='#d43789'
-      ctx.fillText(text1.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 160)
+      ctx.fillText(text1.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 160)
       ctx.fillStyle='#000000'
-      ctx.fillText(text2.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 200)
-      ctx.fillText(text3.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 240)
-      ctx.fillText(text4.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 280)
-      ctx.fillText(text5.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 320)
-      ctx.fillText(text6.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 360)
-      ctx.fillText(text7.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 400)
+      ctx.fillText(text2.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 200)
+      ctx.fillText(text3.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 240)
+      ctx.fillText(text4.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 280)
+      ctx.fillText(text5.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 320)
+      ctx.fillText(text6.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 360)
+      ctx.fillText(text7.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 400)
       ctx.fillStyle='#d43789'
-      ctx.fillText(text8.split("").join(String.fromCharCode(8202)), (sectionwidth * 2) + 40, this.startTop + sectionheight + 440)
+      ctx.fillText(text8.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 440)
       
       const publicQr = new Image()
       publicQr.onload = function () {
         that.loaded += 1
         let y = ((sectionheight - 400) / 2) + sectionheight
-        ctx.drawImage(publicQr, (sectionwidth * 2) + 400, that.startTop + y, 400, 400)
+        ctx.drawImage(publicQr, 400, that.startTop + y, 400, 400)
+        ctx.drawImage(publicQr, sectionwidth + 400, that.startTop + y, 400, 400)
       }
       publicQr.src = publicSrc
 
@@ -188,7 +225,7 @@ export default {
       const logo_image = new Image()
       logo_image.onload = function(){
         that.loaded += 1
-        let x = (sectionwidth - logo_image.width) / 2
+        let x = (sectionwidth * 2) + (sectionwidth - logo_image.width) / 2
         let y = that.startTop + ((sectionheight - logo_image.height) / 2)
 
         ctx.drawImage(logo_image, x, sectionheight + y)
@@ -216,19 +253,37 @@ export default {
 }
 </script>
 <style lang="scss">
+.print-position {
+  margin-bottom: 8px;
+}
 .posbuttons {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  button {
+    border-radius: 0;
+    &.btn {
+      padding: 0;
+    }
+    &.outline {
+      img {
+        opacity: 0.1;
+      }
+    }
+  }
+  img {
+    width: 220px;
+  }
 }
 .printpos {
   display: flex;
   canvas {
     background: white; 
-    max-width: 200px; 
+    max-width: 500px; 
     height: auto;
     margin-right: 20px;
     border-radius: 20px;
+    display: none!important;
   }
 }
 .fdcol {
