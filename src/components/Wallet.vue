@@ -16,6 +16,7 @@
       <button style="width: 100%; margin-top: 20px;" class="btn" @click="printWallet">Print</button>
     </div>
     </div>
+    <img :src="src" id="printimage" />
   </div>
 </template>
 
@@ -237,7 +238,8 @@ export default {
 
     },
     async printWallet () {
-      var win = window.open('about:blank', "_new");
+      window.print()
+      /*var win = window.open('about:blank', "_new");
     win.document.open();
     win.document.write([
         '<html>',
@@ -248,7 +250,7 @@ export default {
         '   </body>',
         '</html>'
     ].join(''));
-    win.document.close();
+    win.document.close();*/
     }
 
   }
@@ -277,6 +279,9 @@ export default {
     width: 220px;
   }
 }
+#printwallet {
+  display: none;
+}
 .printpos {
   display: flex;
   canvas {
@@ -304,5 +309,15 @@ export default {
       margin: 0;
     }
   }
+  #printimage {
+  display: block;
+  position: fixed;
+  height: 279mm; 
+  width: 210mm;
+      top: 0;
+    right: 0;
+    z-index: 999;
+    background: white;
+}
 }
 </style>
