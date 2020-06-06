@@ -291,7 +291,6 @@ canvas {
     }
     #genwallet {
         top: 0;
-        justify-content: flex-start;
     }
     .genwallet {
         color:$text;
