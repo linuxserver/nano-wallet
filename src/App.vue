@@ -247,6 +247,10 @@ canvas {
             }
         }
     }
+    .block {
+        width: 100%;
+        max-width: 600px;
+    }
     #login {
         justify-content: space-between;
         top: 0;
@@ -700,6 +704,7 @@ input[type=text], input[type=password] {
             padding: 10px;
             border: none;
             margin-bottom: 20px;
+            font-size: 15px!important;
         }
     }
 }
@@ -750,7 +755,7 @@ input[type=text], input[type=password] {
     justify-content: center;
     letter-spacing: 3px;
     text-align: center;
-    max-width: 500px;
+    max-width: 600px;
     &.outline {
         padding: 8px 18px;
         border: 2px solid $highlightsemi;
