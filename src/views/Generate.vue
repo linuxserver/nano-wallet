@@ -117,12 +117,12 @@ export default {
 #genwallet {
   .login {
     .max {
-      height: 46px;
+      height: 37px;
     }
   }
 }
 .details .copy {
-    right: -25px;
-    top: 45px;
+    right: -21px;
+    top: 40px;
 }
 </style>
