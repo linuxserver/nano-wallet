@@ -5,30 +5,23 @@
       <div class="block">
         <div class="details smaller">
           <label for="seed">Seed</label>
-          <a href="#" @click="copyToClipboard(walletdata.seed)" class="copy"><i class="fad fa-clone"></i></a>
-          <input class="copytext" type="text" name="seed" :value="walletdata.seed" />
-        </div>
-        <div class="details smaller">
-          <label for="privatekey">Private Key</label>
-          <a href="#" @click="copyToClipboard(walletdata.privatekey)" class="copy"><i class="fad fa-clone"></i></a>
-          <input class="copytext" type="text" name="privatekey" :value="walletdata.privatekey" />
-        </div>
-        <div class="details smaller">
-          <label for="publickey">Public Key</label>
-          <a href="#" @click="copyToClipboard(walletdata.publickey)" class="copy"><i class="fad fa-clone"></i></a>
-          <input class="copytext" type="text" name="publickey" :value="walletdata.publickey" />
+          <a href="#" @click="copyToClipboard(seed)" class="copy"><i class="fad fa-clone"></i></a>
+          <div class="login">
+            <input class="copytext" type="text" v-model="seed" name="seed" />
+            <span @click="clearWallet" class="max">CLEAR</span>
+          </div>
         </div>
         <div class="details smaller">
           <label for="address">Address</label>
-          <a href="#" @click="copyToClipboard(walletdata.address)" class="copy"><i class="fad fa-clone"></i></a>
-          <input class="copytext" type="text" name="address" :value="walletdata.address" />
+          <a href="#" @click="copyToClipboard(address)" class="copy"><i class="fad fa-clone"></i></a>
+          <input class="copytext" type="text" v-model="address" name="address" />
         </div>
-        <button class="btn" @click="copyToClipboard('Seed: ' + walletdata.seed + '\nPrivate Key: ' + walletdata.privatekey + '\nPublic Key: ' + walletdata.publickey + '\nAddress: ' + walletdata.address)">Copy All</button>
-        <wallet :private="walletdata.seed" :public="walletdata.address"></wallet>
+        <button class="btn" @click="copyToClipboard('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Copy All</button>
+        <wallet :private="seed" :public="address"></wallet>
       </div>
       <div class="block">
         <div class="canvas-bag">
-          <qr-block :address="'nanoseed:' + walletdata.seed"></qr-block>
+          <qr-block :address="'nanoseed:' + seed"></qr-block>
         </div>
       </div>
     </div>
@@ -50,10 +43,30 @@ export default {
   data() {
     return {
       newrep: '',
+      seed: '',
+      privatekey: '',
+      publickey: '',
+      address: '',
       walletdata: {}
     }
   },
+  watch: {
+    seed: function (newseed, oldseed) {
+      if(newseed !== oldseed && newseed.length === 64) {
+        this.$store.dispatch('app/seedData', newseed).then(data => {
+          this.seed = data.seed,
+          this.privatekey = data.privatekey,
+          this.publickey = data.publickey,
+          this.address = data.address
+        }) 
+      }
+    }
+  },
   methods: {
+    clearWallet () {
+      this.seed = ''
+      this.address = ''
+    }
   },
   computed: {
     genWalletLink () {
@@ -66,7 +79,10 @@ export default {
   },
   mounted () {
     this.$store.dispatch('app/getSeed').then(data => {
-      this.walletdata = data
+      this.seed = data.seed,
+      this.privatekey = data.privatekey,
+      this.publickey = data.publickey,
+      this.address = data.address
     }) 
   }
 }
@@ -77,12 +93,19 @@ export default {
 <style lang="scss" scoped>
 .btn {
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 .canvas-bag {
   text-align: center;
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+#genwallet {
+  .login {
+    .max {
+      height: 46px;
+    }
+  }
 }
 </style>

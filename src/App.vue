@@ -647,7 +647,7 @@ input[type=text], input[type=password] {
     }
 
     input[type=text], input[type=password] {
-        padding-right: 60px;
+        padding-right: 60px!important;
         @media all and (min-width: 900px) {
             font-size: 22px;
             padding: 15px 60px 15px 15px;

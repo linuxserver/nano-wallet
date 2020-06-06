@@ -38,8 +38,12 @@ export function node ({ commit, state }) {
   
 }
 
-export async function getSeed () {
+export async function getSeed (context) {
   const seed = await NanoCurrency.generateSeed();
+  return seedData(context, seed)
+}
+
+export async function seedData (context, seed) {
   const privatekey = NanoCurrency.deriveSecretKey(seed, 0);
   const publickey = NanoCurrency.derivePublicKey(privatekey);
   const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});

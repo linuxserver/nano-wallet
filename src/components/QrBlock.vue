@@ -32,6 +32,7 @@ export default {
             //errorCorrectionLevel: 'H'
           }
         });
+        document.getElementById(this._uid).innerHTML = ''
         qrCode.append(document.getElementById(this._uid));
       }
     },
