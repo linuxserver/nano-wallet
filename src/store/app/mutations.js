@@ -23,6 +23,9 @@ export function history(state, data) {
 export function pending(state, data) {
   state.pending = data
 }
+export function balance(state, data) {
+  state.balance = data
+}
 
 export function resetState(state) {
   Object.assign(state, initialState())

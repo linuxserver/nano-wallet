@@ -622,7 +622,7 @@ input[type=text], input[type=password] {
 }
 .login {
     position: relative;
-    .eye {
+    .eye, .max {
         position: absolute;
         display: flex;
         right: 0;
@@ -638,8 +638,14 @@ input[type=text], input[type=password] {
                 display: block;
             }
         }
-
     }
+    .max {
+        font-size: 14px;
+        color: $highlight;
+        cursor: pointer;
+        font-weight: 400;
+    }
+
     input[type=text], input[type=password] {
         padding-right: 60px;
         @media all and (min-width: 900px) {

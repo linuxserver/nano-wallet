@@ -2,7 +2,11 @@
   <div class="send">
     <div id="sendform">
         <label for="amount">Amount:</label>
-        <input type="text" v-model="amount" id="amount" name="amount">
+          <div class="login">
+            <input type="text" v-model="amount" id="amount" name="amount">
+            <span  @click="setmax" class="max">MAX</span>
+          </div>
+
         <label for="destination">Destination:</label>
         <input type="text" v-model="destination" id="destination" name="destination">
       </div>
@@ -90,6 +94,9 @@ export default {
       this.amount = ''
       this.destination = ''
       this.$emit('close', 'true')
+    },
+    setmax () {
+      this.amount = this.$store.state.app.balance
     },
   }
 
