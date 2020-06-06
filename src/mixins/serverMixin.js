@@ -64,13 +64,13 @@ export const serverMixin = {
     },*/
     
     abbreviateAddress (address) {
-      return address.substring(0, 11) + '...' + address.slice(address.length - 6)
+      return '<span class="abbreviate">' + address.substring(0, 11) + '...' + address.slice(address.length - 6) + '</span>'
     },
 
     highlightAddress (address) {
       if (address !== null && address !== undefined) {
         const end = address.length - 6;
-        return '<span class="highlight">' + address.substring(0, 11) + '</span>' + address.substring(11, end) + '<span class="highlight">' + address.slice(address.length - 6) + '</span>'
+        return '<span class="abbreviate"><span class="highlight">' + address.substring(0, 11) + '</span>' + address.substring(11, end) + '<span class="highlight">' + address.slice(address.length - 6) + '</span></span>'
       }
       return null
     },

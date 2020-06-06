@@ -779,4 +779,7 @@ input:-webkit-autofill:active {
         font-size: 14px;
     }
 }
+.abbreviate {
+    font-family: 'Courier New', Courier, monospace;
+}
 </style>

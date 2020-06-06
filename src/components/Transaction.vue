@@ -16,8 +16,8 @@
         </div>
       </div>
       <div class="address">
-        <span @click="link('address',transaction.account)" v-if="type !== 'pending'">{{ formattedDate }} {{ abbreviateAddress(transaction.account) }}</span>
-        <span @click="link('address',transaction.source)" v-if="type === 'pending'">{{ abbreviateAddress(transaction.source) }}</span>
+        <span @click="link('address',transaction.account)" v-if="type !== 'pending'" v-html="formattedDate + ' ' + abbreviateAddress(transaction.account)"></span>
+        <span @click="link('address',transaction.source)" v-if="type === 'pending'" v-html="abbreviateAddress(transaction.source)"></span>
       </div>
     </div>
   </div>
