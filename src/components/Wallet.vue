@@ -7,7 +7,7 @@
       <div class="printpos">
         <canvas width="2480" height="3508" style="" :id="'wallet_' + _uid"></canvas>
         <div class="posbuttons">
-          <div class="print-position">A4 Print position</div>
+          <div class="print-position">Paper print position</div>
           <button class="btn" :class="{ outline: position !== 1}" @click="position = 1"><img src="wallet_preview.png" /></button>
           <button class="btn" :class="{ outline: position !== 2}" @click="position = 2"><img src="wallet_preview.png" /></button>
           <button class="btn" :class="{ outline: position !== 3}" @click="position = 3"><img src="wallet_preview.png" /></button>
@@ -54,7 +54,7 @@ export default {
   computed: {
     startTop () {
       if (this.position === 1) return parseInt(0)
-      return parseInt((this.position - 1) * 1169)
+      return parseInt((this.position - 1) * 1100)
     }
   },
   methods: {
@@ -70,10 +70,10 @@ export default {
       ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       ctx.width = 2480
-      ctx.height = 3508
+      ctx.height = 3300
 
       const sectionwidth = 827
-      const sectionheight = 585
+      const sectionheight = 550
 
       const that = this
 
@@ -87,11 +87,13 @@ export default {
       }
 
       drawDashedLine(0, this.startTop + 0, ctx.width, this.startTop + 0)
-      drawDashedLine(0, this.startTop + 585, ctx.width, this.startTop + 585)
-      drawDashedLine(0, this.startTop + 1169, ctx.width, this.startTop + 1169)
+      drawDashedLine(0, this.startTop + 550, ctx.width, this.startTop + 550)
+      drawDashedLine(0, this.startTop + 1100, ctx.width, this.startTop + 1100)
+      //drawDashedLine(0, 3300, ctx.width, 3300)
 
-      drawDashedLine(820, this.startTop + 0, 820, this.startTop + 1169)
-      drawDashedLine(1661, this.startTop + 0, 1661, this.startTop + 1169)
+      drawDashedLine(0, this.startTop + 0, 0, this.startTop + 1100)
+      drawDashedLine(820, this.startTop + 0, 820, this.startTop + 1100)
+      drawDashedLine(1661, this.startTop + 0, 1661, this.startTop + 1100)
 
       ctx.font = "24px Nunito"
       ctx.fillStyle='#000000'
@@ -114,7 +116,7 @@ export default {
       base_image.src = '/wallet.png'
       base_image.onload = function(){
         that.loaded += 1
-        ctx.drawImage(base_image, 0, parseInt(that.startTop) + 0)
+        ctx.drawImage(base_image, 0, parseInt(that.startTop) - 22)
       }
 
 
@@ -131,7 +133,7 @@ export default {
       const privateSrc = await QRCode.toDataURL('nanoseed:' + this.private)
 
       ctx.font = "50px Nunito"
-      ctx.fillText("S E E D", sectionwidth + 40, -this.startTop + 100)
+      ctx.fillText("S E E D", sectionwidth + 40, -this.startTop + 130)
 
       console.log(this.private)
 
@@ -146,14 +148,14 @@ export default {
 
       ctx.font = "38px Monospace"
 
-      ctx.fillText(text1.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 160)
-      ctx.fillText(text2.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 200)
-      ctx.fillText(text3.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 240)
-      ctx.fillText(text4.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 280)
-      ctx.fillText(text5.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 320)
-      ctx.fillText(text6.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 360)
-      ctx.fillText(text7.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 400)
-      ctx.fillText(text8.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 440)
+      ctx.fillText(text1.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 190)
+      ctx.fillText(text2.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 230)
+      ctx.fillText(text3.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 270)
+      ctx.fillText(text4.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 310)
+      ctx.fillText(text5.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 350)
+      ctx.fillText(text6.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 390)
+      ctx.fillText(text7.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 430)
+      ctx.fillText(text8.split("").join(String.fromCharCode(8202)), sectionwidth + 40, -this.startTop + 470)
 
       ctx.restore();
 
@@ -241,8 +243,8 @@ export default {
         '<html>',
         '   <head>',
         '   </head>',
-        '   <body style="margin: 0" onload="window.print()" onafterprint="window.close()">',
-        '       <img style="width:100%" src="' + this.src + '"/>',
+        '   <body style="margin: 0; text-align: right;" onload="window.print()" onafterprint="window.close()">',
+        '       <img style="height: 279mm; width: 210mm; page-break-inside:avoid;" src="' + this.src + '"/>',
         '   </body>',
         '</html>'
     ].join(''));
