@@ -165,13 +165,13 @@ canvas {
 }
 .showmobile {
   display: block!important;
-  @media all and (min-width: 900px) {
+  @media all and (min-width: 1040px) {
     display: none!important;
   }
 }
 .hidemobile {
   display: none!important;
-  @media all and (min-width: 900px) {
+  @media all and (min-width: 1040px) {
     display: block!important;
   }
 }
@@ -212,7 +212,7 @@ canvas {
             padding: 30px;
             padding-top: 62px;
             margin: -30px;
-            @media all and (min-width: 900px) {
+            @media all and (min-width: 1040px) {
                 display: flex;
                 justify-content: center;
                 overflow-y: visible;
