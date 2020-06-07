@@ -4,12 +4,20 @@ export function initialState () {
     settings: {
       pow: 1,
       changeaddress: true,
-      node: {
-        address: 'nano.linuxserver.io',
-        protocol: 'https',
-        port: 7077,
-        path: '',
-      },
+      node: [
+        {
+          address: 'nano.linuxserver.io',
+          protocol: 'http',
+          port: 7076,
+          path: '',
+        },
+	{
+          address: 'nano2.linuxserver.io',
+          protocol: 'http',
+          port: 7076,
+          path: '',
+        }
+      ],
       presets: {
         'mynano.ninja': {
           port: 443,

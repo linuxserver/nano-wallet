@@ -12,7 +12,7 @@ function port() {
   return '7076'
 }
 
-export function node ({ commit, state }) {
+export async function node ({ commit, state }) {
   let newnode = {...state.node}
   if(state.settings.changeaddress === true) {
     newnode.address = router.currentRoute.params.node
@@ -26,9 +26,27 @@ export function node ({ commit, state }) {
       }
     }
   } else {
-    newnode = {
-      ...newnode,
-      ...state.settings.node
+    var i
+    for (i = 0; i < state.settings.node.length; i++) {
+      const rpcurl = state.settings.node[i].protocol + '://' + state.settings.node[i].address + ':' + state.settings.node[i].port + state.settings.node[i].path
+      const Init = { method:'POST',body: '{"action":"account_info"}'}
+      Init.headers = {}
+      if ('headers' in state.settings.node[i]) {
+        Init.headers = state.settings.node[i].headers
+      }
+      if ('auth' in state.settings.node[i] && state.settings.node[i].auth !== null) {
+        Init.headers['Authorization'] = state.settings.node[i].auth
+      }
+      const res = await fetch(rpcurl,Init)
+      if (res.ok) {
+        newnode = {
+          ...newnode,
+          ...state.settings.node[i]
+        }
+	break
+      } else {
+        console.log(res);
+      }
     }
   }
   if('auth' in router.currentRoute.query) {
