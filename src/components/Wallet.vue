@@ -1,6 +1,6 @@
 <template>
   <div class="wallet">
-    <button style="width: 100%;" class="btn outline" @click="createWallet" type="button">Paper Wallet</button>
+    <button style="width: 100%;" class="btn outline" @click="createWallet" type="button">Create Paper Wallet</button>
     <div class="page" style="z-index: 9; top: 0; bottom: 0; justtify-content: flex-start;" :class="{active: wallet !== false}">
       <div class="fdcol">
       <a class="close" @click="closeWallet"><i class="fal fa-times"></i></a>

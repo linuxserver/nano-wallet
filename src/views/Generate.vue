@@ -16,9 +16,10 @@
           <a href="#" @click="copyToClipboard(address)" class="copy"><i class="fad fa-clone"></i></a>
           <input class="copytext" type="text" v-model="address" name="address" />
         </div>
-        <button style="margin-top: 30px;" class="btn" @click="copyToClipboard('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Copy All</button>
+        <button style="margin-top: 30px;" class="btn" @click="copyToClipboard('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Copy To Clipboard</button>
+        <button class="btn outline" @click="save('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Download</button>
         <wallet :private="seed" :public="address"></wallet>
-      </div>
+     </div>
       <!--<div class="block">
         <div class="canvas-bag">
           <qr-block :address="'nanoseed:' + seed"></qr-block>
@@ -63,6 +64,21 @@ export default {
     }
   },
   methods: {
+    save (data) {
+      const filename = this.abbreviateAddress(this.address, false) + '.txt'
+      var blob = new Blob([data], {type: 'text/csv'});
+      if(window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, filename);
+      }
+      else{
+        var elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = filename;        
+        document.body.appendChild(elem);
+        elem.click();        
+        document.body.removeChild(elem);
+      }
+    },
     clearWallet () {
       this.seed = ''
       this.address = ''
