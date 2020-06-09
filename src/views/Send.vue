@@ -73,7 +73,11 @@ export default {
     },
     async send() {
       if(this.pow === null) {
-        return alert('Please wait for the status to be ready')
+        this.$notify({
+          title: 'PoW not complete',
+          text: 'Please wait for the status to be ready',
+          type: 'error'
+        })
       }
       if (this.amount.startsWith('.')){
         this.amount = '0' + this.amount

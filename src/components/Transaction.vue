@@ -67,7 +67,11 @@ export default {
   methods: {
     async receive () {
       if(this.pow === null) {
-        return alert('Please wait for the status to be ready')
+        this.$notify({
+          title: 'PoW not complete',
+          text: 'Please wait for the status to be ready',
+          type: 'error'
+        })
       }
 
       const publickey = NanoCurrency.derivePublicKey(this.privatekey)
