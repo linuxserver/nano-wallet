@@ -303,6 +303,9 @@ canvas {
                 font-size: 40px;
                 text-align: right;
                 margin-bottom: 0;
+                &:focus {
+                    outline: none;
+                }
             }
         }
         .keypad {

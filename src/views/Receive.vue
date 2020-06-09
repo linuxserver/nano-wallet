@@ -8,7 +8,7 @@
       <a @click.prevent="setAmount()" class="btn outline">Set Amount</a>
     </div>
     <div v-show="showset !== false" class="block" style="padding: 0; margin-top: -47px;">
-      <div class="amount"><input type="text" v-model="amount" /></div>
+      <div class="amount"><input type="text" @keypress="isNumber($event)" ref="amount" v-model="amount" /></div>
       <div class="keypad">
         <div class="row"><button @click="addNumber('7')">7</button><button @click="addNumber('8')">8</button><button @click="addNumber('9')">9</button></div>
         <div class="row"><button @click="addNumber('4')">4</button><button @click="addNumber('5')">5</button><button @click="addNumber('6')">6</button></div>
@@ -48,11 +48,44 @@ export default {
   watch: {
     address: function (newaddress) {
       this.receive = 'nano:' + newaddress
+    },
+    showset: function (current) {
+      if (current === true) {
+        this.$nextTick(function () {
+          this.$refs.amount.focus()
+        })
+      }
     }
   },
   computed: {
   },
   methods: {
+    isNumber: function(evt) {
+      console.log(evt)
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode == 46) {
+        //Check if the text already contains the . character
+        console.log(this.amount.indexOf('.'))
+        if (this.amount.indexOf('.') === -1) {
+          return true
+        } else {
+          evt.preventDefault()
+        }
+      } else {
+        if (charCode > 31 &&
+          (charCode < 48 || charCode > 57))
+          evt.preventDefault()
+      }
+      if (evt.key === '0' && this.amount === '0') {
+        evt.preventDefault()
+      }
+      if (evt.key !== '0' && this.amount === '0') {
+        this.amount = evt.key
+        evt.preventDefault()
+      }
+      return true;
+
+    },
     setAmount () {
       this.showset = true
     },
@@ -60,15 +93,22 @@ export default {
       if(this.amount === '0') {
         if(number !== '.') {
           this.amount = number
+          this.$refs.amount.focus()
           return
         }
       } 
+      if (number === '.' && this.amount.indexOf('.') !== -1) {
+        this.$refs.amount.focus()
+        return
+      }
       this.amount = this.amount + number
+      this.$refs.amount.focus()
     },
     backspace () {
       let amount = this.amount.slice(0, -1)
       if(amount.length <= 0) amount = '0'
       this.amount = amount
+      this.$refs.amount.focus()
     },
     cancel () {
       this.amount = '0'
