@@ -1,7 +1,7 @@
 var numbro = require('numbro')
-
+var NanoCurrency = require('nanocurrency')
 import Vue from 'vue'
- 
+
 export const serverMixin = {
   data() {
     return {
@@ -87,6 +87,19 @@ export const serverMixin = {
     transactionStatus (value) {
       if (value === 'send') return 'Sent'
       if (value === 'receive') return 'Received'
+    },
+
+    checkamount (amount) {
+      if (!NanoCurrency.checkAmount(amount)) {
+        this.$notify({
+          title: 'Invalid amount',
+          text: 'Please ensure the amount selected is a valid',
+          type: 'error'
+        })
+	return false
+      } else {
+        return true
+      }
     }
     
   }

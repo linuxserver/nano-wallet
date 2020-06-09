@@ -66,7 +66,11 @@ export default {
         qrdata[1].split('&').forEach(function(part) {
           const item = part.split('=')
           if (item[0] == 'amount' && item[1]) {
-            this.amount = NanoCurrency.convert(item[1],this.rawconv)
+            let rawamount = NanoCurrency.convert(item[1],this.rawconv)
+            // make sure it's a valid number
+            if (this.checkamount(rawamount)) {
+              this.amount = rawamount
+            }
           }
         }, this)
       }
@@ -83,32 +87,41 @@ export default {
         this.amount = '0' + this.amount
       }
       const amount = NanoCurrency.convert(this.amount, this.nanoconv)
-      const senderpublickey = NanoCurrency.derivePublicKey(this.privatekey)
-      const sender = NanoCurrency.deriveAddress(senderpublickey,{useNanoPrefix:true})
-      let info = {}
-      info['action'] = 'account_info'
-      info['representative'] = 'true'
-      info['account'] = sender
-      const res = await this.$store.dispatch('app/rpCall', info)
-      const balance = new BigNumber(res.balance).minus(new BigNumber(amount)).toFixed()
-      const block = NanoCurrency.createBlock(this.privatekey, {
-        work: this.pow,
-        previous: res.frontier,
-        representative: res.representative,
-        balance: balance,
-        link: this.destination
-      })
-      console.log(block)
-      let send = {}
-      send['action'] = 'process'
-      send['json_block'] = 'true'
-      send['subtype'] = 'send'
-      send['block'] = block.block
-      await this.$store.dispatch('app/rpCall', send)
-      this.$store.commit('app/pow', null)
-      this.amount = ''
-      this.destination = ''
-      this.$emit('close', 'true')
+      // make sure it's a valid number
+      if (this.checkamount(amount) && NanoCurrency.checkAddress(this.destination)) {
+        const senderpublickey = NanoCurrency.derivePublicKey(this.privatekey)
+        const sender = NanoCurrency.deriveAddress(senderpublickey,{useNanoPrefix:true})
+        let info = {}
+        info['action'] = 'account_info'
+        info['representative'] = 'true'
+        info['account'] = sender
+        const res = await this.$store.dispatch('app/rpCall', info)
+        const balance = new BigNumber(res.balance).minus(new BigNumber(amount)).toFixed()
+        const block = NanoCurrency.createBlock(this.privatekey, {
+          work: this.pow,
+          previous: res.frontier,
+          representative: res.representative,
+          balance: balance,
+          link: this.destination
+        })
+        console.log(block)
+        let send = {}
+        send['action'] = 'process'
+        send['json_block'] = 'true'
+        send['subtype'] = 'send'
+        send['block'] = block.block
+        await this.$store.dispatch('app/rpCall', send)
+        this.$store.commit('app/pow', null)
+        this.amount = ''
+        this.destination = ''
+        this.$emit('close', 'true')
+      } else if (!NanoCurrency.checkAddress(this.destination)) {
+        this.$notify({
+          title: 'Destination address is not valid',
+          text: 'Please use a valid address',
+          type: 'error'
+        })
+      }
     },
     setmax () {
       this.amount = this.$store.state.app.balance
