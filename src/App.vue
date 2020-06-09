@@ -214,7 +214,7 @@ canvas {
             position: relative;
             width: calc(100% + 60px);
             padding: 30px;
-            padding-top: 62px;
+            padding-top: 48px;
             margin: -30px;
             @media all and (min-width: 1040px) {
                 display: flex;
@@ -264,6 +264,7 @@ canvas {
         z-index: 2;
     }
     #receive {
+        justify-content: flex-start;
         .qrcode {
             text-align: center;
             img {
@@ -276,9 +277,10 @@ canvas {
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
         .btn {
-            margin-top: 30px;
+            margin-top: 15px;
             width: 100%;
         }
         .address {
@@ -286,6 +288,59 @@ canvas {
             margin: 0 30px 30px;
             font-weight: bold;
             line-height: 1.8;
+        }
+        .amount {
+            position: absolute;
+            top: 0;
+            right: -30px;
+            left: -30px;
+            padding: 58px 20px 20px;
+            background: linear-gradient(to bottom, rgb(58, 67, 91) 0%, rgb(22, 26, 36) 100%);
+            z-index: 3;
+            input {
+                border: none;
+                background: transparent;
+                font-size: 40px;
+                text-align: right;
+                margin-bottom: 0;
+            }
+        }
+        .keypad {
+            display: flex;
+            flex-direction: column;
+            width: calc(100% + 60px);
+            margin: 156px -30px 0;
+            border: 1px solid #00000026;
+            .row {
+                display: flex;
+                width: 100%;
+            }
+            button {
+                flex: 0 0 33.333%;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background: transparent;
+                border: 1px solid #00000026;
+                color: $text;
+                font-size: 30px;
+            }
+        }
+        .receive-amount {
+            background: #000;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .receive {
+            .page {
+                justify-content: flex-start;
+                max-width: 500px;
+                @media all and (min-width: 1040px) {
+
+                }
+            }
         }
     }
     #scan, #blockdetails {
