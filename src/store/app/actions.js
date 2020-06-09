@@ -85,6 +85,9 @@ export async function getDetails (context, address) {
 }
 
 export async function rpCall ({commit, state}, body) {
+  if (state.node.address === null) {
+    await node({commit, state})
+  }
   var rpcurl = state.node.protocol + '://' + state.node.address + ':' + state.node.port + state.node.path
   var Init = { method:'POST',body: JSON.stringify(body)}
   Init.headers = {}
