@@ -1,5 +1,7 @@
 var numbro = require('numbro')
 
+import Vue from 'vue'
+ 
 export const serverMixin = {
   data() {
     return {
@@ -40,8 +42,11 @@ export const serverMixin = {
       input.select();
       document.execCommand('copy');
       document.body.removeChild(input);
-      alert('Copied to clipboard')
-
+      Vue.notify({
+        title: 'Success!',
+        text: 'Copied to clipboard',
+        type: 'success'
+      })
     },
     
     link(type,data) {

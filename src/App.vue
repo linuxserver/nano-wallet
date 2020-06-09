@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <notifications  position="top center" />
   </div>
 </template>
 
@@ -78,6 +79,9 @@ pre {
   }
 }
 .refresh {
+}
+.vue-notification-group {
+    padding-top: 50px;
 }
 .df {
     display: flex;
