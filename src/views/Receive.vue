@@ -8,7 +8,7 @@
       <a @click.prevent="setAmount()" class="btn outline">Set Amount</a>
     </div>
     <div v-show="showset !== false" class="block" style="padding: 0; margin-top: -47px;">
-      <div class="amount"><input type="text" @keypress="isNumber($event)" ref="amount" v-model="amount" /></div>
+      <div class="amount"><input type="text" @keypress="isNumber($event)" @paste="isNumber($event)" ref="amount" v-model="amount" /></div>
       <div class="keypad">
         <div class="row"><button @click="addNumber('7')">7</button><button @click="addNumber('8')">8</button><button @click="addNumber('9')">9</button></div>
         <div class="row"><button @click="addNumber('4')">4</button><button @click="addNumber('5')">5</button><button @click="addNumber('6')">6</button></div>
@@ -122,6 +122,15 @@ export default {
         this.receive = 'nano:' + this.address
         this.set = false
         this.showset = false
+        return false
+      }
+      // make sure it's a valid number
+      if (NanoCurrency.checkAmount(this.amount) !== true) {
+        this.$notify({
+          title: 'Invalid amount',
+          text: 'Please ensure the amount selected is a valid',
+          type: 'error'
+        })
         return false
       }
       let rawamount = NanoCurrency.convert(this.amount, this.nanoconv)
