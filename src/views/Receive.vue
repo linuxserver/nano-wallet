@@ -58,8 +58,10 @@ export default {
     },
     addNumber (number) {
       if(this.amount === '0') {
-        this.amount = number
-        return
+        if(number !== '.') {
+          this.amount = number
+          return
+        }
       } 
       this.amount = this.amount + number
     },
