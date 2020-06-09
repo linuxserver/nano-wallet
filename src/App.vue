@@ -321,7 +321,7 @@ canvas {
             button {
                 flex: 0 0 33.333%;
                 display: flex;
-                height: 50px;
+                height: 65px;
                 justify-content: center;
                 align-items: center;
                 background: transparent;
