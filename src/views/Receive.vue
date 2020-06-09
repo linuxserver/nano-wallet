@@ -124,8 +124,9 @@ export default {
         this.showset = false
         return false
       }
+      let rawamount = NanoCurrency.convert(this.amount, this.nanoconv)
       // make sure it's a valid number
-      if (NanoCurrency.checkAmount(this.amount) !== true) {
+      if (NanoCurrency.checkAmount(rawamount) !== true) {
         this.$notify({
           title: 'Invalid amount',
           text: 'Please ensure the amount selected is a valid',
@@ -133,7 +134,7 @@ export default {
         })
         return false
       }
-      let rawamount = NanoCurrency.convert(this.amount, this.nanoconv)
+
       this.receive = 'nano:' + this.address + '?amount=' + rawamount
       this.set = true
       this.showset = false
