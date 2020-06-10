@@ -193,6 +193,7 @@ export default {
       text6 = this.public.substring(40, 48)
       text7 = this.public.substring(48, 56)
       text8 = this.public.substring(56, 64)
+      let text9 = this.public.substring(64, 72)
 
       ctx.font = "38px Monospace"
       ctx.fillStyle='#d43789'
@@ -206,6 +207,7 @@ export default {
       ctx.fillText(text7.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 400)
       ctx.fillStyle='#d43789'
       ctx.fillText(text8.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 440)
+      ctx.fillText(text9.split("").join(String.fromCharCode(8202)), 40, this.startTop + sectionheight + 480)
       
       const publicQr = new Image()
       publicQr.onload = function () {
