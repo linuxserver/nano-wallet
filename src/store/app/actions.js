@@ -28,8 +28,14 @@ export async function node ({ commit, state }) {
   } else {
     var i
     for (i = 0; i < state.settings.node.length; i++) {
+      const controller = new AbortController();
+      const timeout = setTimeout(
+        () => { controller.abort() },
+        10000,
+      )
       const rpcurl = state.settings.node[i].protocol + '://' + state.settings.node[i].address + ':' + state.settings.node[i].port + state.settings.node[i].path
       const Init = { method:'POST',body: '{"action":"account_info"}'}
+      Init.signal = controller.signal
       Init.headers = {}
       if ('headers' in state.settings.node[i]) {
         Init.headers = state.settings.node[i].headers
@@ -37,15 +43,24 @@ export async function node ({ commit, state }) {
       if ('auth' in state.settings.node[i] && state.settings.node[i].auth !== null) {
         Init.headers['Authorization'] = state.settings.node[i].auth
       }
-      const res = await fetch(rpcurl,Init)
-      if (res.ok) {
-        newnode = {
-          ...newnode,
-          ...state.settings.node[i]
+      try {
+        console.log("Checking backend: " + rpcurl)
+        const res = await fetch(rpcurl,Init)
+        clearTimeout(timeout)
+        if (res.ok) {
+          console.log("Backend OK: " + rpcurl)
+          newnode = {
+            ...newnode,
+            ...state.settings.node[i]
+          }
+          break
+        } else {
+          console.log(res)
         }
-	break
-      } else {
-        console.log(res);
+      }
+      catch {
+        clearTimeout(timeout)
+        console.log("Timed out: " + rpcurl)
       }
     }
   }
