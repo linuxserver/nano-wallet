@@ -213,7 +213,7 @@ export default {
       }
     },
     receive: function (state) {
-      if (state === true) {
+      if (state === true && this.$store.state.app.settings.receiverefresh) {
         const that = this
         let currentpending
         let newpending
