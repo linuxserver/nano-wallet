@@ -70,40 +70,46 @@ export default {
           type: 'error'
         })
       }
-      const publickey = NanoCurrency.derivePublicKey(this.privatekey)
-      const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true})
+      if (NanoCurrency.checkAddress(this.newrep)) {
+        const publickey = NanoCurrency.derivePublicKey(this.privatekey)
+        const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true})
 
-      let infodetails = {};
-      infodetails['action'] = 'account_info';
-      infodetails['representative'] = 'true';
-      infodetails['account'] = address;
-      const info = await this.$store.dispatch('app/rpCall', infodetails)
+        let infodetails = {};
+        infodetails['action'] = 'account_info';
+        infodetails['representative'] = 'true';
+        infodetails['account'] = address;
+        const info = await this.$store.dispatch('app/rpCall', infodetails)
 
-      const blocktype = 'change';
-      // const frontier = info.frontier;
-      const previous = info.frontier;
-      const balance = info.balance;
-      const block = NanoCurrency.createBlock(this.privatekey, {
-        work: this.pow,
-        previous: previous,
-        representative: this.newrep,
-        balance: balance,
-        link: '0000000000000000000000000000000000000000000000000000000000000000'
-      });
+        const blocktype = 'change';
+        // const frontier = info.frontier;
+        const previous = info.frontier;
+        const balance = info.balance;
+        const block = NanoCurrency.createBlock(this.privatekey, {
+          work: this.pow,
+          previous: previous,
+          representative: this.newrep,
+          balance: balance,
+          link: '0000000000000000000000000000000000000000000000000000000000000000'
+        });
 
-      let repchange = {};
-      repchange['action'] = 'process';
-      repchange['json_block'] = 'true';
-      repchange['subtype'] = blocktype;
-      repchange['block'] = block.block;
-      await this.$store.dispatch('app/rpCall', repchange)
-      this.$emit('change', true)
+        let repchange = {};
+        repchange['action'] = 'process';
+        repchange['json_block'] = 'true';
+        repchange['subtype'] = blocktype;
+        repchange['block'] = block.block;
+        await this.$store.dispatch('app/rpCall', repchange)
+        this.$emit('change', true)
+      } else {
+        this.error = 'Invalid Representative ' + this.newrep
+      }
     },
     scanDone: function (data) {
-      if (data.startsWith('nanorep:')){
-        this.newrep = data.replace('nanorep:','').split('?')[0]
+      this.error = null
+      const newrep = data.replace('nanorep:','').split('?')[0]
+      if (NanoCurrency.checkAddress(newrep)) {
+        this.newrep = newrep
       } else {
-        this.error = 'Invalid QR'
+        this.error = 'Invalid QR Data ' + data
       }
     }
   }
