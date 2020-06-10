@@ -296,6 +296,10 @@ export default {
 .fdcol {
   flex-direction: column;
 }
+#printimage {
+  height: 0;
+  width: 0;
+}
 @media print {
   @page{
     margin-left: 0px;
