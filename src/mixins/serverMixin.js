@@ -18,7 +18,11 @@ export const serverMixin = {
   methods: {
        
     abbreviateNumber (number, precision = 2) {
+      console.log(number)
       if (precision === 2) {
+        if (number < 0.005) {
+          return number
+        }
         return numbro(number).format({
           trimMantissa: true,
           mantissa: 2,
