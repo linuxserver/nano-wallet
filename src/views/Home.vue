@@ -50,7 +50,12 @@
         </div>
         <div class="inner">
           <div class="block">
-            <div class="headingtitle top"><span id="closewallet" class="" @click="logout"><i class="fal fa-sign-out fa-flip-horizontal"></i></span><span>Wallet</span><span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fal fa-sync"></i></span></div>
+            <div class="headingtitle top">
+              <span id="closewallet" class="" @click="logout"><i class="fal fa-sign-out fa-flip-horizontal"></i></span>
+              <span>Wallet</span>
+              <span class="refresh rotate" @click="refresh" :class="{ down: isActive }"><i class="fal fa-sync"></i></span>
+              <div class="lastrefresh">Last Refresh: {{ lastrefresh.toLocaleTimeString() }}</div>
+            </div>
             <simplebar class="block pending">
               <div id="output">
                 <div class="balance">
@@ -174,7 +179,8 @@ function initialState (){
     terminate: false,
     showadvanced: false,
     seedtab: true,
-    pendingpoll: null
+    pendingpoll: null,
+    lastrefresh: new Date()
   }
 }
 
@@ -320,6 +326,7 @@ export default {
       }
       try {
         await this.getDetails(this.privatekey)
+        this.lastrefresh = new Date()
         if(current !== this.details.frontier || open === true) {
           this.genWork(this.privatekey, this.details)
         }

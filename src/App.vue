@@ -94,6 +94,19 @@ pre {
   color: white;
   font-weight: 200;
 }
+.lastrefresh {
+    position: absolute;
+    top: 25px;
+    right: 0px;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    background: #0000002e;
+    padding: 2px 4px;
+    border-radius: 3px;
+    text-transform: none;
+    opacity: 0.4;
+}
 .labeltabs {
     display: flex;
     margin-bottom: 5px;
@@ -486,7 +499,8 @@ canvas {
     text-transform: uppercase;
     letter-spacing: 4px;
     &.top {
-        margin: 25px 20px 25px;               
+        margin: 25px 20px 25px;
+        position: relative;          
     }
 }
 
@@ -639,7 +653,7 @@ canvas {
     button.pocket {
         background: $highlight3;
         border: none;
-        padding: 3px 20px;
+        padding: 3px 8px;
         border-radius: 7px;
     }
     &.receive {
