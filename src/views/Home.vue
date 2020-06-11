@@ -111,11 +111,11 @@
         </div>
       </div>
       <div id="send" class="page" :class="{active: send !== false}">
-        <a class="close" @click="send = false"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="send = false"><i class="fal fa-times"></i></a>
         <send :open="send" @close="send = false"></send>
       </div>
       <div id="settings" class="page" :class="{active: settings !== false}">
-        <a class="close" @click="settings = false"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="settings = false"><i class="fal fa-times"></i></a>
         <settings
           :open="settings"
           :representative="representative"
@@ -123,13 +123,13 @@
         ></settings>
       </div>
       <div id="receive" class="page" :class="{active: receive !== false}">
-        <a class="close" @click="receive = false"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="receive = false"><i class="fal fa-times"></i></a>
         <receive
           :address="address"
         ></receive>
       </div>
       <div id="blockdetails" class="page" :class="{active: blockdetails !== null}">
-        <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="blockdetails = null"><i class="fal fa-times"></i></a>
         <block-state :details="blockdetails"></block-state>
       </div>
 
@@ -180,7 +180,8 @@ function initialState (){
     showadvanced: false,
     seedtab: true,
     pendingpoll: null,
-    lastrefresh: new Date()
+    lastrefresh: new Date(),
+    closebutton: true
   }
 }
 
@@ -213,13 +214,14 @@ export default {
       }
     },
     receive: function (state) {
-      if (state === true && this.$store.state.app.settings.receiverefresh) {
+      if (state === true && this.$store.state.app.settings.receiverefresh || this.$store.state.app.settings.pos && this.$store.state.app.receiveamount !== 0) {
         const that = this
         let currentpending
         let newpending
         let currentkeys
         let newkeys
-        this.pendingpoll = setInterval(async function(){ 
+        this.pendingpoll = setInterval(async function(){
+          console.log('test') 
           currentpending = that.pending
           await that.$store.dispatch('app/pending', that.address)
           that.$nextTick(function () {
@@ -238,13 +240,19 @@ export default {
               }
             }
           })
-        }, 10000)
+        }, this.$store.state.app.settings.receiveinterval)
       } else {
         clearInterval(this.pendingpoll)
       }
     }
   },
   mounted () {
+    if (this.$route.name == 'POS') {
+     this.address = this.$route.params.address
+     this.receive = true
+     this.closebutton = false
+     this.$store.state.app.receiveamount = 0
+    }
   },
   beforeDestroy: function () {
     // make sure interval is cleared

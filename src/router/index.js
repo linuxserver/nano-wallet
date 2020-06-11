@@ -37,6 +37,11 @@ Vue.use(VueRouter)
     name: 'Address',
     component: Address
   },
+  {
+    path: '/pos/:address',
+    name: 'POS',
+    component: Home
+  },
 
   {
     path: '/:node',
@@ -57,6 +62,11 @@ Vue.use(VueRouter)
     path: '/:node/address/:address',
     name: 'Address',
     component: Address
+  },
+  {
+    path: '/:node/pos/:address',
+    name: 'POS',
+    component: Home
   }
 ]
 

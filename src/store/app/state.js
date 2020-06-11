@@ -5,6 +5,8 @@ export function initialState () {
       pow: 1,
       changeaddress: true,
       receiverefresh: false,
+      receiveinterval: 10000,
+      pos: true,
       node: [
         {
           address: 'nano.linuxserver.io',
