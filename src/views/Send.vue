@@ -12,6 +12,7 @@
       </div>
       <button class="sendfunds btn" @click="send" type="button">Send</button>
       <scan-qr @scanned="scanDone"></scan-qr>
+      <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
   </div>
 </template>
 
@@ -20,12 +21,14 @@ import { serverMixin } from '../mixins/serverMixin.js'
 import * as NanoCurrency from 'nanocurrency'
 import BigNumber from 'bignumber.js'
 import ScanQr from '../components/ScanQr.vue'
+import ScanNfc from '../components/ScanNfc.vue'
 
 export default {
   name: 'Send',
   mixins: [ serverMixin ],
   components: {
-    ScanQr
+    ScanQr,
+    ScanNfc
   },
   props: {
     address: String,
@@ -35,6 +38,7 @@ export default {
     return {
       amount: '',
       destination: '',
+      nfcsup: false
     }
   },
   computed: {
@@ -54,6 +58,13 @@ export default {
         this.amount = ''
         this.destination = ''
       }
+    }
+  },
+  mounted () {
+    if (!("NDEFReader" in window)) {
+      this.nfcsup = false
+    } else {
+      this.nfcsup = true
     }
   },
   methods: {
@@ -125,7 +136,7 @@ export default {
     },
     setmax () {
       this.amount = this.$store.state.app.balance
-    },
+    }
   }
 
 }

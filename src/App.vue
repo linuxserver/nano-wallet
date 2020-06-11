@@ -431,6 +431,11 @@ canvas {
         position: fixed;
       }
     }
+    .scan-nfc-code {
+      .page {
+        position: fixed;
+      }
+    }
 }
 #output {
     .balance {
