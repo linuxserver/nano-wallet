@@ -214,7 +214,7 @@ export default {
       }
     },
     receive: function (state) {
-      if (state === true && this.$store.state.app.settings.receiverefresh || this.$store.state.app.settings.pos && this.$store.state.app.receiveamount !== 0) {
+      if (state === true && this.$store.state.app.settings.receiverefresh || this.$route.name == 'POS' && this.$store.state.app.receiveamount !== 0) {
         const that = this
         let currentpending
         let newpending
