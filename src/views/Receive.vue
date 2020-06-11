@@ -27,6 +27,7 @@
 import { serverMixin } from '../mixins/serverMixin.js'
 import QrBlock from '../components/QrBlock'
 import * as NanoCurrency from 'nanocurrency'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'Receive',
@@ -56,6 +57,47 @@ export default {
         this.$nextTick(function () {
           this.$refs.amount.focus()
         })
+      }
+    },
+    receive: function (state) {
+      if (state === true && this.$store.state.app.settings.receiverefresh || this.$route.name == 'POS' && this.amount !== 0) {
+        const that = this
+        let currentpending
+        let newpending
+        let currentkeys
+        let newkeys
+        this.pendingpoll = setInterval(async function(){
+          if (this.$route.name == 'POS' && this.amount <= 0) {
+            this.amount = 0
+            this.setReceive()
+            return
+          } else {
+            this.setReceive()
+            return
+          }                   
+          currentpending = that.pending
+          await that.$store.dispatch('app/pending', that.address)
+          that.$nextTick(function () {
+            newpending = that.pending
+            if (JSON.stringify(currentpending) !== JSON.stringify(newpending)) {
+              currentkeys = Object.keys(currentpending)
+              newkeys = Object.keys(newpending)
+              for (const key of newkeys) {
+                if(currentkeys.indexOf(key) === -1) {
+                  const amountNano = NanoCurrency.convert(newpending[key].amount,this.rawconv)
+                  this.amount = new BigNumber(this.amount).minus(new BigNumber(amountNano)).toFixed()
+                  that.$notify({
+                    title: 'Funds received: ' + amountNano,
+                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
+                    type: 'success'
+                  })
+                }
+              }
+            }
+          })
+        }, this.$store.state.app.settings.receiveinterval)
+      } else {
+        clearInterval(this.pendingpoll)
       }
     }
   },
@@ -142,7 +184,7 @@ export default {
       this.receive = 'nano:' + this.address
       this.set = false
       this.showset = false
-      this.$store.state.app.receiveamount
+      this.amount = 0
     }
   },
   mounted () {

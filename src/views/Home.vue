@@ -151,7 +151,6 @@ import simplebar from 'simplebar-vue';
 import 'simplebar/dist/simplebar.min.css';
 import ScanQr from '../components/ScanQr.vue'
 
-
 const hardwareConcurrency = window.navigator.hardwareConcurrency || 2
 const workerCount = Math.max(hardwareConcurrency - 1, 1)
 let workerList = []
@@ -211,38 +210,6 @@ export default {
       if(this.open === true && newpow !== oldpow && newpow === null) {
         console.log('pow change')
         this.refreshDetails()
-      }
-    },
-    receive: function (state) {
-      if (state === true && this.$store.state.app.settings.receiverefresh || this.$route.name == 'POS' && this.$store.state.app.receiveamount !== 0) {
-        const that = this
-        let currentpending
-        let newpending
-        let currentkeys
-        let newkeys
-        this.pendingpoll = setInterval(async function(){
-          console.log('test') 
-          currentpending = that.pending
-          await that.$store.dispatch('app/pending', that.address)
-          that.$nextTick(function () {
-            newpending = that.pending
-            if (JSON.stringify(currentpending) !== JSON.stringify(newpending)) {
-              currentkeys = Object.keys(currentpending)
-              newkeys = Object.keys(newpending)
-              for (const key of newkeys) {
-                if(currentkeys.indexOf(key) === -1) {
-                  that.$notify({
-                    title: 'Funds received: ' + NanoCurrency.convert(newpending[key].amount,this.rawconv),
-                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
-                    type: 'success'
-                  })
-                }
-              }
-            }
-          })
-        }, this.$store.state.app.settings.receiveinterval)
-      } else {
-        clearInterval(this.pendingpoll)
       }
     }
   },
