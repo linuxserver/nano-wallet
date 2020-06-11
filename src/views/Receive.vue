@@ -68,10 +68,10 @@ export default {
         let currentkeys
         let newkeys
         this.pendingpoll = setInterval(async function(){
-          if (this.$route.name == 'POS' && this.amount <= 0) {
-            this.amount = 0
-            this.setReceive()
-            clearInterval(this.pendingpoll)
+          if (that.$route.name == 'POS' && that.amount <= 0) {
+            that.amount = 0
+            that.setReceive()
+            clearInterval(that.pendingpoll)
           }                  
           currentpending = that.pending
           await that.$store.dispatch('app/pending', that.address)
@@ -82,8 +82,8 @@ export default {
               newkeys = Object.keys(newpending)
               for (const key of newkeys) {
                 if(currentkeys.indexOf(key) === -1) {
-                  const amountNano = NanoCurrency.convert(newpending[key].amount,this.rawconv)
-                  this.amount = new BigNumber(this.amount).minus(new BigNumber(amountNano)).toFixed()
+                  const amountNano = NanoCurrency.convert(newpending[key].amount,that.rawconv)
+                  that.amount = new BigNumber(that.amount).minus(new BigNumber(amountNano)).toFixed()
                   that.$notify({
                     title: 'Funds received: ' + amountNano,
                     text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
