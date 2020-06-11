@@ -218,7 +218,6 @@ export default {
      this.address = this.$route.params.address
      this.receive = true
      this.closebutton = false
-     this.$store.state.app.receiveamount = 0
     }
   },
   beforeDestroy: function () {

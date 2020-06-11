@@ -41,11 +41,12 @@ export default {
   data() {
     return {
       newrep: '',
-      amount: '0',
+      amount: 0,
       set: false,
       showset: false,
       receive: null,
-      clipboard: true
+      clipboard: true,
+      pendingpoll: null
     }
   },
   watch: {
@@ -70,11 +71,8 @@ export default {
           if (this.$route.name == 'POS' && this.amount <= 0) {
             this.amount = 0
             this.setReceive()
-            return
-          } else {
-            this.setReceive()
-            return
-          }                   
+            clearInterval(this.pendingpoll)
+          }                  
           currentpending = that.pending
           await that.$store.dispatch('app/pending', that.address)
           that.$nextTick(function () {
@@ -189,6 +187,9 @@ export default {
   },
   mounted () {
     if (this.$route.name == 'POS') {
+     this.receive = true
+     this.closebutton = false
+     this.amount = 0
      this.clipboard = false
     }
   }
