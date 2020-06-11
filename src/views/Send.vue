@@ -61,9 +61,7 @@ export default {
     }
   },
   mounted () {
-    if (!("NDEFReader" in window)) {
-      this.nfcsup = false
-    } else {
+    if ("NDEFReader" in window) {
       this.nfcsup = true
     }
   },
