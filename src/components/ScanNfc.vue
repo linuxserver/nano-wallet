@@ -47,7 +47,7 @@ export default {
                 const decoder = new TextDecoder(record.encoding)
                 const text = decoder.decode(record.data)
                 that.$emit('scanned', text)
-                this.closeScan()
+                that.closeScan()
                 break
               }
               default: {
