@@ -79,7 +79,7 @@ This wallet was designed around the software stack described [here](https://blog
 
 If you want to lock the wallet to a specific RPC server then go to `src/stores/app/state.js` and change `changeaddress` to false, the node will then be locked to the node details directly beneath (only change the settings node details not the main node details).
 
-From there basic branding would be to modify the site title found in `/public/index.html` and swap out our QR code icon at `/public/qr_logo.png` and `public/wallet_logo.png` for the paper wallet, we have specifically made efforts to not brand this wallet to our codebase or organization to allow anyone with a public RPC endpoint to also host this wallet themselves and have their users use it as a wallet and block explorer.
+From there basic branding would be to modify the site title found in `.env` and swap out our QR code icon at `/public/qr_logo.png` and `public/wallet_logo.png` for the paper wallet, we have specifically made efforts to not brand this wallet to our codebase or organization to allow anyone with a public RPC endpoint to also host this wallet themselves and have their users use it as a wallet and block explorer.
 
 Currently statically set RPC endpoints allowing users to simply access https://wallet.yourdomain.com and be off and transacting require that the `block_count` RPC action is whitelisted by your RPC servers, it is used on connect to ensure the RPC server is healthy. You can also optionally setup multiple RPC servers to fall back on in case of downtime by defining multiple in the `src/stores/app/state.js` array for `node`. 
 
@@ -87,7 +87,7 @@ If you want to support scanning of NFC tags from your web wallet please note tha
 
 https://developers.chrome.com/origintrials/#/view_trial/236438980436951041
 
-And set the token in `src/stores/app/state.js` to the one for your own Domain. Keep in mind this will only function on Andoid with Chrome on a device that supports NFC. 
+And set the token in `.env` to the one for your own Domain. Keep in mind this will only function on Andoid with Chrome on a device that supports NFC. 
 
 ### Hosting your forked repo from Github Pages
 
