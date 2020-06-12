@@ -11,7 +11,8 @@
         <label for="newrep">Change Representative</label>
         <input class="newrep" type="text" v-model="newrep" name="newrep" />
     </div>
-    <scan-qr style="margin-bottom: 20px;" v-if="change" @scanned="scanDone"></scan-qr>
+    <scan-qr v-if="change" @scanned="scanDone"></scan-qr>
+    <scan-nfc style="margin-bottom: 15px;" v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
     <div class="inline-buttons">
       <button v-if="!change" @click="change = true" class="repchange btn">Change Representative</button>
       <button v-if="change" @click="changeRep" class="repchange btn">Confirm</button>
@@ -25,11 +26,13 @@
 import * as NanoCurrency from 'nanocurrency'
 import { serverMixin } from '../mixins/serverMixin.js'
 import ScanQr from '../components/ScanQr.vue'
+import ScanNfc from '../components/ScanNfc.vue'
 
 export default {
   name: 'Settings',
   components: {
-    ScanQr
+    ScanQr,
+    ScanNfc
   },
   props: {
     representative: String,
@@ -40,7 +43,8 @@ export default {
     return {
       newrep: '',
       change: false,
-      error: null
+      error: null,
+      nfcsup: false
     }
   },
   computed: {
@@ -59,6 +63,11 @@ export default {
         this.change = false
         this.error = null
       }
+    }
+  },
+  mounted () {
+    if ("NDEFReader" in window) {
+      this.nfcsup = true
     }
   },
   methods: {

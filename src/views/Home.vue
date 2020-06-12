@@ -38,6 +38,7 @@
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
           <scan-qr @scanned="scanDone"></scan-qr>
+          <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
         </div>
         <div id="buttons">
           <router-link class="genwallet" :to="$store.getters['app/nodeLink'] + 'generate'">Generate Wallet</router-link>
@@ -150,6 +151,7 @@ import Worker from 'worker-loader!./../mixins/pow.js'
 import simplebar from 'simplebar-vue';
 import 'simplebar/dist/simplebar.min.css';
 import ScanQr from '../components/ScanQr.vue'
+import ScanNfc from '../components/ScanNfc.vue'
 
 const hardwareConcurrency = window.navigator.hardwareConcurrency || 2
 const workerCount = Math.max(hardwareConcurrency - 1, 1)
@@ -180,7 +182,8 @@ function initialState (){
     seedtab: true,
     pendingpoll: null,
     lastrefresh: new Date(),
-    closebutton: true
+    closebutton: true,
+    nfcsup: false
   }
 }
 
@@ -193,7 +196,8 @@ export default {
     Settings,
     BlockState,
     simplebar,
-    ScanQr
+    ScanQr,
+    ScanNfc
   },
   mixins: [ serverMixin ],
   data() {
@@ -218,6 +222,9 @@ export default {
      this.address = this.$route.params.address
      this.receive = true
      this.closebutton = false
+    }
+    if ("NDEFReader" in window) {
+      this.nfcsup = true
     }
   },
   computed: {
