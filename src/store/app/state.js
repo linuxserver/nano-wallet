@@ -5,7 +5,7 @@ export function initialState () {
       pow: 1,
       changeaddress: true,
       receiverefresh: false,
-      nfctoken: 'Ahj98+v1x4Bc5M82YLnZNFjOSgGSGis9VHSc++KhrQHrbZMeiJ3Q7+NqXYVaadKFqk0KerB3NwPLNQhVjPo5uw8AAABheyJvcmlnaW4iOiJodHRwczovL2xpbnV4c2VydmVyLmlvOjQ0MyIsImZlYXR1cmUiOiJXZWJORkMiLCJleHBpcnkiOjE1OTU0NTE1ODYsImlzU3ViZG9tYWluIjp0cnVlfQ==',
+      nfctoken: process.env.VUE_APP_NFC_TOKEN,
       node: [
         {
           address: 'nano.linuxserver.io',
