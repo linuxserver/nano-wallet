@@ -220,10 +220,6 @@ export default {
      this.closebutton = false
     }
   },
-  beforeDestroy: function () {
-    // make sure interval is cleared
-    clearInterval(this.pendingpoll)
-  },
   computed: {
     genWalletLink () {
       if('node' in this.$route.params) {

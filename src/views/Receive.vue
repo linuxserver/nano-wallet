@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       newrep: '',
-      amount: 0,
+      amount: '0', // Amount needs to be a string for the buttons to work
       set: false,
       showset: false,
       receive: null,
@@ -52,6 +52,8 @@ export default {
   watch: {
     address: function (newaddress) {
       this.receive = 'nano:' + newaddress
+      // address isn't set initially, so wait for it to populate then get current pending list
+      this.$store.dispatch('app/pending', this.address)
     },
     showset: function (current) {
       if (current === true) {
@@ -61,15 +63,15 @@ export default {
       }
     },
     receive: function (state) {
-      if (state === true && this.$store.state.app.settings.receiverefresh || this.$route.name == 'POS' && this.amount !== 0) {
+      if ((state === true && this.$store.state.app.settings.receiverefresh) || (this.$route.name == 'POS' && this.amount !== '0')) {
         const that = this
         let currentpending
         let newpending
         let currentkeys
         let newkeys
         this.pendingpoll = setInterval(async function(){
-          if (that.$route.name == 'POS' && that.amount <= 0) {
-            that.amount = 0
+          if (that.$route.name == 'POS' && that.amount <= '0') {
+            that.amount = '0'
             that.setReceive()
             clearInterval(that.pendingpoll)
           }                  
@@ -84,6 +86,7 @@ export default {
                 if(currentkeys.indexOf(key) === -1) {
                   const amountNano = NanoCurrency.convert(newpending[key].amount,that.rawconv)
                   that.amount = new BigNumber(that.amount).minus(new BigNumber(amountNano)).toFixed()
+                  that.setReceive()
                   that.$notify({
                     title: 'Funds received: ' + amountNano,
                     text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
@@ -100,6 +103,13 @@ export default {
     }
   },
   computed: {
+    pending () {
+      return this.$store.state.app.pending
+    }
+  },
+  beforeDestroy: function () {
+    // make sure interval is cleared
+    clearInterval(this.pendingpoll)
   },
   methods: {
     isNumber: function(evt) {
@@ -182,14 +192,14 @@ export default {
       this.receive = 'nano:' + this.address
       this.set = false
       this.showset = false
-      this.amount = 0
+      this.amount = '0' // Amount needs to be a string for the buttons to work
     }
   },
   mounted () {
     if (this.$route.name == 'POS') {
-     this.receive = true
+     // this.receive = true
      this.closebutton = false
-     this.amount = 0
+     this.amount = '0' // Amount needs to be a string for the buttons to work
      this.clipboard = false
     }
   }
