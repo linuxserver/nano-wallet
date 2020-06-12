@@ -3,7 +3,8 @@
     <button class="scan btn outline" @click="scanNfc" type="button">Scan NFC</button>
     <div class="page" style="z-index: 9;" :class="{active: scannfc !== false}">
       <a class="close" @click="closeScan"><i class="fal fa-times"></i></a>
-      <div v-if="output">{{ output }}</div>
+      <div v-if="output === 'Scanning'">{{ output }} <i class="fas fa-spinner fa-spin"></i></div>
+      <div v-else>{{ output }}</div>
     </div>
   </div>
 </template>

@@ -10,9 +10,9 @@
         <label for="destination">Destination:</label>
         <input type="text" v-model="destination" id="destination" name="destination">
       </div>
-      <button class="sendfunds btn" @click="send" type="button">Send</button>
       <scan-qr @scanned="scanDone"></scan-qr>
       <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
+      <button class="sendfunds btn" @click="send" type="button">Send</button>
   </div>
 </template>
 
