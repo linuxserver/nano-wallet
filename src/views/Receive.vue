@@ -4,8 +4,9 @@
       <div class="address" @click="link('address',address)" v-html="highlightAddress(address)"></div>
       <qr-block :address="receive"></qr-block>
       <div class="receive-amount" v-if="set === true">Amount: {{ amount }}</div>
-      <a @click.prevent="copyToClipboard(address)" class="btn">Copy Address</a>
+      <a v-if="clipboard === true" @click.prevent="copyToClipboard(address)" class="btn">Copy Address</a>
       <a @click.prevent="setAmount()" class="btn outline">Set Amount</a>
+      <a @click.prevent="clearReceive()" class="btn outline">Clear Amount</a>
     </div>
     <div v-show="showset !== false" class="block" style="padding: 0; margin-top: -47px;">
       <div class="amount"><input type="text" @keypress="isNumber($event)" @paste="isNumber($event)" ref="amount" v-model="amount" /></div>
@@ -26,6 +27,7 @@
 import { serverMixin } from '../mixins/serverMixin.js'
 import QrBlock from '../components/QrBlock'
 import * as NanoCurrency from 'nanocurrency'
+import BigNumber from 'bignumber.js'
 
 export default {
   name: 'Receive',
@@ -39,15 +41,19 @@ export default {
   data() {
     return {
       newrep: '',
-      amount: '0',
+      amount: '0', // Amount needs to be a string for the buttons to work
       set: false,
       showset: false,
-      receive: null
+      receive: null,
+      clipboard: true,
+      pendingpoll: null
     }
   },
   watch: {
     address: function (newaddress) {
       this.receive = 'nano:' + newaddress
+      // address isn't set initially, so wait for it to populate then get current pending list
+      this.$store.dispatch('app/pending', this.address)
     },
     showset: function (current) {
       if (current === true) {
@@ -55,9 +61,55 @@ export default {
           this.$refs.amount.focus()
         })
       }
+    },
+    receive: function (state) {
+      if ((state === true && this.$store.state.app.settings.receiverefresh) || (this.$route.name == 'POS' && this.amount !== '0')) {
+        const that = this
+        let currentpending
+        let newpending
+        let currentkeys
+        let newkeys
+        this.pendingpoll = setInterval(async function(){
+          if (that.$route.name == 'POS' && that.amount <= '0') {
+            that.amount = '0'
+            that.setReceive()
+            clearInterval(that.pendingpoll)
+          }                  
+          currentpending = that.pending
+          await that.$store.dispatch('app/pending', that.address)
+          that.$nextTick(function () {
+            newpending = that.pending
+            if (JSON.stringify(currentpending) !== JSON.stringify(newpending)) {
+              currentkeys = Object.keys(currentpending)
+              newkeys = Object.keys(newpending)
+              for (const key of newkeys) {
+                if(currentkeys.indexOf(key) === -1) {
+                  const amountNano = NanoCurrency.convert(newpending[key].amount,that.rawconv)
+                  that.amount = new BigNumber(that.amount).minus(new BigNumber(amountNano)).toFixed()
+                  that.setReceive()
+                  that.$notify({
+                    title: 'Funds received: ' + amountNano,
+                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
+                    type: 'success'
+                  })
+                }
+              }
+            }
+          })
+        }, this.$store.state.app.settings.receiveinterval)
+      } else {
+        clearInterval(this.pendingpoll)
+      }
     }
   },
   computed: {
+    pending () {
+      return this.$store.state.app.pending
+    }
+  },
+  beforeDestroy: function () {
+    // make sure interval is cleared
+    clearInterval(this.pendingpoll)
   },
   methods: {
     isNumber: function(evt) {
@@ -135,6 +187,20 @@ export default {
       this.showset = false
 
       return true
+    },
+    clearReceive () {
+      this.receive = 'nano:' + this.address
+      this.set = false
+      this.showset = false
+      this.amount = '0' // Amount needs to be a string for the buttons to work
+    }
+  },
+  mounted () {
+    if (this.$route.name == 'POS') {
+     // this.receive = true
+     this.closebutton = false
+     this.amount = '0' // Amount needs to be a string for the buttons to work
+     this.clipboard = false
     }
   }
 }

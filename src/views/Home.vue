@@ -111,11 +111,11 @@
         </div>
       </div>
       <div id="send" class="page" :class="{active: send !== false}">
-        <a class="close" @click="send = false"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="send = false"><i class="fal fa-times"></i></a>
         <send :open="send" @close="send = false"></send>
       </div>
       <div id="settings" class="page" :class="{active: settings !== false}">
-        <a class="close" @click="settings = false"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="settings = false"><i class="fal fa-times"></i></a>
         <settings
           :open="settings"
           :representative="representative"
@@ -123,13 +123,13 @@
         ></settings>
       </div>
       <div id="receive" class="page" :class="{active: receive !== false}">
-        <a class="close" @click="receive = false"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="receive = false"><i class="fal fa-times"></i></a>
         <receive
           :address="address"
         ></receive>
       </div>
       <div id="blockdetails" class="page" :class="{active: blockdetails !== null}">
-        <a class="close" @click="blockdetails = null"><i class="fal fa-times"></i></a>
+        <a class="close" v-if="closebutton === true" @click="blockdetails = null"><i class="fal fa-times"></i></a>
         <block-state :details="blockdetails"></block-state>
       </div>
 
@@ -150,7 +150,6 @@ import Worker from 'worker-loader!./../mixins/pow.js'
 import simplebar from 'simplebar-vue';
 import 'simplebar/dist/simplebar.min.css';
 import ScanQr from '../components/ScanQr.vue'
-
 
 const hardwareConcurrency = window.navigator.hardwareConcurrency || 2
 const workerCount = Math.max(hardwareConcurrency - 1, 1)
@@ -180,7 +179,8 @@ function initialState (){
     showadvanced: false,
     seedtab: true,
     pendingpoll: null,
-    lastrefresh: new Date()
+    lastrefresh: new Date(),
+    closebutton: true
   }
 }
 
@@ -211,44 +211,14 @@ export default {
         console.log('pow change')
         this.refreshDetails()
       }
-    },
-    receive: function (state) {
-      if (state === true && this.$store.state.app.settings.receiverefresh) {
-        const that = this
-        let currentpending
-        let newpending
-        let currentkeys
-        let newkeys
-        this.pendingpoll = setInterval(async function(){ 
-          currentpending = that.pending
-          await that.$store.dispatch('app/pending', that.address)
-          that.$nextTick(function () {
-            newpending = that.pending
-            if (JSON.stringify(currentpending) !== JSON.stringify(newpending)) {
-              currentkeys = Object.keys(currentpending)
-              newkeys = Object.keys(newpending)
-              for (const key of newkeys) {
-                if(currentkeys.indexOf(key) === -1) {
-                  that.$notify({
-                    title: 'Funds received: ' + NanoCurrency.convert(newpending[key].amount,this.rawconv),
-                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
-                    type: 'success'
-                  })
-                }
-              }
-            }
-          })
-        }, 10000)
-      } else {
-        clearInterval(this.pendingpoll)
-      }
     }
   },
   mounted () {
-  },
-  beforeDestroy: function () {
-    // make sure interval is cleared
-    clearInterval(this.pendingpoll)
+    if (this.$route.name == 'POS') {
+     this.address = this.$route.params.address
+     this.receive = true
+     this.closebutton = false
+    }
   },
   computed: {
     genWalletLink () {
