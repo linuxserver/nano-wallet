@@ -6,6 +6,7 @@ export function initialState () {
       changeaddress: true,
       receiverefresh: false,
       receiveinterval: 10000,
+      nfctoken: process.env.VUE_APP_NFC_TOKEN,
       node: [
         {
           address: 'nano.linuxserver.io',

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta http-equiv="origin-trial" content="<%= VUE_APP_NFC_TOKEN %>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
@@ -14,11 +15,11 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#db4290">
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#26314e">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title><%= VUE_APP_TITLE %></title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but <%= VUE_APP_TITLE %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->

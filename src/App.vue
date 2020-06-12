@@ -431,6 +431,11 @@ canvas {
         position: fixed;
       }
     }
+    .scan-nfc-code {
+      .page {
+        position: fixed;
+      }
+    }
 }
 #output {
     .balance {
@@ -583,9 +588,31 @@ canvas {
 .mla {
     margin-left: auto;
 }
-.sendfunds {
+#send {
+    @media all and (max-width: 600px) {
+        padding-bottom: 115px;
+    }
+}
+.btn.sendfunds {
     width: 100%;
-    margin: 15px 0 30px;
+    margin: 15px 0;
+    @media all and (max-width: 600px) {
+        position: absolute;
+        bottom: 32px;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+        margin: 0 auto;
+        font-size: 20px!important;
+        padding: 30px!important;
+        color: white!important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 600;
+    }
+}
+.scan-qr-code, .scan-qr-code {
+    margin-bottom: 15px;
 }
 .scan {
     width: 100%;

@@ -1,5 +1,12 @@
 ![LSIO Nano Wallet](https://i.imgur.com/HZzgy8q.gif)
 # LinuxServer Nano Wallet
+
+## Demo
+
+To try this wallet please access [![Discord](https://img.shields.io/discord/354974912613449730.svg?color=94398d&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=Discord&logo=discord)](https://discord.gg/YWrKVTn "realtime support / chat with the community and the team.") and use the `#faucet` channel to get funds. Those can be used on our public network: 
+
+https://wallet.linuxserver.io/#/nano.linuxserver.io
+
 ## Intro
 This project has some core goals that are very different from a conventional CryptoCurrency wallet: 
 * Ability to hook into a user defined network
@@ -16,24 +23,39 @@ With that said, these design concepts greatly reduce the barrier of entry to a u
 ## Hosted wallet endpoints
 
 The source code for this project is built transparently and published to Github pages at the following endpoints: 
-* https://wallet.linuxserver.io/#/ - What is considered stable, built from releases in this repo.
-* https://devwallet.linuxserver.io/#/ - Current head of master built from commits to master in this repo.
+* https://wallet.linuxserver.io/#/nano.linuxserver.io - What is considered stable, built from releases in this repo.
+* https://devwallet.linuxserver.io/#/nano.linuxserver.io - Current head of master built from commits to master in this repo.
 
 The URL paths for public block exploration are in the following format: 
 * https://wallet.linuxserver.io/#/nano.linuxserver.io/block/YOUR_BLOCK_HASH_HERE - Displays raw block information.
 * https://wallet.linuxserver.io/#/nano.linuxserver.io/address/YOUR_ADDRESS_HERE - Displays a stripped down wallet interface with transaction history.
 
+We also provide Point of Sale like functionality using the following format: 
+* https://wallet.linuxserver.io/#/nano.linuxserver.io/pos/YOUR_ADDRESS_HERE - Displays an interactive receive menu
+
+The Point of sale view is designed around the concept that you will be actively receiving funds during a transaction, and pocketing them later from a secure backend/terminal. It can be accessed by anyone and does not require credentials. You set the amount and a QR tag is generated from that amount. Once the amount is paid by a user from their phone/device the pending transaction to that specific wallet you will trigger a success notification and the total owed will be cleared for the next transaction. Using this model it is important to not use duplicate wallets across different terminals or endpoints or your transactions during the receive window will conflict. It is important to note that the same functionality is available from the `Receive` menu with an opened unlocked wallet. 
+
+If this wallet is forked from this source and published elsewhere or to your own Github pages endpoint as laid out in the `Customisation` section of this document you should use the following URL formats: 
+
+* https://yoursubdomain.yourdomain.com/ - Home full wallet
+* https://yoursubdomain.yourdomain.com/#/block/YOUR_BLOCK_HASH_HERE - Block view
+* https://yoursubdomain.yourdomain.com/#/address/YOUR_ADDRESS_HERE - Address view
+* https://yoursubdomain.yourdomain.com/#/pos/YOUR_ADDRESS_HERE - POS view
+
+In general this URL format is self documenting from the wallet interface as all of the links will use these endpoints in new windows to provide shareable public links. 
+
 ## Live Nano network addresses
 
 We will list here Live Nano RPC provies that we add and how to use them.
 
-### [mynano.ninja](https://mynano.ninja/)
-Requires an API key to use: https://mynano.ninja/auth/login#apikey
-* Use: https://wallet.linuxserver.io/#/mynano.ninja?auth=APIKEY
-
 ### [nanos.cc](https://nanos.cc/)
 Does not requires an API key to use
 * Use: https://wallet.linuxserver.io/#/proxy.nanos.cc
+* DownStream hosted: https://tix.nanos.cc/
+
+### [mynano.ninja](https://mynano.ninja/)
+Requires an API key to use: https://mynano.ninja/auth/login#apikey
+* Use: https://wallet.linuxserver.io/#/mynano.ninja?auth=APIKEY
 
 ## For users
 
@@ -55,9 +77,17 @@ This wallet was designed around the software stack described [here](https://blog
 
 ## Customisation
 
-If you want to lock the wallet to a specific RPC server then go to src/stores/app/state.js and change `changeaddress` to false, the node will then be locked to the node details directly beneath (only change the settings node details not the main node details).
+If you want to lock the wallet to a specific RPC server then go to `src/stores/app/state.js` and change `changeaddress` to false, the node will then be locked to the node details directly beneath (only change the settings node details not the main node details).
 
-From there basic branding would be to modify the site title found in `/public/index.html` and swap out our QR code icon at `/public/qr_logo.png` we have specifically made efforts to not brand this wallet to our codebase or organization to allow anyone with a public RPC endpoint to also host this wallet themselves and have their users use it as a wallet and block explorer.
+From there basic branding would be to modify the site title found in `/public/index.html` and swap out our QR code icon at `/public/qr_logo.png` and `public/wallet_logo.png` for the paper wallet, we have specifically made efforts to not brand this wallet to our codebase or organization to allow anyone with a public RPC endpoint to also host this wallet themselves and have their users use it as a wallet and block explorer.
+
+Currently statically set RPC endpoints allowing users to simply access https://wallet.yourdomain.com and be off and transacting require that the `block_count` RPC action is whitelisted by your RPC servers, it is used on connect to ensure the RPC server is healthy. You can also optionally setup multiple RPC servers to fall back on in case of downtime by defining multiple in the `src/stores/app/state.js` array for `node`. 
+
+If you want to support scanning of NFC tags from your web wallet please note that because the Chrome support for Web NFC is currently in an experimental stage you will need to register an origin token here:
+
+https://developers.chrome.com/origintrials/#/view_trial/236438980436951041
+
+And set the token in `src/stores/app/state.js` to the one for your own Domain. Keep in mind this will only function on Andoid with Chrome on a device that supports NFC. 
 
 ### Hosting your forked repo from Github Pages
 
@@ -73,7 +103,7 @@ If you are planning on hosting this wallet on your domain pointed to your RPC se
 
 From here you can ingest upstream changes from this repo when needed and customize it to your needs while Github deploys your site on updates to their hosted CDN. 
 
-## For developers
+## Building from source and development
 
 The frontend framework for this project is [vuejs](https://vuejs.org/) below are the commands used to build this project from source and run a local development environment. We highly reccomending using [vuejs-devtools](https://github.com/vuejs/vue-devtools) locally to inspect and debug. 
 
