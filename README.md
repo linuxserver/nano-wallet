@@ -1,5 +1,12 @@
 ![LSIO Nano Wallet](https://i.imgur.com/HZzgy8q.gif)
 # LinuxServer Nano Wallet
+
+## Demo
+
+To try this wallet please access [![Discord](https://img.shields.io/discord/354974912613449730.svg?color=94398d&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=Discord&logo=discord)](https://discord.gg/YWrKVTn "realtime support / chat with the community and the team.") and use the `#faucet` channel to get funds. Those can be used on our public network: 
+
+https://wallet.linuxserver.io/#/nano.linuxserver.io
+
 ## Intro
 This project has some core goals that are very different from a conventional CryptoCurrency wallet: 
 * Ability to hook into a user defined network
