@@ -34,7 +34,7 @@ export async function node ({ commit, state }) {
         10000,
       )
       const rpcurl = state.settings.node[i].protocol + '://' + state.settings.node[i].address + ':' + state.settings.node[i].port + state.settings.node[i].path
-      const Init = { method:'POST',body: '{"action":"account_info"}'}
+      const Init = { method:'POST',body: '{"action":"block_count"}'}
       Init.signal = controller.signal
       Init.headers = {}
       if ('headers' in state.settings.node[i]) {
@@ -48,12 +48,17 @@ export async function node ({ commit, state }) {
         const res = await fetch(rpcurl,Init)
         clearTimeout(timeout)
         if (res.ok) {
-          console.log("Backend OK: " + rpcurl)
-          newnode = {
-            ...newnode,
-            ...state.settings.node[i]
+          let data = await res.json()
+          if (data.count) {
+            console.log("Backend OK: " + rpcurl)
+            newnode = {
+              ...newnode,
+              ...state.settings.node[i]
+            }
+            break
+          } else {
+            console.log(res)
           }
-          break
         } else {
           console.log(res)
         }
