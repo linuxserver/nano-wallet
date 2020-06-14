@@ -96,6 +96,9 @@ export default {
                     text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
                     type: 'success'
                   })
+                  if (that.amount !== '0') {
+                    clearInterval(that.pendingpoll)
+                  }
                 }
               }
             }
