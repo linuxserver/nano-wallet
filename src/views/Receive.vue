@@ -62,8 +62,8 @@ export default {
         })
       }
     },
-    receive: function (state) {
-      if ((state === true && this.$store.state.app.settings.receiverefresh) || (this.$route.name == 'POS' && this.amount !== '0')) {
+    receive: function () {
+      if (this.$route.name == 'POS' && this.amount !== '0') {
         const that = this
         let currentpending
         let newpending

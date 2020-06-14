@@ -215,6 +215,38 @@ export default {
         console.log('pow change')
         this.refreshDetails()
       }
+    },
+    receive: function (state) {
+      if (state === true && this.$route.name !== 'POS') {
+        const that = this
+        let currentpending
+        let newpending
+        let currentkeys
+        let newkeys
+        this.pendingpoll = setInterval(async function(){ 
+          currentpending = that.pending
+          await that.$store.dispatch('app/pending', that.address)
+          that.lastrefresh = new Date()
+          that.$nextTick(function () {
+            newpending = that.pending
+            if (JSON.stringify(currentpending) !== JSON.stringify(newpending)) {
+              currentkeys = Object.keys(currentpending)
+              newkeys = Object.keys(newpending)
+              for (const key of newkeys) {
+                if(currentkeys.indexOf(key) === -1) {
+                  that.$notify({
+                    title: 'Funds received: ' + NanoCurrency.convert(newpending[key].amount,this.rawconv),
+                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
+                    type: 'success'
+                  })
+                }
+              }
+            }
+          })
+        }, 10000)
+      } else {
+        clearInterval(this.pendingpoll)
+      }
     }
   },
   mounted () {
