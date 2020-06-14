@@ -85,7 +85,11 @@ export default {
               for (const key of newkeys) {
                 if(currentkeys.indexOf(key) === -1) {
                   const amountNano = NanoCurrency.convert(newpending[key].amount,that.rawconv)
-                  that.amount = new BigNumber(that.amount).minus(new BigNumber(amountNano)).toFixed()
+                  if (amountNano > that.amount) {
+                    that.amount = '0'
+                  } else {
+                    that.amount = new BigNumber(that.amount).minus(new BigNumber(amountNano)).toFixed()
+                  }
                   that.setReceive()
                   that.$notify({
                     title: 'Funds received: ' + amountNano,
