@@ -1,7 +1,7 @@
 <template>
   <div class="receive inner">
     <div v-show="showset === false" class="block">
-      <span class="address" v-html="highlightAddress(address)"></span><a @click="copyToClipboard(address)" class="value"><i class="fad fa-clone"></i></a><a @click="link('address',address)" class="value"><i class="fad fa-external-link"></i></a>
+      <div class="address"><span class="" v-html="highlightAddress(address)"></span> <a @click="copyToClipboard(address)" class="value"><i class="fad fa-clone"></i></a> <a @click="link('address',address)" class="value"><i class="fad fa-external-link"></i></a></div>
       <qr-block :address="receive"></qr-block>
       <div class="receive-amount" v-if="set === true">Amount: {{ amount }}</div>
       <a v-if="clipboard === true" @click.prevent="copyToClipboard(address)" class="btn">Copy Address</a>
