@@ -3,6 +3,8 @@
     <label for="key">Enter node address</label>
     <input v-model="node" type="text" id="node" name="node">
     <button @click="openNode" class="openwallet btn" type="button">Go To Node</button>
+    <p>A blurb about what this is</p>
+    <p><a class="highlight" href="https://github.com/linuxserver/nano-wallet/">Github</a></p>
   </div>
 </template>
 
@@ -14,7 +16,7 @@ export default {
   },
   data() {
     return {
-      node: ''
+      node: 'nano.linuxserver.io'
     }
   },
   watch: {
