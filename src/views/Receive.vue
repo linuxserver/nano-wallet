@@ -92,8 +92,8 @@ export default {
                   }
                   that.setReceive()
                   that.$notify({
-                    title: 'Funds received: ' + amountNano,
-                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
+                    title: 'Funds delivered: ' + amountNano,
+                    text: 'Sent from '+ that.abbreviateAddress(newpending[key].source, false),
                     type: 'success'
                   })
                   if (that.amount !== '0') {

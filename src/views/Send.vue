@@ -75,10 +75,10 @@ export default {
         qrdata[1].split('&').forEach(function(part) {
           const item = part.split('=')
           if (item[0] == 'amount' && item[1]) {
-            let rawamount = NanoCurrency.convert(item[1],this.rawconv)
+            let nanoamount = NanoCurrency.convert(item[1],this.rawconv)
             // make sure it's a valid number
-            if (this.checkamount(rawamount)) {
-              this.amount = rawamount
+            if (this.checkamount(item[1])) {
+              this.amount = nanoamount
             }
           }
         }, this)
