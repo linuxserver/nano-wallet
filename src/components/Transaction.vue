@@ -12,7 +12,7 @@
         <div v-if="type !== 'pending'" class="type">{{ transactionStatus(transaction.type) }}</div>
         <div v-if="type === 'pending'" class="type">
           <button v-if="privatekey !== null" @click="receive" class="pocket">Click to Receive</button>
-          <div v-else class="">Pending</div>
+          <div v-else class="">Delivered</div>
         </div>
       </div>
       <div class="address">
