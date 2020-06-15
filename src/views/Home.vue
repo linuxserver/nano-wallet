@@ -235,8 +235,8 @@ export default {
               for (const key of newkeys) {
                 if(currentkeys.indexOf(key) === -1) {
                   that.$notify({
-                    title: 'Funds received: ' + NanoCurrency.convert(newpending[key].amount,this.rawconv),
-                    text: 'Received from '+ that.abbreviateAddress(newpending[key].source, false),
+                    title: 'Funds delivered: ' + NanoCurrency.convert(newpending[key].amount,this.rawconv),
+                    text: 'Sent from '+ that.abbreviateAddress(newpending[key].source, false),
                     type: 'success'
                   })
                 }
