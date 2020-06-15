@@ -6,7 +6,7 @@
       <div class="receive-amount" v-if="set === true">Amount: {{ amount }}</div>
       <a v-if="clipboard === true" @click.prevent="copyToClipboard(address)" class="btn">Copy Address</a>
       <a @click.prevent="setAmount()" class="btn outline">Set Amount</a>
-      <a @click.prevent="clearReceive()" class="btn outline">Clear Amount</a>
+      <a v-if="set === true" @click.prevent="clearReceive()" class="btn outline">Clear Amount</a>
     </div>
     <div v-show="showset !== false" class="block" style="padding: 0; margin-top: -47px;">
       <div class="amount"><input type="text" @keypress="isNumber($event)" @paste="isNumber($event)" ref="amount" v-model="amount" /></div>
