@@ -37,6 +37,13 @@
             </div>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
+          <div v-if="showadvanced === true">
+            <label for="derivephrase">EXPERIMENTAL Seed Phrase OR File OR Both</label>
+            <input type="text" v-model="derivephrase" name="derivephrase" />
+            <label for="deriveupload" class="btn openwallet" >Seed File</label>
+            <input type="file" id="deriveupload" style="display:none;" />
+            <button @click="derivefromphrase" class="btn outline" >Derive Seed</button>
+          </div>
           <scan-qr @scanned="scanDone"></scan-qr>
           <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
         </div>
@@ -183,7 +190,8 @@ function initialState (){
     pendingpoll: null,
     lastrefresh: new Date(),
     closebutton: true,
-    nfcsup: false
+    nfcsup: false,
+    derivephrase: ''
   }
 }
 
@@ -470,7 +478,24 @@ export default {
 
       }
 
+    },
+    async derivefromphrase () {
+      const that = this
+      const fileitem = document.getElementById('deriveupload').files[0]
+      if (fileitem) {
+        const reader = new FileReader()
+        reader.readAsArrayBuffer(fileitem)
+        reader.onload = async function(file) {
+          const filebytes = file.target.result
+          const shasum = await that.shasum(that.derivephrase,filebytes)
+          that.seed = shasum
+        }
+      } else {
+        const shasum = await that.shasum(that.derivephrase,null)
+        that.seed = shasum
+      }
     }
+
   }
 }
 </script>
