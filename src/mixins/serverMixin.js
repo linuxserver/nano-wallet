@@ -104,6 +104,31 @@ export const serverMixin = {
       } else {
         return true
       }
+    },
+
+    async sum (buffer) {
+      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+      const hashArray = Array.from(new Uint8Array(hashBuffer))
+      const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
+      return hashHex
+    },
+
+    async shasum (string,file) {
+      if (file && string) {
+        const fileSum = await this.sum(file)
+	const stringBuffer = new TextEncoder('utf-8').encode(string)
+	const stringSum = await this.sum(stringBuffer)
+	const combinedBuffer = new TextEncoder('hex').encode(fileSum + stringSum)
+	const combinedSum = await this.sum(combinedBuffer)
+	return combinedSum
+      } else if (!file && string) {
+        const stringBuffer = new TextEncoder('utf-8').encode(string)
+	const stringSum = await this.sum(stringBuffer)
+	return stringSum
+      } else if (file && !string) {
+	const fileSum = await this.sum(file)
+	return fileSum
+      }
     }
     
   }

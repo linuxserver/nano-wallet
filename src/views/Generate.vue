@@ -4,6 +4,13 @@
     <!--<div class="inner">-->
       <div class="block">
         <div class="details smaller">
+          <label for="phrase">EXPERIMENTAL Seed Phrase OR File OR Both</label>
+          <input class="copytext" type="text" v-model="phrase" name="phrase" />
+          <label for="fileupload" class="btn outline">Seed File</label>
+          <input type="file" id="fileupload" style="display:none;" />
+          <button @click="seedfromphrase" class="btn outline" >Generate Seed</button>
+        </div>
+        <div class="details smaller">
           <label for="seed">Seed <a class="refreshwallet" @click.prevent="refreshWallet" href=""><i class="fal fa-sync"></i></a></label>
           <a href="#" @click="copyToClipboard(seed)" class="copy"><i class="fad fa-clone"></i></a>
           <div class="login">
@@ -48,7 +55,8 @@ export default {
       privatekey: '',
       publickey: '',
       address: '',
-      walletdata: {}
+      walletdata: {},
+      phrase: ''
     }
   },
   watch: {
@@ -91,6 +99,22 @@ export default {
         this.address = data.address
       }) 
 
+    },
+    async seedfromphrase () {
+      const that = this
+      const fileitem = document.getElementById('fileupload').files[0]
+      if (fileitem) {
+        const reader = new FileReader()
+        reader.readAsArrayBuffer(fileitem)
+        reader.onload = async function(file) {
+          const filebytes = file.target.result
+          const shasum = await that.shasum(that.phrase,filebytes)
+          that.seed = shasum
+        }
+      } else {
+        const shasum = await that.shasum(that.phrase,null)
+        that.seed = shasum
+      }
     }
   },
   computed: {
