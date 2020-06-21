@@ -197,7 +197,11 @@ export default {
           })
         }
       } else {
-        console.log('metadata not set')
+        this.$notify({
+          title: 'Metadata Not Set',
+          text: 'Please set some metadata',
+          type: 'error'
+        })
       }
     }
   },
