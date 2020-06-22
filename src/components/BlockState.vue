@@ -7,7 +7,7 @@
             <div class="label">The type of transaction that created this state block</div>
           </div>
           <div class="block">
-            <div class="title">Metadata <span @click="copyToClipboard(metadatahex)" class="value"><i class="fad fa-clone"></i></span><span @click="showmetaform()" v-if="addmeta !== false" class="value"><i class="fal fa-plus-circle"></i></span></div>
+            <div class="title">Metadata <span @click="copyToClipboard(metadatahex)" class="value"><i class="fad fa-clone"></i></span><span @click="showmetaform()" v-show="addmeta !== false" class="value"><i class="fal fa-plus-circle"></i> Add Metadata</span><span v-show="addmeta !== true" @click="metalink()" class="value"><i class="fad fa-external-link"></i></span></div>
             <div v-if="metaform !== false" class="login">
               <input type="text" v-model="metadata" placeholder="THIS IS PERMANENT" id="metadata" :maxlength="metaformmax" name="metadata">
               <span  @click="setmeta()" class="max" v-text="(metaformmax - metadata.length) + ' SET'"></span>
@@ -203,6 +203,9 @@ export default {
           type: 'error'
         })
       }
+    },
+    metalink () {
+      window.open('https://www.nanometadata.com/' + this.hash)
     }
   },
   computed: {
