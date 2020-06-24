@@ -10,7 +10,7 @@
             <div class="title">Metadata <span @click="copyToClipboard(metadatahex)" class="value"><i class="fad fa-clone"></i></span><span @click="showmetaform()" v-show="addmeta !== false" class="value"><i class="fal fa-plus-circle"></i> Add Metadata</span><span v-show="addmeta !== true" @click="metalink()" class="value"><i class="fad fa-external-link"></i></span></div>
             <div v-if="metaform !== false" class="login">
               <input type="text" v-model="metadata" v-on:keyup.enter="setmeta()" placeholder="THIS IS PERMANENT" id="metadata" :maxlength="metaformmax" name="metadata">
-              <span  @click="setmeta()" class="max" v-text="(metaformmax - metadata.length) + ' SET'"></span>
+              <span  @click="setmeta()" class="max metadata-save" v-text="(metaformmax - metadata.length) + ' | SAVE'"></span>
             </div>
             <div v-if="showspinner !== false"><i class="fas fa-spinner fa-spin"></i></div>
             <div class="account" v-text="metadatahex"></div>
