@@ -4,6 +4,8 @@ export function initialState () {
     settings: {
       pow: 1,
       changeaddress: true,
+      checkbackends: true,
+      followlinks: true,
       receiveinterval: 10000,
       nfctoken: process.env.VUE_APP_NFC_TOKEN,
       node: [

@@ -119,11 +119,6 @@ export default {
     if(this.static) {
       this.getDetails(this.$route.params.hash)
     }
-    if (this.$route.name !== 'Block' && this.$store.state.app.node.address.split('.').slice(-2)[0] == 'linuxserver') {
-      this.net = 'lsio'
-    } else {
-      this.net = 'live'
-    }
   },
   watch: {
     async details (newvalue) {
@@ -171,6 +166,11 @@ export default {
     },
     async setmeta () {
       if (this.metadata) {
+        if (this.$store.state.app.node.address.split('.').slice(-2)[0] == 'linuxserver') {
+          this.net = 'lsio'
+        } else {
+          this.net = 'live'
+        }
         this.metaform = false
         this.showspinner = true
         const privkey = this.$store.state.app.privatekey
