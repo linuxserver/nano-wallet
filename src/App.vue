@@ -755,6 +755,9 @@ input[type=text], input[type=password] {
         cursor: pointer;
         font-weight: 400;
     }
+    .metadata-save {
+        width: 75px;
+    }
 
     input[type=text], input[type=password] {
         padding-right: 60px!important;
