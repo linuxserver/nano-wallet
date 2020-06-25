@@ -119,7 +119,7 @@ export default {
     if(this.static) {
       this.getDetails(this.$route.params.hash)
     }
-    if (this.$store.state.app.node.address.split('.').slice(-2)[0] == 'linuxserver') {
+    if (this.$route.name !== 'Block' && this.$store.state.app.node.address.split('.').slice(-2)[0] == 'linuxserver') {
       this.net = 'lsio'
     } else {
       this.net = 'live'
