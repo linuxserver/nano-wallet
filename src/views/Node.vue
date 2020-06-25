@@ -9,14 +9,11 @@
           Advanced
         </label>
       </div>
-      <input v-show="showadvanced === false" v-model="node" type="text" id="node" name="node">
-      <input v-show="showadvanced === true" v-model="address" placeholder="endpoint IE yourdomain.com" type="text" id="address" name="address">
-      <input v-show="showadvanced === true" v-model="protocol" placeholder="http or https" type="text" id="protocol" name="protocol">
-      <input v-show="showadvanced === true" v-model="port" placeholder="port to connect to IE 443" type="text" id="port" name="port">
-      <input v-show="showadvanced === true" v-model="path" placeholder="Path IE /proxy *optional" type="text" id="path" name="path">
-      <input v-show="showadvanced === true" v-model="auth" placeholder="Auth Header IE Basic TOKENHERE *optional" type="text" id="auth" name="auth">
-      <button v-show="showadvanced === false" @click="openNode" class="openwallet btn" type="button">Go To Node</button>
-      <button v-show="showadvanced === true" @click="openAdvanced" class="openwallet btn" type="button">Go To Node</button>
+      <input v-if="showadvanced === false" v-model="node" type="text" id="node" name="node">
+      <input v-if="showadvanced === true" v-model="address" placeholder="https://domain.com:443/path" type="text" id="address" name="address">
+      <input v-if="showadvanced === true" v-model="auth" placeholder="Auth Header *optional" type="text" id="auth" name="auth">
+      <button v-if="showadvanced === false" @click="openNode" class="openwallet btn" type="button">Go To Node</button>
+      <button v-if="showadvanced === true" @click="openAdvanced" class="openwallet btn" type="button">Go To Node</button>
     </div>
     <p style="margin-top: 40px;">This wallet is designed to use any Nano Node RPC server as a backend, using nano.linuxserver.io will plug you into our own public network. More information including how to get funds from a faucet is available on <a class="highlight" target="_blank" href="https://github.com/linuxserver/nano-wallet/">GitHub</a>.</p><p>If you are looking for the live Nano network please use <a class="highlight" href="https://tixwallet.cc/" target="_blank">tixwallet.cc</a>.</p>
     <p><a class="highlight" target="_blank" href="https://github.com/linuxserver/nano-wallet/"><i class="fab fa-2x fa-github"></i></a></p>
@@ -34,9 +31,6 @@ export default {
     return {
       node: 'nano.linuxserver.io',
       address: '',
-      protocol: '',
-      port: '',
-      path: '',
       auth: '',
       showadvanced: false
     }
@@ -47,23 +41,37 @@ export default {
       this.$router.push('/' + this.node)
     },
     openAdvanced () {
-      if (this.address && (this.protocol == 'http' || this.protocol == 'https') && this.port) {
-        this.$store.state.app.settings.changeaddress = false
-        this.$store.state.app.settings.checkbackends = false
-        this.$store.state.app.settings.followlinks = false
-        let node = {}
-        node['headers'] = {'Content-Type': 'application/json'}
-        node['address'] = this.address
-        node['protocol'] = this.protocol
-        node['port'] = this.port
-        if (this.path) {
-          node['path'] = this.path
+      if (this.address) {
+        let urlreg = new RegExp('^(https?:\\/\\/)?((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|((\\d{1,3}\\.){3}\\d{1,3}))(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*')
+        if (urlreg.test(this.address)){
+          let url = new URL(this.address)
+          this.$store.state.app.settings.changeaddress = false
+          this.$store.state.app.settings.checkbackends = false
+          this.$store.state.app.settings.followlinks = false
+          let node = {}
+          node['headers'] = {'Content-Type': 'application/json'}
+          node['address'] = url.hostname
+          node['protocol'] = url.protocol.replace(':','')
+          node['path'] = url.pathname
+          if (url.port) {
+            node['port'] = url.port
+          } else if (url.protocol == 'http:') {
+            node['port'] = 80
+          } else if (url.protocol == 'https:') {
+            node['port'] = 443
+          }
+          if (this.auth) {
+            node['auth'] = this.auth
+          }
+          this.$store.state.app.settings.node = [node]
+          this.$router.push({name:'Home'})
+        } else {
+          this.$notify({
+            title: 'Error',
+            text: 'URL Malformed',
+            type: 'error'
+          })
         }
-        if (this.auth) {
-          node['auth'] = this.auth
-        }
-        this.$store.state.app.settings.node = [node]
-        this.$router.push({name:'Home'})
       } else {
         this.$notify({
           title: 'Error',
