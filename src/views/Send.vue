@@ -1,18 +1,25 @@
 <template>
   <div class="send">
-    <div id="sendform">
-        <label for="amount">Amount:</label>
-          <div class="login">
-            <input type="text" v-model="amount" id="amount" name="amount">
-            <span  @click="setmax" class="max">MAX</span>
-          </div>
-
-        <label for="destination">Destination:</label>
-        <input type="text" v-model="destination" id="destination" name="destination">
+    <div class="login" v-show="checkout !== false" id="checkoutform">
+      <div v-text="checkoutheader"></div>
+      <div v-if="emailform !== false">
+        <label for="email">Email:</label>
+        <input v-bind="emailattrs" type="text" v-model="email" id="email" name="email">
       </div>
-      <scan-qr @scanned="scanDone"></scan-qr>
-      <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
-      <button class="sendfunds btn" @click="send" type="button">Send</button>
+    </div>
+    <div v-show="checkout !== true" id="sendform">
+      <label for="amount">Amount:</label>
+      <div class="login">
+        <input type="text" v-model="amount" id="amount" name="amount">
+        <span  @click="setmax" class="max">MAX</span>
+      </div>
+      <label for="destination">Destination:</label>
+      <input type="text" v-model="destination" id="destination" name="destination">
+    </div>
+    <scan-qr @scanned="scanDone"></scan-qr>
+    <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
+    <button class="scan btn outline" @click="renderform" type="button">Render Form</button>
+    <button class="sendfunds btn" @click="send" type="button">Send</button>
   </div>
 </template>
 
@@ -22,6 +29,7 @@ import * as NanoCurrency from 'nanocurrency'
 import BigNumber from 'bignumber.js'
 import ScanQr from '../components/ScanQr.vue'
 import ScanNfc from '../components/ScanNfc.vue'
+import yaml from 'yaml-js'
 
 export default {
   name: 'Send',
@@ -38,7 +46,13 @@ export default {
     return {
       amount: '',
       destination: '',
-      nfcsup: false
+      nfcsup: false,
+      product: '',
+      checkout: false,
+      checkoutheader: '',
+      email: '',
+      emailform: false,
+      emailattrs: {}
     }
   },
   computed: {
@@ -134,14 +148,37 @@ export default {
     },
     setmax () {
       this.amount = this.$store.state.app.balance
+    },
+    async renderform() {
+let formyaml = `---
+product: Cool Widget
+destination: nano_1zxq3qikmtuz9gum8bwyyyyn14easwepdfjw9nuke6uf8m98rtmrczbth747
+price: 15.4
+inputs:
+  - type: email
+    placeholder: user@email.com
+    errormessage: Email is required
+    required: true`
+      const checkout = yaml.load(formyaml)
+      this.checkout = true
+      this.product = checkout.product
+      this.amount = checkout.price
+      this.destination = checkout.destination
+      this.checkoutheader = 'This will send ' + checkout.price + ' Nano to ' + checkout.destination.substring(0, 11) + '...' + checkout.destination.slice(checkout.destination.length - 6) + ' for ' + checkout.product
+      for (let input of checkout.inputs) {
+        console.log(input)
+        if (input.type == 'email') {
+          this.emailform = true
+          this.emailattrs = {placeholder: input.placeholder}
+        }
+      }
     }
   }
-
 }
 </script>
-<!--<style lang="scss" scoped>
+<style lang="scss" scoped>
 #canvas {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
-</style>-->
+</style>
