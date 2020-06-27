@@ -54,6 +54,14 @@ export const serverMixin = {
     },
     
     link(type,data) {
+      if (this.$store.state.app.settings.followlinks == false) {
+        Vue.notify({
+          title: 'Error',
+          text: 'Links are not available in advanced mode',
+          type: 'error'
+        })
+	return false
+      }
       const baseurl = window.location.origin;
       if (type == 'address') {
 	window.open(baseurl + '/#' + this.$store.getters['app/nodeLink'] + 'address/' + data);

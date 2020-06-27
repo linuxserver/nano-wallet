@@ -7,6 +7,17 @@
             <div class="label">The type of transaction that created this state block</div>
           </div>
           <div class="block">
+            <div class="title">Metadata <span @click="copyToClipboard(metadatahex)" class="value"><i class="fad fa-clone"></i></span><span @click="showmetaform()" v-show="addmeta !== false" class="value"><i class="fal fa-plus-circle"></i> Add Metadata</span><span v-show="addmeta !== true" @click="metalink()" class="value"><i class="fad fa-external-link"></i></span></div>
+            <div v-if="metaform !== false" class="login">
+              <input type="text" v-model="metadata" v-on:keyup.enter="setmeta()" placeholder="THIS IS PERMANENT" id="metadata" :maxlength="metaformmax" name="metadata">
+              <span  @click="setmeta()" class="max metadata-save" v-text="(metaformmax - metadata.length) + ' | SAVE'"></span>
+            </div>
+            <div v-if="showspinner !== false"><i class="fas fa-spinner fa-spin"></i></div>
+            <div class="account" v-text="metadatahex"></div>
+            <div class="account" v-text="metadatautf8"></div>
+            <div class="label">Off chain metadata attached to this transaction</div>
+          </div>
+          <div class="block">
             <div class="title">Account <span @click="copyToClipboard(blockstate.contents.account)" class="value"><i class="fad fa-clone"></i></span><span @click="link('address',blockstate.contents.account)" class="value"><i class="fad fa-external-link"></i></span></div>
             <div class="account">{{ blockstate.contents.account }}</div>
             <div class="label">The account represented by this state block</div>
@@ -69,8 +80,9 @@
 <script>
 import * as NanoCurrency from 'nanocurrency'
 import { serverMixin } from '../mixins/serverMixin.js'
-import simplebar from 'simplebar-vue';
-import 'simplebar/dist/simplebar.min.css';
+import simplebar from 'simplebar-vue'
+import 'simplebar/dist/simplebar.min.css'
+import { blake2sHex } from 'blakejs'
 
 export default {
   name: 'BlockState',
@@ -91,7 +103,16 @@ export default {
   data() {
     return {
       hash: null,
-      blockstate: null
+      blockstate: null,
+      net: null,
+      metadatahex: '',
+      metadatautf8: '',
+      addmetadata: false,
+      metaform: false,
+      metaformmax: 32,
+      metadata: '',
+      addmeta: false,
+      showspinner: false
     }
   },
   mounted() {
@@ -117,9 +138,74 @@ export default {
       }
       this.hash = hash
       this.blockstate = await this.$store.dispatch('app/rpCall', blockinfo);
+      this.metadatahex = ''
+      this.metadatautf8 = ''
+      this.metaform = false
+      this.metadata = ''
+      this.showspinner = false
+      const response = await fetch('https://www.nanometadata.com/' + this.hash)
+      if (response.ok) {
+        this.addmeta = false
+        const payload = await response.text()
+        const hexmetadata = payload.substring(192)
+        this.metadatahex = 'HEX: ' + hexmetadata
+        this.metadatautf8 = 'UTF8: ' + new Buffer(hexmetadata, 'hex').toString('utf8')
+      } else {
+        if (this.$route.name !== 'Block') {
+          this.addmeta = true
+        }
+        this.metadatahex = 'None Found'
+      }
     },
     formattedValue (raw) {
       return this.abbreviateNumber(NanoCurrency.convert(raw,this.rawconv), 5)
+    },
+    showmetaform () {
+      this.metaform = !this.metaform
+      return true
+    },
+    async setmeta () {
+      if (this.metadata) {
+        if (this.$store.state.app.node.address.split('.').slice(-2)[0] == 'linuxserver') {
+          this.net = 'lsio'
+        } else {
+          this.net = 'live'
+        }
+        this.metaform = false
+        this.showspinner = true
+        const privkey = this.$store.state.app.privatekey
+        const hex = Buffer(this.metadata).toString('hex')
+        const hash = blake2sHex(this.hash + hex).toUpperCase()
+        const pubkey = NanoCurrency.derivePublicKey(privkey)
+        const sig = NanoCurrency.signBlock({ hash: hash, secretKey: privkey })
+        const params = 'trans=' + this.hash + '&data=' + hex + '&pub=' + pubkey + '&sig=' + sig + '&net=' + this.net
+        const apiurl = 'https://api.nanometadata.com/metadata?' + params
+        const response = await fetch(apiurl)
+        const apires = await response.text()
+        if (response.ok) {
+          this.$notify({
+            title: 'Transaction signed',
+            text: 'Transaction has been signed at nanometadata.com',
+            type: 'success'
+          })
+          this.getDetails(this.hash)
+        } else {
+          this.$notify({
+            title: 'Cannot sign transaction',
+            text: apires,
+            type: 'error'
+          })
+        }
+      } else {
+        this.$notify({
+          title: 'Metadata Not Set',
+          text: 'Please set some metadata',
+          type: 'error'
+        })
+      }
+    },
+    metalink () {
+      window.open('https://www.nanometadata.com/' + this.hash)
     }
   },
   computed: {
