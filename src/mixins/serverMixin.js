@@ -1,6 +1,8 @@
 var numbro = require('numbro')
 var NanoCurrency = require('nanocurrency')
 import Vue from 'vue'
+import vueCountryRegionSelect from 'vue-country-region-select'
+Vue.use(vueCountryRegionSelect)
 
 export const serverMixin = {
   data() {
