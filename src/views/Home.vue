@@ -36,14 +36,14 @@
               <input v-model="seedindex" :type="logintype" id="seedindex" name="seedindex">
             </div>
           </div>
-          <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
           <div v-if="showadvanced === true">
-            <label for="derivephrase">EXPERIMENTAL Seed Phrase OR File OR Both</label>
-            <input type="text" v-model="derivephrase" name="derivephrase" />
+            <label for="derivephrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefile"><i class="fal fa-exclamation-circle"></i></a></label>
+            <input type="password" v-model="derivephrase" name="derivephrase" />
             <label for="deriveupload" class="btn openwallet" >Seed File</label>
             <input type="file" id="deriveupload" style="display:none;" />
             <button @click="derivefromphrase" class="btn outline" >Derive Seed</button>
           </div>
+          <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
           <scan-qr @scanned="scanDone"></scan-qr>
           <scan-nfc v-if="nfcsup !== false" @scanned="scanDone"></scan-nfc>
         </div>
@@ -140,6 +140,10 @@
         <a class="close" v-if="closebutton === true" @click="blockdetails = null"><i class="fal fa-times"></i></a>
         <block-state :details="blockdetails"></block-state>
       </div>
+      <div class="page" style="z-index: 9;" :class="{active: aboutphrase !== false}">
+        <a class="close" @click="closePhrasefile"><i class="fal fa-times"></i></a>
+        <p>Before you use this method to login to your wallet you should have a firm grasp on what is happening on the backend. This login method will shasum a file or a phrase or the combination of the two sums and use that as the seed for your account. In general human beings are incapable of creating a cryptographically secure phrases which is why BIP39 exists, at the least you should use a file + phrase to login using this method. Please also generate a paper wallet from Generate Wallet or write down your seed somewhere. While using this method have the underlying expectation that the funds using this seed have a chance to be stolen and only ever use it for small daily transactional amounts.</p>
+      </div>
 
   </div>
 </template>
@@ -191,7 +195,8 @@ function initialState (){
     lastrefresh: new Date(),
     closebutton: true,
     nfcsup: false,
-    derivephrase: ''
+    derivephrase: '',
+    aboutphrase: false
   }
 }
 
@@ -494,6 +499,14 @@ export default {
         const shasum = await that.shasum(that.derivephrase,null)
         that.seed = shasum
       }
+    },
+
+    closePhrasefile () {
+      this.aboutphrase = false
+    },
+
+    openPhrasefile () {
+      this.aboutphrase = true
     }
 
   }

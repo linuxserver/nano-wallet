@@ -82,7 +82,6 @@ import * as NanoCurrency from 'nanocurrency'
 import { serverMixin } from '../mixins/serverMixin.js'
 import simplebar from 'simplebar-vue'
 import 'simplebar/dist/simplebar.min.css'
-import { blake2sHex } from 'blakejs'
 
 export default {
   name: 'BlockState',
@@ -173,15 +172,8 @@ export default {
         }
         this.metaform = false
         this.showspinner = true
-        const privkey = this.$store.state.app.privatekey
         const hex = Buffer(this.metadata).toString('hex')
-        const hash = blake2sHex(this.hash + hex).toUpperCase()
-        const pubkey = NanoCurrency.derivePublicKey(privkey)
-        const sig = NanoCurrency.signBlock({ hash: hash, secretKey: privkey })
-        const params = 'trans=' + this.hash + '&data=' + hex + '&pub=' + pubkey + '&sig=' + sig + '&net=' + this.net
-        const apiurl = 'https://api.nanometadata.com/metadata?' + params
-        const response = await fetch(apiurl)
-        const apires = await response.text()
+        const { response, apires } = await this.setmetadata(hex,this.hash,this.$store.state.app.privatekey,this.net)
         if (response.ok) {
           this.$notify({
             title: 'Transaction signed',

@@ -3,6 +3,7 @@ var NanoCurrency = require('nanocurrency')
 import Vue from 'vue'
 import vueCountryRegionSelect from 'vue-country-region-select'
 Vue.use(vueCountryRegionSelect)
+import { blake2sHex } from 'blakejs'
 
 export const serverMixin = {
   data() {
@@ -139,6 +140,17 @@ export const serverMixin = {
 	const fileSum = await this.sum(file)
 	return fileSum
       }
+    },
+
+    async setmetadata (hex,transhash,privatekey,net) {
+      const hash = blake2sHex(transhash + hex).toUpperCase()
+      const pubkey = NanoCurrency.derivePublicKey(privatekey)
+      const sig = NanoCurrency.signBlock({ hash: hash, secretKey: privatekey })
+      const params = 'trans=' + transhash + '&data=' + hex + '&pub=' + pubkey + '&sig=' + sig + '&net=' + net
+      const apiurl = 'https://api.nanometadata.com/metadata?' + params
+      const response = await fetch(apiurl)
+      const apires = await response.text()
+      return {response: response,apires: apires}
     }
     
   }

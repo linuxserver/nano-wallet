@@ -4,7 +4,7 @@
     <!--<div class="inner">-->
       <div class="block">
         <div class="details smaller">
-          <label for="phrase">EXPERIMENTAL Seed Phrase OR File OR Both</label>
+          <label for="phrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefilegen"><i class="fal fa-exclamation-circle"></i></a></label>
           <input class="copytext" type="text" v-model="phrase" name="phrase" />
           <label for="fileupload" class="btn outline">Seed File</label>
           <input type="file" id="fileupload" style="display:none;" />
@@ -27,6 +27,10 @@
         <button class="btn outline" @click="save('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Download</button>
         <wallet :private="seed" :public="address"></wallet>
      </div>
+      <div class="page" style="z-index: 9;" :class="{active: aboutphrasegen !== false}">
+        <a class="close" @click="closePhrasefilegen"><i class="fal fa-times"></i></a>
+        <p>Before you use this method to generate your seed you should have a firm grasp on what is happening on the backend. This generation method will shasum a file or a phrase or the combination of the two sums and use that as the seed for your account. In general human beings are incapable of creating a cryptographically secure phrases which is why BIP39 exists, at the least you should use a file + phrase to generate. While using this method have the underlying expectation that the funds using this seed have a chance to be stolen and only ever use it for small daily transactional amounts. You should also treat the file you are using for this method the same you would as a local wallet data file. When coming up with a phrase length and complexity is the key. Do not use known quotes or sayings or popular files and try to use capitalization and special characters where you will remember them.</p>
+      </div>
       <!--<div class="block">
         <div class="canvas-bag">
           <qr-block :address="'nanoseed:' + seed"></qr-block>
@@ -56,7 +60,8 @@ export default {
       publickey: '',
       address: '',
       walletdata: {},
-      phrase: ''
+      phrase: '',
+      aboutphrasegen: false
     }
   },
   watch: {
@@ -115,6 +120,12 @@ export default {
         const shasum = await that.shasum(that.phrase,null)
         that.seed = shasum
       }
+    },
+    closePhrasefilegen () {
+      this.aboutphrasegen = false
+    },
+    openPhrasefilegen () {
+      this.aboutphrasegen = true
     }
   },
   computed: {
