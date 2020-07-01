@@ -90,7 +90,8 @@ function sendInitial (){
     net: '',
     formsource: 'https://www.nanocheckout.com/templates/',
     formurl: '',
-    sendtab: true
+    sendtab: true,
+    checkoutapi: 'https://api.nanocheckout.com/order'
   }
 }
 
@@ -237,7 +238,10 @@ export default {
               type: 'error'
             })
           }
-          const filename = sendres.hash + '.txt'
+          var Init = { method:'POST',body: payloadstring}
+          var orderes = await fetch(this.checkoutapi + '?trans=' + sendres.hash,Init)
+          var orderdata = await orderes.json()
+          const filename = orderdata.message + '.txt'
           var blob = new Blob([payloadstring], {type: 'text/plain'});
           if(window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, filename);
