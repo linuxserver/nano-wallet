@@ -55,7 +55,7 @@
     <button v-if="sendtab === false && checkout === false" class="btn sendfunds" @click="renderform" type="button">Checkout</button>
     <scan-qr v-if="checkout === false" @scanned="scanDone"></scan-qr>
     <scan-nfc v-if="nfcsup !== false && checkout === false" @scanned="scanDone"></scan-nfc>
-    <button v-if="(sendtab === true && checkout === false) || (sendtab === false && checkout === true)" class="sendfunds btn" @click="send" type="button">Send</button>
+    <button v-if="open === true && ((sendtab === true && checkout === false) || (sendtab === false && checkout === true))" class="sendfunds btn" @click="send" type="button">Send</button>
   </div>
 </template>
 
