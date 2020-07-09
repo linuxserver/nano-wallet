@@ -597,8 +597,8 @@ canvas {
     width: 100%;
     margin: 15px 0;
     @media all and (max-width: 600px) {
-        position: absolute;
-        bottom: 32px;
+        position: fixed;
+        bottom: 0px;
         left: 0;
         right: 0;
         border-radius: 0;
@@ -709,7 +709,7 @@ label {
     margin-bottom: 10px;
     display: inline-block;
 }
-input[type=text], input[type=password] {
+input[type=text], input[type=password], select {
     font-size: 22px;
     padding: 15px;
     background: #00000036;

@@ -1,5 +1,5 @@
 <template>
-  <div class="send">
+  <div class="send inner">
     <div class="labeltabs">
       <label @click="setSend" class="df" :class="{ active: sendtab === true}">
         Send
@@ -8,7 +8,7 @@
         Checkout
       </label>
     </div>
-    <div v-show="checkout !== false" id="checkoutform">
+    <div v-show="checkout !== false" class="block" id="checkoutform">
       <div v-text="checkoutheader"></div>
       <div v-if="emailform !== false">
         <label for="email">Email:</label>
@@ -349,3 +349,12 @@ export default {
   transform: scaleX(-1);
 }
 </style>-->
+<style lang="scss">
+  .send.inner {
+    height: 100%;
+    padding-top: 0 !important;
+    padding-bottom: 100px !important;
+  }
+  #checkoutform {
+  }
+</style>
