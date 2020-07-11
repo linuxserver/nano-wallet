@@ -23,7 +23,7 @@
           <label for="address1">Address:</label>
           <input type="text" id="address1" name="address1" class="checkout" placeholder="Street Address" :required="element.required">
           <label for="address2">Address 2:</label>
-          <input type="text" id="address2" name="address2" class="checkout" placeholder="Apt or Box #" :required="element.required">
+          <input type="text" id="address2" name="address2" class="checkout" placeholder="Apt or Box #" :required="false">
           <label for="country">Country:</label>
           <country-select v-model="country" id="country" name="country" :country="country" topCountry="US" class="checkout"/>
           <label for="region">Region:</label>
