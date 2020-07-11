@@ -10,32 +10,32 @@
     </div>
     <div v-show="checkout !== false" class="block" id="checkoutform">
       <div v-text="checkoutheader"></div>
-      <div v-if="emailform !== false">
-        <label for="email">Email:</label>
-        <input data-regexp="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-error="Please Enter Valid Email" v-bind="emailattrs" type="text" id="email" name="email" class="checkout">
-      </div>
-      <div v-if="nameform !== false">
-        <label for="name">Name:</label>
-        <input v-bind="nameattrs" type="text" id="name" name="name" class="checkout">
-      </div>
-      <div v-if="addressform !== false">
-        <label for="address1">Address:</label>
-        <input v-bind="addressattrs" type="text" id="address1" name="address1" class="checkout" placeholder="Street Address">
-        <label for="address2">Address 2:</label>
-        <input type="text" id="address2" name="address2" class="checkout" placeholder="Apt or Box #">
-        <label for="country">Country:</label>
-        <country-select v-bind="addressattrs" v-model="country" id="country" name="country" :country="country" topCountry="US" class="checkout"/>
-        <label for="region">Region:</label>
-        <region-select v-bind="addressattrs" v-model="region" id="region" name="region" :country="country" :region="region" class="checkout"/>
-        <label for="city">City:</label>
-        <input v-bind="addressattrs" type="text" id="city" name="city" class="checkout" placeholder="Local City">
-        <label for="zip">Postal Code:</label>
-        <input v-bind="addressattrs" type="text" id="zip" name="zip" class="checkout" placeholder="Local Postal Code">
-      </div>
-      <div v-if="customform !== false">
-        <div v-for="input in custominputs" :key="input.name">
-          <label :for="input.name">{{ input.label }}:</label>
-          <input type="text" :id="input.name" :name="input.name" class="checkout" :required="input.required" :placeholder="input.placeholder">
+      <div v-for="(element) in form.inputs" :key="element.type">
+        <div v-if="element.type === 'email'">
+          <label for="email">Email:</label>
+          <input data-regexp="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-error="Please Enter Valid Email" type="text" id="email" name="email" class="checkout" :Placeholder="element.placeholder" :required="element.required">
+        </div>
+        <div v-if="element.type === 'name'">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" class="checkout" :Placeholder="element.placeholder" :required="element.required">
+        </div>
+        <div v-if="element.type === 'address'">
+          <label for="address1">Address:</label>
+          <input type="text" id="address1" name="address1" class="checkout" placeholder="Street Address" :required="element.required">
+          <label for="address2">Address 2:</label>
+          <input type="text" id="address2" name="address2" class="checkout" placeholder="Apt or Box #" :required="element.required">
+          <label for="country">Country:</label>
+          <country-select v-model="country" id="country" name="country" :country="country" topCountry="US" class="checkout"/>
+          <label for="region">Region:</label>
+          <region-select v-model="region" id="region" name="region" :country="country" :region="region" class="checkout"/>
+          <label for="city">City:</label>
+          <input type="text" id="city" name="city" class="checkout" placeholder="Local City" :required="element.required">
+          <label for="zip">Postal Code:</label>
+          <input type="text" id="zip" name="zip" class="checkout" placeholder="Local Postal Code" :required="element.required">
+        </div>
+        <div v-if="element.type === 'custom'">
+          <label :for="element.name">{{ element.label }}:</label>
+          <input type="text" :id="element.name" :name="element.name" class="checkout" :placeholder="element.placeholder" :required="element.required">
         </div>
       </div>
     </div>
@@ -75,16 +75,10 @@ function sendInitial (){
     product: '',
     checkout: false,
     checkoutheader: '',
-    emailform: false,
-    emailattrs: {},
-    addressform: false,
-    addressattrs: {},
-    nameform: false,
-    nameattrs: {},
     country: '',
     region: '',
     customform: false,
-    custominputs: [],
+    form: {},
     payload: {},
     payloadhash: '',
     net: '',
@@ -278,8 +272,8 @@ export default {
       if (this.formurl.startsWith(this.formsource)) {
         const formres = await fetch(this.formurl)
         const formyaml = await formres.text()
-        const checkout = yaml.load(formyaml)
-        if (checkout.net !== this.net) {
+        const checkoutyaml = yaml.load(formyaml)
+        if (checkoutyaml.net !== this.net) {
           this.$notify({
             title: 'Error',
             text: 'Checkout is not for this Network',
@@ -289,30 +283,11 @@ export default {
         }
         this.checkout = true
         this.sendtab = false
-        this.product = checkout.product
-        this.amount = checkout.price.toString()
-        this.destination = checkout.destination
-        this.checkoutheader = 'This will send ' + checkout.price + ' Nano to ' + checkout.destination.substring(0, 11) + '...' + checkout.destination.slice(checkout.destination.length - 6) + ' for ' + checkout.product + ' ,please save your receipt from this order it will help you verify your order if something goes wrong'
-        for (let input of checkout.inputs) {
-          if (input.type == 'email') {
-            this.emailform = true
-            this.emailattrs = {placeholder: input.placeholder,required: input.required}
-          }
-          if (input.type == 'address') {
-            this.addressform = true
-            this.addressattrs = {required: input.required}
-          }
-          if (input.type == 'name') {
-            this.nameform = true
-            this.nameattrs = {placeholder: input.placeholder,required: input.required}
-          }
-          if (input.custom) {
-            this.customform = true
-            for (let custom of input.custom) {
-              this.custominputs.push(custom) 
-            }
-          }
-        }
+        this.product = checkoutyaml.product
+        this.amount = checkoutyaml.price.toString()
+        this.destination = checkoutyaml.destination
+        this.checkoutheader = 'This will send ' + checkoutyaml.price + ' Nano to ' + checkoutyaml.destination.substring(0, 11) + '...' + checkoutyaml.destination.slice(checkoutyaml.destination.length - 6) + ' for ' + checkoutyaml.product + ' ,please save your receipt from this order it will help you verify your order if something goes wrong'
+        this.form = checkoutyaml
       } else {
         this.$notify({
           title: 'Error',
@@ -333,8 +308,6 @@ export default {
       this.destination = ''
       this.sendtab = true
       this.checkout = false
-      this.customform = false
-      this.custominputs = []
     },
     setCheckout () {
       this.formurl = ''
@@ -354,7 +327,5 @@ export default {
     height: 100%;
     padding-top: 0 !important;
     padding-bottom: 100px !important;
-  }
-  #checkoutform {
   }
 </style>
