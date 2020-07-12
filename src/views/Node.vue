@@ -39,7 +39,7 @@ export default {
   mixins: [ serverMixin ],
   methods: {
     openNode () {
-      this.$router.push('/' + this.node)
+      window.open(window.location.href.replace('/#/node','') + '/#/' + this.node, '_blank')
     },
     openAdvanced () {
       if (this.address) {
@@ -82,7 +82,7 @@ export default {
       }
     },
     openLocalhost () {
-      this.$router.push('/127.0.0.1')
+      window.open(window.location.href.replace('/#/node','') + '/#/127.0.0.1', '_blank')
     },
     setAdvanced () {
       this.showadvanced = true
