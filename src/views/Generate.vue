@@ -55,8 +55,7 @@ export default {
       address: '',
       walletdata: {},
       phrase: '',
-      aboutphrasegen: false,
-      showadvanced: false
+      aboutphrasegen: false
     }
   },
   watch: {
