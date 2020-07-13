@@ -35,13 +35,15 @@
             <div class="login">
               <input v-model="seedindex" :type="logintype" id="seedindex" name="seedindex">
             </div>
-          </div>
-          <div v-if="showadvanced === true">
             <label for="derivephrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefile"><i class="fal fa-exclamation-circle"></i></a></label>
-            <input type="password" v-model="derivephrase" name="derivephrase" />
-            <label for="deriveupload" class="btn openwallet" >Seed File</label>
-            <input type="file" id="deriveupload" style="display:none;" />
-            <button @click="derivefromphrase" class="btn outline" >Derive Seed</button>
+            <div class="login">
+              <input type="password" v-model="derivephrase" name="derivephrase" />
+            </div>
+            <div>
+              <button @click="$refs.seedfile.click()" class="btn outline" id="seedfile">File</button>
+              <input type="file" id="deriveupload" ref="seedfile" style="display:none;" />
+              <button @click="derivefromphrase" class="btn outline" id="derivebutton">Derive</button>
+            </div>
           </div>
           <button @click="openWallet" class="openwallet btn" type="button">Open Wallet</button>
           <scan-qr @scanned="scanDone"></scan-qr>
@@ -495,9 +497,15 @@ export default {
           const shasum = await that.shasum(that.derivephrase,filebytes)
           that.seed = shasum
         }
-      } else {
+      } else if (that.derivephrase) {
         const shasum = await that.shasum(that.derivephrase,null)
         that.seed = shasum
+      } else {
+        that.$notify({
+          title: 'Error',
+          text: 'You must set one or both of file or phrase to use this',
+          type: 'error'
+        })
       }
     },
 
@@ -512,3 +520,4 @@ export default {
   }
 }
 </script>
+

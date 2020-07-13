@@ -4,13 +4,6 @@
     <!--<div class="inner">-->
       <div class="block">
         <div class="details smaller">
-          <label for="phrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefilegen"><i class="fal fa-exclamation-circle"></i></a></label>
-          <input class="copytext" type="text" v-model="phrase" name="phrase" />
-          <label for="fileupload" class="btn outline">Seed File</label>
-          <input type="file" id="fileupload" style="display:none;" />
-          <button @click="seedfromphrase" class="btn outline" >Generate Seed</button>
-        </div>
-        <div class="details smaller">
           <label for="seed">Seed <a class="refreshwallet" @click.prevent="refreshWallet" href=""><i class="fal fa-sync"></i></a></label>
           <a href="#" @click="copyToClipboard(seed)" class="copy"><i class="fad fa-clone"></i></a>
           <div class="login">
@@ -26,17 +19,18 @@
         <button style="margin-top: 30px;" class="btn" @click="copyToClipboard('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Copy To Clipboard</button>
         <button class="btn outline" @click="save('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Download</button>
         <wallet :private="seed" :public="address"></wallet>
-     </div>
+        <div class="details smaller padtop">
+          <label for="phrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefilegen"><i class="fal fa-exclamation-circle"></i></a></label>
+          <input class="copytext" type="text" v-model="phrase" name="phrase" />
+          <label for="fileupload" class="btn outline">Seed File</label>
+          <input type="file" id="fileupload" style="display:none;" />
+          <button @click="seedfromphrase" class="btn outline" >PhraseFile Generate</button>
+        </div>
+      </div>
       <div class="page" style="z-index: 9;" :class="{active: aboutphrasegen !== false}">
         <a class="close" @click="closePhrasefilegen"><i class="fal fa-times"></i></a>
         <p>Before you use this method to generate your seed you should have a firm grasp on what is happening on the backend. This generation method will shasum a file or a phrase or the combination of the two sums and use that as the seed for your account. In general human beings are incapable of creating a cryptographically secure phrases which is why BIP39 exists, at the least you should use a file + phrase to generate. While using this method have the underlying expectation that the funds using this seed have a chance to be stolen and only ever use it for small daily transactional amounts. You should also treat the file you are using for this method the same you would as a local wallet data file. When coming up with a phrase length and complexity is the key. Do not use known quotes or sayings or popular files and try to use capitalization and special characters where you will remember them.</p>
       </div>
-      <!--<div class="block">
-        <div class="canvas-bag">
-          <qr-block :address="'nanoseed:' + seed"></qr-block>
-        </div>
-      </div>-->
-    <!--</div>-->
   </div>
 </template>
 
@@ -61,7 +55,8 @@ export default {
       address: '',
       walletdata: {},
       phrase: '',
-      aboutphrasegen: false
+      aboutphrasegen: false,
+      showadvanced: false
     }
   },
   watch: {
@@ -116,9 +111,15 @@ export default {
           const shasum = await that.shasum(that.phrase,filebytes)
           that.seed = shasum
         }
-      } else {
+      } else if (that.phrase) {
         const shasum = await that.shasum(that.phrase,null)
         that.seed = shasum
+      } else {
+        that.$notify({
+          title: 'Error',
+          text: 'You must set one or both of file or phrase to use this',
+          type: 'error'
+        })
       }
     },
     closePhrasefilegen () {

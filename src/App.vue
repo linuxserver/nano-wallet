@@ -897,4 +897,13 @@ input:-webkit-autofill:active {
 .abbreviate {
     font-family: 'Courier New', Courier, monospace;
 }
+#seedfile {
+  width: 50%;
+}
+#derivebutton {
+  width: 50%;
+}
+.padtop {
+  padding-top: 20px;
+}
 </style>
