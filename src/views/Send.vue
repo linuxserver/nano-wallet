@@ -348,10 +348,6 @@ export default {
 .content::-webkit-scrollbar {
   display: none;
 }
-.center {
-  display:inline-block;
-  text-align:center;
-}
 @keyframes spinner {
   to { transform: rotate(360deg); }
 }
