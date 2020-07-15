@@ -1,61 +1,63 @@
 <template>
-  <div class="send inner">
-    <div class="labeltabs">
-      <label @click="setSend" class="df" :class="{ active: sendtab === true}">
-        Send
-      </label>
-      <label @click="setCheckout" class="df" :class="{ active: sendtab !== true}">
-        Checkout
-      </label>
-    </div>
-    <div v-show="checkout !== false" class="block" id="checkoutform">
-      <div v-text="checkoutheader"></div>
-      <div v-for="(element) in form.inputs" :key="element.type">
-        <div v-if="element.type === 'email'">
-          <label for="email">Email:</label>
-          <input data-regexp="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-error="Please Enter Valid Email" type="text" id="email" name="email" class="checkout" :Placeholder="element.placeholder" :required="element.required">
-        </div>
-        <div v-if="element.type === 'name'">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" class="checkout" :Placeholder="element.placeholder" :required="element.required">
-        </div>
-        <div v-if="element.type === 'address'">
-          <label for="address1">Address:</label>
-          <input type="text" id="address1" name="address1" class="checkout" placeholder="Street Address" :required="element.required">
-          <label for="address2">Address 2:</label>
-          <input type="text" id="address2" name="address2" class="checkout" placeholder="Apt or Box #" :required="false">
-          <label for="country">Country:</label>
-          <country-select v-model="country" id="country" name="country" :country="country" topCountry="US" class="checkout"/>
-          <label for="region">Region:</label>
-          <region-select v-model="region" id="region" name="region" :country="country" :region="region" class="checkout"/>
-          <label for="city">City:</label>
-          <input type="text" id="city" name="city" class="checkout" placeholder="Local City" :required="element.required">
-          <label for="zip">Postal Code:</label>
-          <input type="text" id="zip" name="zip" class="checkout" placeholder="Local Postal Code" :required="element.required">
-        </div>
-        <div v-if="element.type === 'custom'">
-          <label :for="element.name">{{ element.label }}:</label>
-          <input type="text" :id="element.name" :name="element.name" class="checkout" :placeholder="element.placeholder" :required="element.required">
+  <div class="wrapper">
+    <div class="content">
+      <div class="labeltabs">
+        <label @click="setSend" class="df" :class="{ active: sendtab === true}">
+          Send
+        </label>
+        <label @click="setCheckout" class="df" :class="{ active: sendtab !== true}">
+          Checkout
+        </label>
+      </div>
+      <div v-show="checkout !== false" id="checkoutform">
+        <div v-text="checkoutheader"></div>
+        <div v-for="(element) in form.inputs" :key="element.type">
+          <div v-if="element.type === 'email'">
+            <label for="email">Email:</label>
+            <input data-regexp="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" data-error="Please Enter Valid Email" type="text" id="email" name="email" class="checkout" :Placeholder="element.placeholder" :required="element.required">
+          </div>
+          <div v-if="element.type === 'name'">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" class="checkout" :Placeholder="element.placeholder" :required="element.required">
+          </div>
+          <div v-if="element.type === 'address'">
+            <label for="address1">Address:</label>
+            <input type="text" id="address1" name="address1" class="checkout" placeholder="Street Address" :required="element.required">
+            <label for="address2">Address 2:</label>
+            <input type="text" id="address2" name="address2" class="checkout" placeholder="Apt or Box #" :required="false">
+            <label for="country">Country:</label>
+            <country-select v-model="country" id="country" name="country" :country="country" topCountry="US" class="checkout"/>
+            <label for="region">Region:</label>
+            <region-select v-model="region" id="region" name="region" :country="country" :region="region" class="checkout"/>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" class="checkout" placeholder="Local City" :required="element.required">
+            <label for="zip">Postal Code:</label>
+            <input type="text" id="zip" name="zip" class="checkout" placeholder="Local Postal Code" :required="element.required">
+          </div>
+          <div v-if="element.type === 'custom'">
+            <label :for="element.name">{{ element.label }}:</label>
+            <input type="text" :id="element.name" :name="element.name" class="checkout" :placeholder="element.placeholder" :required="element.required">
+          </div>
         </div>
       </div>
-    </div>
-    <div v-show="checkout === false && sendtab === true" id="sendform">
-      <label for="amount">Amount:</label>
-      <div class="login">
-        <input type="text" v-model="amount" id="amount" name="amount">
-        <span  @click="setmax" class="max">MAX</span>
+      <div v-show="checkout === false && sendtab === true" id="sendform">
+        <label for="amount">Amount:</label>
+        <div class="login">
+          <input type="text" v-model="amount" id="amount" name="amount">
+          <span  @click="setmax" class="max">MAX</span>
+        </div>
+        <label for="destination">Destination:</label>
+        <input type="text" v-model="destination" id="destination" name="destination">
       </div>
-      <label for="destination">Destination:</label>
-      <input type="text" v-model="destination" id="destination" name="destination">
+      <div v-if="checkout === false && sendtab === false">
+        <label for="amount">Checkout Template URL:</label>
+        <input type="text" v-model="formurl" id="formurl" name="formurl">
+      </div>
+      <button v-if="sendtab === false && checkout === false" class="btn sendfunds" @click="renderform" type="button">Checkout</button>
+      <scan-qr v-if="checkout === false" @scanned="scanDone"></scan-qr>
+      <scan-nfc v-if="nfcsup !== false && checkout === false" @scanned="scanDone"></scan-nfc>
+      <button v-if="open === true && ((sendtab === true && checkout === false) || (sendtab === false && checkout === true))" class="sendfunds btn" @click="send" type="button"><span v-show="loading !== true">Send</span><span v-show="loading === true" class="icon"><i class="fa fa-spinner"></i></span></button>
     </div>
-    <div v-if="checkout === false && sendtab === false">
-      <label for="amount">Checkout Template URL:</label>
-      <input type="text" v-model="formurl" id="formurl" name="formurl">
-    </div>
-    <button v-if="sendtab === false && checkout === false" class="btn sendfunds" @click="renderform" type="button">Checkout</button>
-    <scan-qr v-if="checkout === false" @scanned="scanDone"></scan-qr>
-    <scan-nfc v-if="nfcsup !== false && checkout === false" @scanned="scanDone"></scan-nfc>
-    <button v-if="open === true && ((sendtab === true && checkout === false) || (sendtab === false && checkout === true))" class="sendfunds btn" @click="send" type="button">Send</button>
   </div>
 </template>
 
@@ -85,7 +87,8 @@ function sendInitial (){
     formsource: 'https://www.nanocheckout.com/templates/',
     formurl: '',
     sendtab: true,
-    checkoutapi: 'https://api.nanocheckout.com/order'
+    checkoutapi: 'https://api.nanocheckout.com/order',
+    loading: false
   }
 }
 
@@ -163,6 +166,7 @@ export default {
           type: 'error'
         })
       }
+      this.loading = true
       if (this.checkout == true) {
         const inputs = document.getElementsByClassName("checkout")
         for (let input of inputs) {
@@ -177,6 +181,7 @@ export default {
                 text: input.dataset.error,
                 type: 'error'
               })
+              this.loading = false
               return false
             }
           }
@@ -252,12 +257,16 @@ export default {
         this.$store.commit('app/pow', null)
         Object.assign(this.$data, sendInitial())
         this.$emit('close', 'true')
+        this.loading = false
+        return true
       } else if (!NanoCurrency.checkAddress(this.destination)) {
         this.$notify({
           title: 'Destination address is not valid',
           text: 'Please use a valid address',
           type: 'error'
         })
+        this.loading = false
+        return false
       }
     },
     setmax () {
@@ -323,9 +332,30 @@ export default {
 }
 </style>-->
 <style lang="scss">
-  .send.inner {
-    height: 100%;
-    padding-top: 0 !important;
-    padding-bottom: 100px !important;
-  }
+.wrapper {
+  display: table-cell;
+  vertical-align: top;
+  height: 100%;
+  max-width: 800px;
+  padding-bottom: 100px;
+}
+.content {
+  max-height: 100%;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.content::-webkit-scrollbar {
+  display: none;
+}
+.center {
+  display:inline-block;
+  text-align:center;
+}
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+.fa-spinner {
+  animation: spinner 1s linear infinite;
+}
 </style>
