@@ -596,6 +596,7 @@ canvas {
 .btn.sendfunds {
     width: 100%;
     margin: 15px 0;
+    max-width: 100%;
     @media all and (max-width: 600px) {
         position: fixed;
         bottom: 0px;
@@ -609,6 +610,7 @@ canvas {
         text-transform: uppercase;
         letter-spacing: 2px;
         font-weight: 600;
+        max-width: inherit;
     }
 }
 .scan-qr-code, .scan-qr-code {

@@ -51,9 +51,11 @@
       </div>
       <div v-if="checkout === false && sendtab === false">
         <label for="amount">Checkout Template URL:</label>
+        <div class="login">
         <input type="text" v-model="formurl" id="formurl" name="formurl">
+        <span  @click="renderform" class="max">LOAD</span>
+        </div>
       </div>
-      <button v-if="sendtab === false && checkout === false" class="btn sendfunds" @click="renderform" type="button">Checkout</button>
       <scan-qr v-if="checkout === false" @scanned="scanDone"></scan-qr>
       <scan-nfc v-if="nfcsup !== false && checkout === false" @scanned="scanDone"></scan-nfc>
       <button v-if="open === true && ((sendtab === true && checkout === false) || (sendtab === false && checkout === true))" class="sendfunds btn" @click="send" type="button"><span v-show="loading !== true">Send</span><span v-show="loading === true" class="icon"><i class="fa fa-spinner"></i></span></button>
@@ -338,6 +340,9 @@ export default {
   height: 100%;
   max-width: 800px;
   padding-bottom: 100px;
+  @media all and (min-width: 1040px) {
+    padding-bottom: 0;
+  }
 }
 .content {
   max-height: 100%;
