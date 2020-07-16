@@ -297,7 +297,7 @@ export default {
         this.product = checkoutyaml.product
         this.amount = checkoutyaml.price.toString()
         this.destination = checkoutyaml.destination
-        this.checkoutheader = 'This will send ' + checkoutyaml.price + ' Nano to ' + checkoutyaml.destination.substring(0, 11) + '...' + checkoutyaml.destination.slice(checkoutyaml.destination.length - 6) + ' for ' + checkoutyaml.product + ' ,please save your receipt from this order it will help you verify your order if something goes wrong'
+        this.checkoutheader = 'This will send ' + checkoutyaml.price + ' Nano to ' + checkoutyaml.destination.substring(0, 11) + '...' + checkoutyaml.destination.slice(checkoutyaml.destination.length - 6) + ' for ' + checkoutyaml.product + ', please save your receipt from this order it will help you verify your order if something goes wrong'
         this.form = checkoutyaml
       } else {
         this.$notify({
