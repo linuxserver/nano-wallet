@@ -20,7 +20,7 @@
         <button class="btn outline" @click="save('Seed: ' + seed + '\nPrivate Key: ' + privatekey + '\nPublic Key: ' + publickey + '\nAddress: ' + address)">Download</button>
         <wallet :private="seed" :public="address"></wallet>
         <div class="details smaller padtop">
-          <label for="phrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefilegen"><i class="fal fa-exclamation-circle"></i></a></label>
+          <label for="phrase">EXPERIMENTAL PhraseFile <a @click="openPhrasefilegen"><i class="fal fa-exclamation-circle"></i></a></label>
           <input class="copytext" type="text" v-model="phrase" name="phrase" />
           <label for="fileupload" class="btn outline">Seed File</label>
           <input type="file" id="fileupload" style="display:none;" />

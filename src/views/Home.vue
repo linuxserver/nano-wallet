@@ -35,7 +35,7 @@
             <div class="login">
               <input v-model="seedindex" :type="logintype" id="seedindex" name="seedindex">
             </div>
-            <label for="derivephrase">EXPERIMENTAL PhaseFile <a @click="openPhrasefile"><i class="fal fa-exclamation-circle"></i></a></label>
+            <label for="derivephrase">EXPERIMENTAL PhraseFile <a @click="openPhrasefile"><i class="fal fa-exclamation-circle"></i></a></label>
             <div class="login">
               <input type="password" v-model="derivephrase" name="derivephrase" />
             </div>
