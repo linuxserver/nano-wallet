@@ -16,7 +16,16 @@
       <button v-if="showadvanced === false" @click="openLocalhost" class="openwallet btn" type="button">Local Node</button>
       <button v-if="showadvanced === true" @click="openAdvanced" class="openwallet btn" type="button">Go To Node</button>
     </div>
-    <p style="margin-top: 40px;">This wallet is designed to use any Nano Node RPC server as a backend, using nano.linuxserver.io will plug you into our own public network. More information including how to get funds from a faucet is available on <a class="highlight" target="_blank" href="https://github.com/linuxserver/nano-wallet/">GitHub</a>.</p><p>If you are looking for the live Nano network please use <a class="highlight" href="https://tixwallet.cc/" target="_blank">tixwallet.cc</a>.</p>
+    <p style="margin-top: 5px;">This wallet is designed to use any Nano Node RPC server as a backend (presets below). Using nano.linuxserver.io will plug you into the LSIO network. More information including how to get funds from a faucet is available on <a class="highlight" target="_blank" href="https://github.com/linuxserver/nano-wallet/">GitHub</a>.</p>
+    <div class="presets">
+      <center>
+        <button @click="openPreset('app.natrium.io')" class="outline btn" type="button">Natrium</button>
+        <button @click="openPreset('proxy.nanos.cc')" class="outline btn" type="button">Nanos.cc</button>
+        <button @click="openPreset('api.nanex.cc')" class="outline btn" type="button">Nanex.cc</button>
+        <button @click="openPreset('vault.nanocrawler.cc')" class="outline btn" type="button">Nano Crawler</button>
+        <button @click="openPreset('mynano.ninja')" class="outline btn" type="button">My Nano Ninja</button>
+      </center>
+    </div>
     <p><a class="highlight" target="_blank" href="https://github.com/linuxserver/nano-wallet/"><i class="fab fa-2x fa-github"></i></a></p>
   </div>
 </template>
@@ -89,10 +98,20 @@ export default {
     },
     setNormal () {
       this.showadvanced = false
+    },
+    openPreset (preset) {
+      window.open(window.location.href.replace('/#/node','') + '/#/' + preset, '_blank')
     }
   }
 }
 </script>
 
 <style lang="scss">
+.presets button{
+  padding: 10px !important;
+  font-size: 12px !important;
+  margin-right: 4px !important;
+  margin-left: 4px !important;
+  margin-bottom: 8px !important;
+}
 </style>

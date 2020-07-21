@@ -38,6 +38,30 @@ export function initialState () {
           headers: {
             'Content-Type': 'application/json'
           }
+        },
+	'app.natrium.io': {
+          port: 443,
+          path: '/api',
+          protocol: 'https',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+	'api.nanex.cc': {
+          port: 443,
+          path: '/',
+          protocol: 'https',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+        'vault.nanocrawler.cc': {
+          port: 443,
+          path: '/api/node-api',
+          protocol: 'https',
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       }
     },
