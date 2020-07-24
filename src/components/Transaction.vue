@@ -61,6 +61,9 @@ export default {
         return this.index
       }
       return this.transaction.hash
+    },
+    prefixparams () {
+      return this.$store.state.app.prefixparams
     }
 
   },
@@ -75,7 +78,9 @@ export default {
       }
 
       const publickey = NanoCurrency.derivePublicKey(this.privatekey)
-      const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true})
+      let params = {}
+      params[this.prefixparams] = true
+      const address = NanoCurrency.deriveAddress(publickey,params)
       let infodetails = {}
       infodetails['action'] = 'account_info'
       infodetails['representative'] = 'true'
@@ -103,12 +108,12 @@ export default {
         representative: rep,
         balance: balance,
         link: this.index
-      });
+      },params);
       var receive = {};
       receive['action'] = 'process';
-      receive['json_block'] = 'true';
+      //receive['json_block'] = 'true';
       receive['subtype'] = blocktype;
-      receive['block'] = block.block;
+      receive['block'] = JSON.stringify(block.block);
       await this.$store.dispatch('app/rpCall', receive)
       this.$emit('receive', true)
       //this.$store.commit('app/pow', null)

@@ -26,6 +26,9 @@ export function pending(state, data) {
 export function balance(state, data) {
   state.balance = data
 }
+export function prefixparams(state, data) {
+  state.prefixparams = data
+}
 
 export function resetState(state) {
   Object.assign(state, initialState())

@@ -24,6 +24,9 @@ export async function node ({ commit, state }) {
         ...newnode,
         ...preset
       }
+      if(preset.banano && preset.banano == true) {
+        state.prefixparams = 'useBananoPrefix'
+      }
     }
   } else {
     if (state.settings.checkbackends == true) {

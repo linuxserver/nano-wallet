@@ -22,8 +22,8 @@
         <div class="details smaller padtop">
           <label for="phrase">EXPERIMENTAL PhraseFile <a @click="openPhrasefilegen"><i class="fal fa-exclamation-circle"></i></a></label>
           <input class="copytext" type="text" v-model="phrase" name="phrase" />
-          <label for="fileupload" class="btn outline">Seed File</label>
-          <input type="file" id="fileupload" style="display:none;" />
+          <label for="fileupload" class="btn outline">{{ filebutton }}</label>
+          <input type="file" id="fileupload" @change="filebuttonchange" style="display:none;" />
           <button @click="seedfromphrase" class="btn outline" >PhraseFile Generate</button>
         </div>
       </div>
@@ -55,7 +55,8 @@ export default {
       address: '',
       walletdata: {},
       phrase: '',
-      aboutphrasegen: false
+      aboutphrasegen: false,
+      filebutton: 'Seed File'
     }
   },
   watch: {
@@ -126,6 +127,10 @@ export default {
     },
     openPhrasefilegen () {
       this.aboutphrasegen = true
+    },
+    filebuttonchange () {
+      const fileitem = document.getElementById('fileupload').files[0]
+      this.filebutton = fileitem.name.substring(0, 20) + '..'
     }
   },
   computed: {

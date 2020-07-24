@@ -62,6 +62,15 @@ export function initialState () {
           headers: {
             'Content-Type': 'application/json'
           }
+        },
+        'kaliumapi.appditto.com': {
+          port: 443,
+          path: '/api',
+          protocol: 'https',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          banano: true
         }
       }
     },
@@ -76,7 +85,8 @@ export function initialState () {
       port: null,
       path: '',
       auth: null
-    }
+    },
+    prefixparams: 'useNanoPrefix'
   }
 }
 

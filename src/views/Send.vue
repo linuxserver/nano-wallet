@@ -118,6 +118,9 @@ export default {
     },
     privatekey () {
       return this.$store.state.app.privatekey
+    },
+    prefixparams () {
+      return this.$store.state.app.prefixparams
     }
   },
   watch: {
@@ -197,7 +200,9 @@ export default {
       // make sure it's a valid number
       if (this.checkamount(amount) && NanoCurrency.checkAddress(this.destination)) {
         const senderpublickey = NanoCurrency.derivePublicKey(this.privatekey)
-        const sender = NanoCurrency.deriveAddress(senderpublickey,{useNanoPrefix:true})
+        let params = {}
+        params[this.prefixparams] = true
+        const sender = NanoCurrency.deriveAddress(senderpublickey,params)
         let info = {}
         info['action'] = 'account_info'
         info['representative'] = 'true'
@@ -210,13 +215,14 @@ export default {
           representative: res.representative,
           balance: balance,
           link: this.destination
-        })
+        },params)
         console.log(block)
         let send = {}
         send['action'] = 'process'
-        send['json_block'] = 'true'
+        //send['json_block'] = 'true'
         send['subtype'] = 'send'
-        send['block'] = block.block
+        send['block'] = JSON.stringify(block.block)
+        console.log(send)
         const sendres = await this.$store.dispatch('app/rpCall', send)
         if (Object.keys(this.payload).length !== 0) {
           this.payload['transactionhash'] = sendres.hash

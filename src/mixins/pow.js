@@ -3,8 +3,8 @@ const NanoCurrency = require('nanocurrency')
 self.addEventListener("message", async (message) => {
   // console.log(message)
   console.log('Computing work for ' + message.data.blockHash)
-  const { blockHash, workerIndex, workerCount } = message.data;
-  const result = await NanoCurrency.computeWork(blockHash, { workerIndex, workerCount });
+  const { blockHash, workerIndex, workerCount, workThreshold } = message.data;
+  const result = await NanoCurrency.computeWork(blockHash, { workThreshold: workThreshold, workerIndex: workerIndex, workerCount: workerCount });
   self.postMessage(result);
 });
 

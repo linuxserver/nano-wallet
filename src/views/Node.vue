@@ -12,6 +12,10 @@
       <input v-if="showadvanced === false" v-model="node" type="text" id="node" name="node">
       <input v-if="showadvanced === true" v-model="address" placeholder="https://domain.com:443/path" type="text" id="address" name="address">
       <input v-if="showadvanced === true" v-model="auth" placeholder="Auth Header *optional" type="text" id="auth" name="auth">
+      <select v-if="showadvanced === true" v-model="nodetype">
+        <option value="nano">Nano Node</option>
+        <option value="banano">Banano Node</option>
+      </select>
       <button v-if="showadvanced === false" @click="openNode" class="openwallet btn" type="button">Go To Node</button>
       <button v-if="showadvanced === false" @click="openLocalhost" class="openwallet btn" type="button">Local Node</button>
       <button v-if="showadvanced === true" @click="openAdvanced" class="openwallet btn" type="button">Go To Node</button>
@@ -20,6 +24,7 @@
     <div class="presets">
       <center>
         <button @click="openPreset('app.natrium.io')" class="outline btn" type="button">Natrium</button>
+        <button @click="openPreset('kaliumapi.appditto.com')" class="outline btn yellow" type="button">Banano</button>
         <button @click="openPreset('proxy.nanos.cc')" class="outline btn" type="button">Nanos.cc</button>
         <button @click="openPreset('api.nanex.cc')" class="outline btn" type="button">Nanex.cc</button>
         <button @click="openPreset('vault.nanocrawler.cc')" class="outline btn" type="button">Nano Crawler</button>
@@ -42,6 +47,7 @@ export default {
       node: 'nano.linuxserver.io',
       address: '',
       auth: '',
+      nodetype: 'nano',
       showadvanced: false
     }
   },
@@ -72,6 +78,10 @@ export default {
           }
           if (this.auth) {
             node['auth'] = this.auth
+          }
+          if (this.nodetype == 'banano') {
+            node['banano'] = true
+            this.$store.state.app.prefixparams = 'useBananoPrefix'
           }
           this.$store.state.app.settings.node = [node]
           this.$router.push({name:'Home'})
@@ -113,5 +123,9 @@ export default {
   margin-right: 4px !important;
   margin-left: 4px !important;
   margin-bottom: 8px !important;
+}
+.yellow {
+  color: #FFFF00 !important;
+  border-color: #FFFF00 !important;
 }
 </style>

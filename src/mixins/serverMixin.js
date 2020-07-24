@@ -16,6 +16,10 @@ export const serverMixin = {
   computed: {
   },
   mounted() {
+    if(this.$store.state.app.prefixparams == 'useBananoPrefix') {
+      this.rawconv = {from:'raw',to:'Banano'}
+      this.nanoconv = {from:'Banano',to:'raw'}
+    }
   },
 
   methods: {
@@ -152,6 +156,6 @@ export const serverMixin = {
       const apires = await response.text()
       return {response: response,apires: apires}
     }
-    
+
   }
 }
