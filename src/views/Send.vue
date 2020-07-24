@@ -283,6 +283,8 @@ export default {
     async renderform() {
       if (this.$store.state.app.node.address.split('.').slice(-2)[0] == 'linuxserver') {
         this.net = 'lsio'
+      } else if (this.prefixparams == 'useBananoPrefix') {
+        this.net = 'banano'
       } else {
         this.net = 'live'
       }
