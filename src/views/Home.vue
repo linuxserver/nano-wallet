@@ -159,7 +159,7 @@ import Settings from '@/views/Settings.vue'
 import BlockState from '@/components/BlockState.vue'
 import { serverMixin } from '../mixins/serverMixin.js'
 import * as webglpow from '../mixins/webgl-pow.js'
-import * as NanoCurrency from 'nanocurrency'
+import * as NanoCurrency from '@thelamer/nanocurrency'
 import Worker from 'worker-loader!./../mixins/pow.js'
 import simplebar from 'simplebar-vue';
 import 'simplebar/dist/simplebar.min.css';

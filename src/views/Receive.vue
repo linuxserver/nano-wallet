@@ -26,7 +26,7 @@
 <script>
 import { serverMixin } from '../mixins/serverMixin.js'
 import QrBlock from '../components/QrBlock'
-import * as NanoCurrency from 'nanocurrency'
+import * as NanoCurrency from '@thelamer/nanocurrency'
 import BigNumber from 'bignumber.js'
 
 export default {

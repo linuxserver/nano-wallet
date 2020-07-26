@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import * as NanoCurrency from 'nanocurrency'
+import * as NanoCurrency from '@thelamer/nanocurrency'
 import { serverMixin } from '../mixins/serverMixin.js'
 import simplebar from 'simplebar-vue'
 import 'simplebar/dist/simplebar.min.css'

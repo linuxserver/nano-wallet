@@ -1,4 +1,4 @@
-const NanoCurrency = require('nanocurrency')
+const NanoCurrency = require('@thelamer/nanocurrency')
 // When the parent theard requires it, render the HTML
 self.addEventListener("message", async (message) => {
   // console.log(message)

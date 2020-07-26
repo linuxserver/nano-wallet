@@ -1,4 +1,4 @@
-import * as NanoCurrency from 'nanocurrency'
+import * as NanoCurrency from '@thelamer/nanocurrency'
 import router from '@/router'
 
 function protocol() {
