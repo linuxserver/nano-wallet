@@ -61,10 +61,11 @@ export default {
   },
   watch: {
     seed: function (newseed, oldseed) {
-      if(oldseed && newseed !== oldseed && newseed.length === 64) {
+      if(oldseed && newseed && newseed !== oldseed && newseed.length === 64) {
         let params = {}
         params[this.$store.state.app.prefixparams] = true
-        this.$store.dispatch('app/seedData', {newseed, params}).then(data => {
+        let seed = newseed
+        this.$store.dispatch('app/seedData', {seed, params}).then(data => {
           this.seed = data.seed,
           this.privatekey = data.privatekey,
           this.publickey = data.publickey,
