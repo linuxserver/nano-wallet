@@ -61,8 +61,10 @@ export default {
   },
   watch: {
     seed: function (newseed, oldseed) {
-      if(newseed !== oldseed && newseed.length === 64) {
-        this.$store.dispatch('app/seedData', newseed).then(data => {
+      if(oldseed && newseed !== oldseed && newseed.length === 64) {
+        let params = {}
+        params[this.$store.state.app.prefixparams] = true
+        this.$store.dispatch('app/seedData', {newseed, params}).then(data => {
           this.seed = data.seed,
           this.privatekey = data.privatekey,
           this.publickey = data.publickey,
@@ -92,7 +94,9 @@ export default {
       this.address = ''
     },
     refreshWallet () {
-      this.$store.dispatch('app/getSeed').then(data => {
+      let params = {}
+      params[this.$store.state.app.prefixparams] = true
+      this.$store.dispatch('app/getSeed', params).then(data => {
         this.seed = data.seed,
         this.privatekey = data.privatekey,
         this.publickey = data.publickey,
@@ -140,10 +144,11 @@ export default {
       }
       return ''
     }
-
   },
   mounted () {
-    this.$store.dispatch('app/getSeed').then(data => {
+    let params = {}
+    params[this.$store.state.app.prefixparams] = true
+    this.$store.dispatch('app/getSeed', params).then(data => {
       this.seed = data.seed,
       this.privatekey = data.privatekey,
       this.publickey = data.publickey,

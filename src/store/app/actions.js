@@ -86,17 +86,17 @@ export async function node ({ commit, state }) {
   
 }
 
-export async function getSeed (context) {
+export async function getSeed (context, params) {
   const seed = await NanoCurrency.generateSeed();
-  return seedData(context, seed)
+  return seedData(context, {seed, params})
 }
 
-export async function seedData (context, seed) {
-  const privatekey = NanoCurrency.deriveSecretKey(seed, 0);
+export async function seedData (context, data) {
+  const privatekey = NanoCurrency.deriveSecretKey(data.seed, 0);
   const publickey = NanoCurrency.derivePublicKey(privatekey);
-  const address = NanoCurrency.deriveAddress(publickey,{useNanoPrefix:true});
+  const address = NanoCurrency.deriveAddress(publickey,data.params);
   const payload = {
-    "seed":seed,
+    "seed":data.seed,
     "privatekey":privatekey,
     "publickey":publickey,
     "address":address
